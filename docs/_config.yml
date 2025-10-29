@@ -1,5 +1,5 @@
 title: Project Name
-remote_theme: Web-Development-Project/Web-Development-Project
+remote_theme: just-the-docs/just-the-docs
 mermaid:
   version: "10.9.0" # Pick version from https://cdn.jsdelivr.net/npm/mermaid/
 callouts:
