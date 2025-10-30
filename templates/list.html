@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<ul>
+    {% for list in lists %}
+    <li>
+        <input type="checkbox" > 
+        {% if list.complete  %} checked {% endif %}
+        <a href = "/lists/{{list.id}}">{{ list.name }}</a>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
