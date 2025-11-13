@@ -5,3 +5,4 @@ __pycache__/
 #Ignore venv folder (Python virtual environment)
 venv/
 
+.DS_Store
