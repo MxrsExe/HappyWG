@@ -1,0 +1,7 @@
+
+#Ignore __pycache__ folder (precompiled Python files)
+__pycache__/
+
+#Ignore venv folder (Python virtual environment)
+venv/
+
