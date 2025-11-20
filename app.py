@@ -1,13 +1,17 @@
-from flask import Flask, render_template
-import db
+from flask import Flask, render_template,request
+
 import os
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 
 def index():
-    return "Hello, World!"
+
+    if request.method == 'POST':
+        return "This is a POST request"
+    return "Hello, World! Get Request Received"
+    
 
 @app.route("/lists/")
 def lists():
@@ -16,5 +20,6 @@ def lists():
 @app.route("/lists/<int:id>")
 def list(id):
     return f"Todo: This is the lists page for a list with id {id}."
+
 
 
