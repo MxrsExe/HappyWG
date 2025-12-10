@@ -1,0 +1,51 @@
+<h1>Willkommen zurück, {{username}}!</h1>
+<p>Schön, dass du da bist! Hier ist deine WG-Übersicht für heute.</p>
+
+<div>
+    <h3>Offene Putzaufgaben</h3>
+    <ul>
+        {% for task in tasks %}
+            <li>count_tasks()</li>
+        {% else %}
+            <li>Keine offenen Putzaufgaben!</li>
+        {% endfor %}
+</div>
+
+<div>
+    <h3>Neue Ideen</h3>
+    <ul>
+        {% for idea in ideas %}
+            <li>count_ideas()</li>
+        {% else %}
+            <li>Keine neuen Ideen!</li>
+        {% endfor %}
+</div>
+
+<div>
+    <h3>Kommende Events</h3>
+    <ul>
+        {% for event in events %}
+            <li>count_events()</li>
+        {% else %}
+            <li>Keine bevorstehenden Events!</li>
+        {% endfor %}
+</div>
+
+<div>
+    <h3>Einkaufsliste</h3>
+    <ul>
+        {% for item in shopping_list %}
+            <li>count_items()</li>
+        {% else %}
+            <li>Deine Einkaufsliste ist leer!</li>
+        {% endfor %}
+</div>
+
+<h2>WG-Mitglieder</h2>
+<ul>
+    {% for member in members %}
+        <li>{{ member.name }} - {{ member.role }}</li>
+    {% else %}
+        <li>Keine Mitglieder in der WG.</li>
+    {% endfor %}
+
