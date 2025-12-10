@@ -31,15 +31,15 @@ Dies ist unser Dashboard. Man sieht oben
 
 # Innovation Board
 
-[Innoboard](assets/images/innovationboard.png)
+![Innoboard](assets/images/innovationboard.png)
 
 # Activity Board
 
-[Activityboard](assets/images/activityboard.png)
+![Activityboard](assets/images/activityboard.png)
 
 # Einkaufsplan
 
-[Einkaufsplan](assets/images/einkaufsplan.png)
+![Einkaufsplan](assets/images/einkaufsplan.png)
 
 
 
