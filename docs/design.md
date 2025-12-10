@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Architecture
+title: Design
 parent: Technical Docs
 nav_order: 1
 ---
@@ -13,6 +13,8 @@ nav_order: 1
 
 ![WG Dashboard](assets/images/wg-dashboard.png)
 ![WG Dashboard 2](assets/images/wg-dashboard-2.png)
+
+Dies ist unser Dashboard. Man sieht oben 
 
 
 
