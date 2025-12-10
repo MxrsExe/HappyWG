@@ -5,7 +5,7 @@ parent: Technical Docs
 nav_order: 1
 ---
 
-## WG Dashboard
+# **Design**
 
 **So sieht unser aktuelles Figma-Design aus:**
 
