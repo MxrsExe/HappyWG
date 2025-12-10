@@ -18,7 +18,7 @@ nav_order: 0
 **[Susann Pietzuch]**
 
     Info: Wirtschaftsinformatik-Studentin an der HWR
-    Matrikelnummer:
+    Matrikelnummer: 77203065051
 
 ## Eidesstaatliche Erklärung
 
