@@ -4,25 +4,27 @@ layout: default
 nav_order: 0
 ---
 
-# Happy WG
+## Happy WG
 
-Sample description
 
-##Team members: Marcel Granovskyy, Susann Pietzuch
-value proposition -
-Problem: Ungleiche Aufgabenverteilung, vergessene Einkäufe, Kommunikationslücken, unstrukturierter Alltag, Konflikte über Sauberkeit und Verantwortlichkeiten. Unsere App soll bei diesen Problemen helfen.
+## Team members: 
+**Marcel Granovskyy** & **Susann Pietzuch**
 
-Lösung: WG-Leben nachhaltig verbessern, indem Organisation, Transparenz und gemeinschaftliches Handeln in einem digitalen Raum vereint werden. Schluss mit den verstreuten Notizen, chaotischen Whatsapp-Chats oder unzuverlässigen mündlichen Absprachen, die zu unnötigem Streit führen. Unsere WG-Helfer Plattform bietet zentrale, intuitive Werkzeuge, die speziell auf die Bedürfnisse von WGs zugeschnitten sind. 
+**[Marcel Granovskyy]**
 
-Mit einem smarten WG-Planer, automatisierten Putzplänen, einem flexiblen Innovation-Board für Ideen & Projekte, einem Activity Board für gemeinsame Events sowie einer gemeinschaftichen Einkaufsliste wird das Zusammenleben nicht nur strukturierter, sondern auch harmonischer und effizienter.
+    Info: Wirtschaftsinformatik-Student an der HWR
+    Matrikelnummer: 77206981430
 
-Unser Ziel ist, den Alltag in der WG spürbar zu erleichtern, Konflikte reduzieren, Verantwortungen fair zu verteilen und gleichzeitig die Gemeinschaft stärken. 
+**[Susann Pietzuch]**
 
-Goals:
-Susann: Mein WG Leben leichter und angenehmer machen, Programmiererfahrung sammeln, gegebenenfalls Web App im Alltag benutzen
-Marcel: Programmiererfahrung sammeln im Bereich Python und Full Stack Web Development für das Berufsleben ggf.
+    Info: Wirtschaftsinformatik-Studentin an der HWR
+    Matrikelnummer:
 
-Als Gruppe: Großes Ambitionslevel, regelmäßige Arbeit am Projekt, keine Prokrastion, Großteil vor Weihnachten fertig haben?
+## Eidesstaatliche Erklärung
+
+Die oben genannten Teammitglieder erklären an Eides statt:
+
+    Diese Arbeit wurde selbständig und eigenhändig erstellt. Die den benutzten Quellen wörtlich oder inhaltlich entommenen Stellen sind als solche kenntlich gemacht. Diese Erklärung gilt für jeglichen Inhalt und umfasst sowohl diese Dokumentation als auch den als Projektergebnis eingereichten Quellcode.
 
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
