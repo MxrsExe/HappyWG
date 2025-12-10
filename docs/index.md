@@ -1,9 +1,10 @@
 ---
 title: Home
+layout: default
 nav_order: 0
 ---
 
-# Web Application Development
+# Happy WG
 
 Sample description
 
