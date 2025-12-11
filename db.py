@@ -1,6 +1,11 @@
 import sqlite3
 
 from flask import current_app, g
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+
 
 def db_connection():
     if 'db_con' not in g:

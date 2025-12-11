@@ -1,6 +1,14 @@
 <h1>Willkommen zurück, {{username}}!</h1>
 <p>Schön, dass du da bist! Hier ist deine WG-Übersicht für heute.</p>
 
+<nav>
+  <a href="{{ url_for('dashboard') }}">Start</a>
+  <a href="{{ url_for('putzplan') }}">Putzplan</a>
+  <a href="{{ url_for('ideen') }}">Ideen</a>
+  <a href="{{ url_for('aktivitaeten') }}">Aktivitäten</a>
+  <a href="{{ url_for('einkauf') }}">Einkauf</a>
+</nav>
+
 <div>
     <h3>Offene Putzaufgaben</h3>
     <ul>
