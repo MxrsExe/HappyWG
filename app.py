@@ -14,17 +14,18 @@ def index():
     
 @app.route("/login/")
 def login():
-    print("Das ist später der Login Screen")
+    
     return render_template("login.html")
+    
 
 @app.route("/welcome/")
 def create_or_join_wg():
-    print("Das ist später Create or Join WG")
+    
     return render_template("welcome.html")
 
 @app.route("/welcome/create_wg/")
 def create_wg():
-    print("Das ist später Create WG")
+    
     return render_template("create_wg.html")
 
 @app.route("/welcome/join_wg/")
@@ -34,7 +35,6 @@ def join_wg():
 
 @app.route("/dashboard/")
 def dashboard():
-    print("Das ist später das Dashboard")
     return render_template("dashboard.html")
 
 @app.route("/putzplan/")
@@ -57,7 +57,7 @@ def create_innovation():
     return render_template("create_inno.html")
 
 @app.route("/activityboard/")
-def activityboard():
+def activity_board():
     print("Das ist später das Activity Board")
     return render_template("activityboard.html")
 
@@ -70,9 +70,9 @@ def create_activity():
     return render_template("create_activity.html")
 
 
-@app.route("/einkaufsliste/")
-def einkaufsliste():
-    print("Das ist später die Einkaufsliste")
-    return render_template("einkaufsliste.html")
+@app.route("/einkaufsplan/")
+def einkaufsplan():
+    print("Das ist später der Einkaufsplan")
+    return render_template("einkaufsplan.html")
 
 
