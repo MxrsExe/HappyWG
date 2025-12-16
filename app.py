@@ -12,39 +12,52 @@ def index():
         return "This is a POST request"
     return "Hello, World! Get Request Received"
     
-@app.route("/login/")
+@app.route("/login/", methods=['GET', 'POST'])
 def login():
-    
+    if request.method == 'POST':
+        print("Benutzer eingeloggt")
+        return redirect(url_for("create_or_join_wg"))
     return render_template("login.html")
     
 
-@app.route("/welcome/")
+@app.route("/welcome/", methods=['GET', 'POST'])
 def create_or_join_wg():
-    
+    if request.method == 'POST':
+       
+        return redirect(url_for("create_wg"))
     return render_template("welcome.html")
 
-@app.route("/welcome/create_wg/")
+@app.route("/welcome/create_wg/", methods=['GET', 'POST'])
 def create_wg():
-    
+    if request.method == 'POST':
+        print("WG erstellt")
+        return redirect(url_for("create_or_join_wg"))
     return render_template("create_wg.html")
 
-@app.route("/welcome/join_wg/")
+@app.route("/welcome/join_wg/", methods=['GET', 'POST'])
 def join_wg():
-    print("Das ist später Join WG")
+    if request.method == 'POST':
+        print("WG beigetreten")
+        return redirect(url_for("dashboard"))
     return render_template("join_wg.html")
 
-@app.route("/dashboard/")
+@app.route("/dashboard/", methods=['GET'])
 def dashboard():
+    if request.method == 'GET':
+        return redirect(url_for("dashboard"))
     return render_template("dashboard.html")
 
-@app.route("/putzplan/")
+@app.route("/putzplan/", methods=['GET'])
 def putzplan():
-    print("Das ist später der Putzplan")
+    if request.method == 'GET':
+        return redirect(url_for("putzplan"))
     return render_template("putzplan.html")
 
 
-@app.route("/innovationboard/")
+@app.route("/innovationboard/", methods=['GET'])
 def innovation_board():
+    if request.method == 'GET':
+        return redirect(url_for("innovation_board"))
     return render_template("innovationboard.html")
 
 @app.route("/new_innovation/", methods=['GET', 'POST'])
@@ -56,9 +69,10 @@ def create_innovation():
     print("Das ist später die neue Innovation erstellen Seite")
     return render_template("create_inno.html")
 
-@app.route("/activityboard/")
+@app.route("/activityboard/", methods=['GET'])
 def activity_board():
-    print("Das ist später das Activity Board")
+    if request.method == 'GET':
+        return redirect(url_for("activity_board"))
     return render_template("activityboard.html")
 
 @app.route("/new_activity/", methods=['GET', 'POST'])
@@ -70,9 +84,10 @@ def create_activity():
     return render_template("create_activity.html")
 
 
-@app.route("/einkaufsplan/")
+@app.route("/einkaufsplan/", methods = ["GET", "POST"])
 def einkaufsplan():
-    print("Das ist später der Einkaufsplan")
+    if request.method == 'GET':
+        return redirect(url_for("einkaufsplan"))
     return render_template("einkaufsplan.html")
 
 
