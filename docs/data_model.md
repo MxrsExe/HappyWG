@@ -8,7 +8,7 @@ nav_order: 2
 # Data Model
 
 ## Unser Data Model, Stand 11.12.2025
-<img src="assets/images/data_model.png" alt="Data Model" width="600">
+<img src="assets/images/data_model.png" alt="Data Model" width="1000" height= "1000">
 
 
 
