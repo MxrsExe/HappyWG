@@ -53,6 +53,12 @@ def putzplan():
         return redirect(url_for("putzplan"))
     return render_template("putzplan.html")
 
+@app.route("/create_cleaning_object/", methods=['GET'])
+def create_cleaning_object():
+    if request.method == 'GET':
+        return redirect(url_for("create_cleaning_object"))
+    return render_template("create_cleaning_object.html")
+
 
 @app.route("/innovationboard/", methods=['GET'])
 def innovation_board():
