@@ -37,6 +37,8 @@ class User(db.Model):
 
     wg = db.relationship('Wg', back_populates='users')
 
+    cleaning_tasks = db.relationship('CleaningTask', back_populates='assigned_user')
+
 
 class Wg(db.Model):
     __tablename__ = 'WG'
@@ -48,6 +50,8 @@ class Wg(db.Model):
     shopping_items = db.relationship('ShoppingItem', back_populates='wg', cascade='all, delete-orphan')
 
     users = db.relationship('User', back_populates='wg')
+
+    cleaning_templates = db.relationship('CleaningTemplate', back_populates='wg', cascade='all, delete-orphan')
     
 
 
@@ -64,8 +68,32 @@ class ShoppingItem(db.Model):
     added_by_user=db.relationhip('User', foreign_keys[added_by])
     assigned_to_user=db.relationship('User', foreign_keys=[assigned_to])
 
+class CleaningTemplate(db.Model):
+    __tablename__ = 'CLEANING_TEMPLATE'
+    template_id = db.Column(db.Integer, primary_key=True, index=True)
+    wg_id = db.Column(db.Integer, db.ForeignKey('WG.wg_id'), nullable=False)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
+    frequency = db.Column(db.String, nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
+    position = db.Column(db.Integer)
 
+    #Beziehungen
+    wg = db.relationship('Wg', backpopulates='cleaning_templates')
+    tasks = db.relationship('CleaningTask',back_populates='template', cascade='all, delete-orphan')
 
+class CleaningTask(db.Model):
+    __tablename__ = 'CLEANING_TASK'
+    task_id = db.Column(db.Integer, primary_key=True, index=True)
+    template_id = db.Column(db.Integer, db.ForeignKey('CLEANING_TEMPLATE.template_id'), nullable=False)
+    assigned_to = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=False)
+    status = db.Column(db.String, nullable=False)
+    completed_at = db.Column(db.DateTime)
+    notes = db.Column(db.String)
+
+    #Beziehungen
+    template = db.relationship('CleaningTemplate'back_populates='tasks')
+    assigned_user = db.relationship('User', back_populates='cleaning_tasks')
 
     
 
