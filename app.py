@@ -4,6 +4,8 @@ import os
 
 app = Flask(__name__)
 
+from db import db, Todo, List, insert_sample  # (1.)
+
 @app.route('/', methods=['GET', 'POST'])
 
 def index():
