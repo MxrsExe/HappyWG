@@ -39,6 +39,8 @@ class User(db.Model):
 
     cleaning_tasks = db.relationship('CleaningTask', back_populates='assigned_user')
 
+    activities_created = db.relationship('Activity', back_populates='creator')
+
 
 class Wg(db.Model):
     __tablename__ = 'WG'
@@ -52,6 +54,8 @@ class Wg(db.Model):
     users = db.relationship('User', back_populates='wg')
 
     cleaning_templates = db.relationship('CleaningTemplate', back_populates='wg', cascade='all, delete-orphan')
+
+    activities = db.relationship('Activity', back_populates='wg', cascade='all,delete-orphan')
     
 
 
@@ -94,6 +98,27 @@ class CleaningTask(db.Model):
     #Beziehungen
     template = db.relationship('CleaningTemplate'back_populates='tasks')
     assigned_user = db.relationship('User', back_populates='cleaning_tasks')
+
+class Activity(db.Model):
+    __tablename__ = 'ACTIVITY'
+    activity_id = db.Column(db.Integer, primary_key=True, index=True)
+    wg_id = db.Column(db.Integer, db.ForeignKey('WG.wg_id'), nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=False)
+    title =db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
+    start_datetime = db.Column(db.DateTime, nullable=False)
+    end_datetime = db.Column(db.DateTime)
+    location = db.Column(db.String)
+    max_participants=db.Column(db.Integer)
+    status = db.Column(db.String, default='planned')
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at=db.Column(db.DateTime, onupdate=db.func.now())
+
+    #Beziehungen
+    wg = db.relationship('Wg', back_populates='activites')
+    creator = db.relationship('User', back_populates='activities_created')
+    def __rep__(self):
+        return f'<Activity {self.title}>'
 
     
 
