@@ -41,6 +41,10 @@ class User(db.Model):
 
     activities_created = db.relationship('Activity', back_populates='creator')
 
+    ideas = db.relationship('Idea', back_populates='creator')
+    idea_comments = db.relationship('Idea_Comment', back_populates='user')
+    idea_likes =db.relationship('Idea_Like', back_populates='user')
+
 
 class Wg(db.Model):
     __tablename__ = 'WG'
@@ -56,6 +60,8 @@ class Wg(db.Model):
     cleaning_templates = db.relationship('CleaningTemplate', back_populates='wg', cascade='all, delete-orphan')
 
     activities = db.relationship('Activity', back_populates='wg', cascade='all,delete-orphan')
+
+    ideas = db.relationship('Idea', back_populates='wg', cascade='all, delete-orphan')
     
 
 
@@ -120,6 +126,46 @@ class Activity(db.Model):
     def __rep__(self):
         return f'<Activity {self.title}>'
 
+class Idea(db.Model):
+    __tablename__ = 'IDEA'
+    idea_id = db.Column(db.Integer, primary_key=True, index=True)
+    wg_id = db.Column(db.Integer, db.ForeignKey('WG.wg_id'), nullable=False)
+    created_by = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=Flase)
+    category_id = db.Column(db.Integer)
+
+    title = db.Column(db.String, nullable=False)
+    description = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    status = db.Column(db.String)
+
+    #Beziehungen
+    wg = db.relationship('Wg', back_populates='ideas')
+    creator = db.relationship('User', backpopulates='ideas')
+    comments=db.relationship('Idea_Comment', back_populates='idea', cascade='all, delete-orphan')
+    likes=db.relationship('Idea_Like', back_populates='idea', cascade='all, delete-orphan')
+
+class Idea_Comment(db.Model):
+    __tablename__ = 'IDEA_COMMENT'
+    comment_id= db.Column(db.Integer, primary_key=True, index=True)
+    idea_id = db.Column(db.Integer, db.ForeignKey('IDEA.idea_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+
+    #Beziehungen
+    idea = db.relationship('Idea', back_populates='comments')
+    user = db.relationship('User', back_populates='idea_comments')
+
+class Idea_Like(db.Model):
+    __tablename__ = 'IDEA_LIKE'
+    like_id = db.Column(db.Integer, primary_key=True, index=True)
+    idea_id = db.Column(db.Integer, db.ForeignKey('IDEA.idea_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=False)
+
+    #Beziehungen
+    idea = db.relationship('Idea', back_populates='likes')
+    user = db.relationshiop('User', back_populates='idea_likes')
     
 
     
