@@ -102,7 +102,7 @@ class CleaningTask(db.Model):
     notes = db.Column(db.String)
 
     #Beziehungen
-    template = db.relationship('CleaningTemplate'back_populates='tasks')
+    template = db.relationship('CleaningTemplate',back_populates='tasks')
     assigned_user = db.relationship('User', back_populates='cleaning_tasks')
 
 class Activity(db.Model):
@@ -165,7 +165,7 @@ class Idea_Like(db.Model):
 
     #Beziehungen
     idea = db.relationship('Idea', back_populates='likes')
-    user = db.relationshiop('User', back_populates='idea_likes')
+    user = db.relationship('User', back_populates='idea_likes')
     
 
     
