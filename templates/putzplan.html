@@ -1,1 +1,121 @@
 <h1>Putzplan</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert-message {% if category == 'success' %}alert-success{% else %}alert-error{% endif %}" style="padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+<nav>
+  <a href="{{ url_for('dashboard') }}">Start</a>
+  <a href="{{ url_for('putzplan') }}">Putzplan</a>
+  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
+  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
+  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+</nav>
+
+<input type="checkbox" id="modalToggle" style="display: none;">
+
+<label for="modalToggle" style="cursor: pointer; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; display: inline-block;">
+    + Neuen Eintrag erstellen
+</label>
+
+<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; z-index: 1;" id="modalBackdrop"></div>
+
+<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 30px; border-radius: 8px; width: 400px; z-index: 2; display: none;" id="modalContent">
+    <label for="modalToggle" style="float: right; cursor: pointer; font-size: 24px; font-weight: bold;">×</label>
+    <h2>Neuen Eintrag erstellen</h2>
+    <h3>Bestimme, wer für was zuständig ist</h3>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
+        <div style="margin-bottom: 15px;">
+            <label for="woche">Kalenderwoche:</label>
+            {{ form.woche(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label for="von_datum">Von:</label>
+            {{ form.von_datum(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="bis_datum">Bis:</label>
+            {{ form.bis_datum(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="aufgabe">Aufgabe:</label>
+            {{ form.aufgabe(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="zustaendig">Zuständig:</label>
+            <input list="users" name="zustaendig" id="zustaendig" style="display: block; margin-top: 5px; padding: 8px; width: 100%;" placeholder="z.B. Max" required>
+            <datalist id="users">
+                {% for user in all_users %}
+                <option value="{{ user.username }}"></option>
+                {% endfor %}
+            </datalist>
+            {% if form.zustaendig.errors %}<span style="color: red;">{{ form.zustaendig.errors[0] }}</span>{% endif %}
+        </div>
+
+        {{ form.submit() }}
+    </form>
+</div>
+
+<style>
+    #modalToggle:checked ~ #modalBackdrop {
+        display: block !important;
+    }
+    
+    #modalToggle:checked ~ #modalContent {
+        display: block !important;
+    }
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Aufgabe</th>
+            <th>Zuständig</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for eintrag in putzplan %}
+        <tr>
+            <td>{{ eintrag.datum }}</td>
+            <td>{{ eintrag.aufgabe }}</td>
+            <td>{{ eintrag.zustaendig }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+
+
+</style>
+
+
+    
+    
