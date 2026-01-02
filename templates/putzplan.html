@@ -11,6 +11,7 @@
 {% endwith %}
 
 
+
 <nav>
   <a href="{{ url_for('dashboard') }}">Start</a>
   <a href="{{ url_for('putzplan') }}">Putzplan</a>
@@ -56,13 +57,23 @@
 
         <div style="margin-bottom: 15px;">
             <label for="zustaendig">Zuständig:</label>
-            <input list="users" name="zustaendig" id="zustaendig" style="display: block; margin-top: 5px; padding: 8px; width: 100%;" placeholder="z.B. Max" required>
-            <datalist id="users">
-                {% for user in all_users %}
-                <option value="{{ user.username }}"></option>
-                {% endfor %}
-            </datalist>
-            {% if form.zustaendig.errors %}<span style="color: red;">{{ form.zustaendig.errors[0] }}</span>{% endif %}
+
+        {{ form.zustaendig(
+            list="users",
+            id="zustaendig",
+            style="display:block; margin-top:5px; padding:8px; width:100%;",
+            placeholder="z.B. Max"
+        ) }}
+
+        <datalist id="users">
+            {% for user in all_users %}
+            <option value="{{ user.username }}"></option>
+            {% endfor %}
+        </datalist>
+
+        {% if form.zustaendig.errors %}
+            <span style="color:red;">{{ form.zustaendig.errors[0] }}</span>
+        {% endif %}
         </div>
 
         {{ form.submit() }}
@@ -80,23 +91,31 @@
 </style>
 
 <table>
-    <thead>
-        <tr>
-            <th>Datum</th>
-            <th>Aufgabe</th>
-            <th>Zuständig</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for eintrag in putzplan %}
-        <tr>
-            <td>{{ eintrag.datum }}</td>
-            <td>{{ eintrag.aufgabe }}</td>
-            <td>{{ eintrag.zustaendig }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+  <thead>
+    <tr>
+      <th>Zeitraum</th>
+      <th>Aufgabe</th>
+      <th>Zuständig</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for eintrag in putzplan %}
+    <tr>
+      <td>{{ eintrag.description }}</td>
+      <td>{{ eintrag.name }}</td>
+      <td>
+        {% if eintrag.tasks and eintrag.tasks[0].assigned_user %}
+          {{ eintrag.tasks[0].assigned_user.username }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
+
+<p>Einträge geladen: {{ putzplan|length }}</p>
 
 <style>
     table {

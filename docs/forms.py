@@ -26,10 +26,11 @@ class CreateTodoForm(FlaskForm):
 
 #Putzplan Forms
 class PutzplanForm(FlaskForm):
-    datum = StringField('Datum', validators=[InputRequired(), Length(min=1, max=10)], render_kw={"placeholder": "TT.MM.JJJJ"})
+    #datum = StringField('Datum', validators=[InputRequired(), Length(min=1, max=10)], render_kw={"placeholder": "TT.MM.JJJJ"})
     aufgabe = StringField('Aufgabe', validators=[InputRequired(), Length(min=1, max=100)], render_kw={"placeholder": "z.B. Bad putzen"})
     zustaendig = StringField('Zuständig', validators=[InputRequired(), Length(min=1, max=50), UserExistsValidator()], render_kw={"placeholder": "z.B. Max"})
     woche = IntegerField('Kalenderwoche', validators=[InputRequired(), NumberRange(min=1, max=53)], render_kw={"placeholder": "1-53"})
     von_datum = DateField('Von', validators=[InputRequired()], render_kw={"placeholder": "DD.MM.YYYY"})
     bis_datum = DateField('Bis', validators=[InputRequired()], render_kw={"placeholder": "DD.MM.YYYY"})
     submit = SubmitField('Erstellen')
+

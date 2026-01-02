@@ -1,7 +1,7 @@
 from os import name
 from flask import Flask, flash, redirect, render_template,request, url_for
 
-from db import CleaningTemplate,db, User
+from db import CleaningTask, CleaningTemplate,db, User
 from docs.forms import PutzplanForm
 
 
@@ -78,30 +78,61 @@ def dashboard():
     
     return render_template("dashboard.html")
 
-@app.route("/putzplan/", methods=['GET', 'POST'])
-def putzplan():
-    form = PutzplanForm()
-    all_users = User.query.all()
-    for user in all_users:
-        print(f"Benutzer: {user.username}")
-    if form.validate_on_submit():
-        new_eintrag = CleaningTemplate(
-            wg_id=1,  # Get from session/logged-in user
-            name=form.aufgabe.data,
-            description=f"Week {form.woche.data}: {form.von_datum.data} to {form.bis_datum.data}",
-            frequency="weekly"
-        )
-        db.session.add(new_eintrag)
-        db.session.commit()
+from flask import request, redirect, url_for, flash, render_template
 
-        flash('Eintrag erfolgreich erstellt!', 'success')
-        return redirect(url_for("putzplan"))
-    elif form.is_submitted():
-        # Form submitted but validation failed
-        if form.zustaendig.errors:
-            flash('WG-Mitglied existiert nicht', 'error')
-    putzplan_eintraege = CleaningTemplate.query.all()
+from flask import request, redirect, url_for, flash, render_template
+
+@app.route("/putzplan/", methods=["GET", "POST"])
+def putzplan():
+
+    form = PutzplanForm()
+    
+    if request.method == "POST":
+        print("POST angekommen")
+        print("form.validate_on_submit():", form.validate_on_submit())
+        print("form.errors:", form.errors)
+        print("zustaendig raw:", request.form.get("zustaendig"))
+
+    
+    all_users = User.query.all()
+
+    if form.validate_on_submit():
+        zustaendig_name = request.form.get("zustaendig", "").strip()
+        user = User.query.filter_by(username=zustaendig_name).first()
+
+        if not user:
+            flash("WG-Mitglied existiert nicht", "error")
+        else:
+            new_template = CleaningTemplate(
+                wg_id=1,
+                name=form.aufgabe.data,
+                description=f"KW {form.woche.data}: {form.von_datum.data} bis {form.bis_datum.data}",
+                frequency="weekly",
+                is_active=True
+            )
+            db.session.add(new_template)
+            db.session.flush()  # template_id ist jetzt da
+
+            new_task = CleaningTask(
+                template_id=new_template.template_id,
+                assigned_to=user.user_id,
+                status="open",
+                notes="Zuständig"
+            )
+            db.session.add(new_task)
+
+            db.session.commit()
+            flash("Eintrag erfolgreich erstellt!", "success")
+            return redirect(url_for("putzplan"))
+
+    putzplan_eintraege = (CleaningTemplate.query
+                          .filter_by(wg_id=1, is_active=True)
+                          .order_by(CleaningTemplate.template_id.desc())
+                          .all())
+
     return render_template("putzplan.html", form=form, putzplan=putzplan_eintraege, all_users=all_users)
+
+
 
 
 @app.route("/innovationboard/", methods=['GET'])
