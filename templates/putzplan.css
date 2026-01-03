@@ -1,0 +1,16 @@
+<style>
+  .progress-stacked {
+    height: 18px !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+  }
+  .progress {
+    height: 18px !important;
+    background-color: #0080ff !important;
+  }
+  .progress-bar {
+    transition: width .6s ease !important;
+  }
+</style>
+
+
