@@ -129,10 +129,25 @@ def putzplan():
                           .filter_by(wg_id=1, is_active=True)
                           .order_by(CleaningTemplate.template_id.desc())
                           .all())
+    
+    tasks = (CleaningTask.query
+         .join(CleaningTemplate)
+         .filter(CleaningTemplate.wg_id == 1)
+         .all())
+    
+    total_tasks = len(tasks)
+    completed_tasks = sum(1 for t in tasks if t.status == "completed")
+    progress = int((completed_tasks / total_tasks) * 100) if total_tasks else 0
 
-    return render_template("putzplan.html", form=form, putzplan=putzplan_eintraege, all_users=all_users)
+    return render_template("putzplan.html", form=form, putzplan=putzplan_eintraege, all_users=all_users,
+                           total_tasks=total_tasks, completed_tasks=completed_tasks, progress=progress)
 
-
+@app.route("/putzplan/task/<int:task_id>/toggle", methods=["POST"])
+def toggle_cleaning_task(task_id):
+    task = CleaningTask.query.get_or_404(task_id)
+    task.status = "completed" if request.form.get("done") == "on" else "open"
+    db.session.commit()
+    return redirect(url_for("putzplan"))
 
 
 @app.route("/innovationboard/", methods=['GET'])

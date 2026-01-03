@@ -20,6 +20,33 @@
   <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
 </nav>
 
+{% set remaining = 100 - progress %}
+
+<div class="mt-3 mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <strong>Fortschritt</strong>
+    <span class="text-muted">{{ completed_tasks }}/{{ total_tasks }} erledigt ({{ progress }}%)</span>
+  </div>
+
+  <div class="progress-stacked" style="height: 18px;">
+    <div class="progress" role="progressbar"
+         aria-label="Erledigt"
+         aria-valuenow="{{ progress|int }}" aria-valuemin="0" aria-valuemax="100"
+         style="width: {{ progress|int }}%;">
+      <div class="progress-bar bg-success"></div>
+    </div>
+
+    <div class="progress" role="progressbar"
+         aria-label="Offen"
+         aria-valuenow="{{ remaining|int }}" aria-valuemin="0" aria-valuemax="100"
+         style="width: {{ remaining|int }}%;">
+      <div class="progress-bar bg-secondary"></div>
+    </div>
+  </div>
+</div>
+
+
+
 <input type="checkbox" id="modalToggle" style="display: none;">
 
 <label for="modalToggle" style="cursor: pointer; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; display: inline-block;">
@@ -93,23 +120,47 @@
 <table>
   <thead>
     <tr>
-      <th>Zeitraum</th>
       <th>Aufgabe</th>
+      <th>Zeitraum</th>
       <th>Zuständig</th>
     </tr>
   </thead>
+  
   <tbody>
     {% for eintrag in putzplan %}
+    
     <tr>
+        <td>
+    {% set task = eintrag.tasks[0] if eintrag.tasks else None %}
+
+    {% if task %}
+      <form method="POST"
+            action="{{ url_for('toggle_cleaning_task', task_id=task.task_id) }}"
+            class="m-0">
+        <label class="d-flex align-items-center gap-2 m-0">
+          <input class="form-check-input m-0"
+                 type="checkbox"
+                 name="done"
+                 onchange="this.form.submit()"
+                 {% if task.status == 'completed' %}checked{% endif %}>
+          <span>{{ eintrag.name }}</span>
+        </label>
+      </form>
+    {% else %}
+      {{ eintrag.name }}
+    {% endif %}
+  </td>
+
       <td>{{ eintrag.description }}</td>
-      <td>{{ eintrag.name }}</td>
-      <td>
+    
+        <td>
         {% if eintrag.tasks and eintrag.tasks[0].assigned_user %}
           {{ eintrag.tasks[0].assigned_user.username }}
         {% else %}
           -
         {% endif %}
       </td>
+       
     </tr>
     {% endfor %}
   </tbody>
