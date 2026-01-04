@@ -9,7 +9,7 @@
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
   <h1 style="margin:0;">InnovationBoard</h1>
 
-  <label for="modalToggle"
+  <label for="modalToggleNewIdea"
          style="cursor:pointer; padding:10px 20px; background-color:#007bff; color:white; border-radius:5px; display:inline-block;">
     + Neue Idee
   </label>
@@ -35,31 +35,77 @@
       <div class="d-flex justify-content-between align-items-center mb-2">
         <!-- Like -->
         <form method="POST" action="{{ url_for('toggle_like', idea_id=idea.idea_id) }}" class="m-0">
-          <button type="submit" class="btn btn-sm btn-outline-primary">
+          
+          <button type="submit" class="btn btn-sm btn-outline-primary"
+                  style="cursor:pointer; padding:10px 20px; background-color:#007bff; color:white; border-radius:5px; display:inline-block;">
             👍 {{ idea.likes|length }}
           </button>
         </form>
-
+      </div>
         <!-- Delete -->
+    <div class="d-flex justify-content-end align-items-center mb-2">
         <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.idea_id) }}" class="m-0">
-          <button type="submit" class="btn btn-link text-danger p-0"
+
+          <button type="submit" class="delete-btn"
+                  style="cursor:pointer; padding:10px 20px; background-color:#dc3545; color:white; border-radius:5px; display:inline-block;"
                   onclick="return confirm('Idee wirklich löschen?');">
             🗑️
           </button>
-
-          <form method="POST" action="{{ url_for('post_comment', idea_id=idea.idea_id) }}" class="m-0">
-            <input type="text" name="comment_text" placeholder="Kommentar hinzufügen..." required
-                   style="padding: 5px; width: 70%;">
-            <button type="submit" class="btn btn-sm btn-outline-secondary">Kommentieren</button>
-
         </form>
-      </div>
-
-      <h3 class="mb-1">{{ idea.title }}</h3>
-      <p class="idea-desc mb-2">{{ idea.description }}</p>
-      <small class="text-muted">Erstellt von {{ idea.creator.username }} am {{ idea.created_at.strftime('%d.%m.%Y') }}</small>
-
     </div>
+    
+  
+  <details class="mt-2">
+    <summary style="cursor:pointer; color:#28a745; font-weight:600;">
+      💬 Kommentare ({{ idea.comments|length if idea.comments else 0 }})
+    </summary>
+
+    <!-- bestehende Kommentare -->
+    <div style="margin-top:10px;">
+      {% for c in idea.comments %}
+        <div style="border-top:1px solid #ddd; padding-top:6px; margin-top:6px;">
+          <small>
+            <strong>{{ c.user.username }}</strong>
+            · {{ c.created_at.strftime('%d.%m.%Y %H:%M') }}
+          </small>
+          <div>{{ c.content }}</div>
+        </div>
+      {% else %}
+        <small class="text-muted">Noch keine Kommentare.</small>
+      {% endfor %}
+    </div>
+
+    <!-- Kommentar schreiben -->
+    <form method="POST"
+      action="{{ url_for('post_comment', idea_id=idea.idea_id) }}"
+      style="margin-top:10px;">
+      {{ comment_form.hidden_tag() }}
+
+      <div style="display:flex; gap:10px; align-items:center;">
+        {{ comment_form.content(
+        id="content-" ~ idea.idea_id,
+        class="form-control",
+        rows="3",
+        style ="resize:vertical; flex-grow:1;",
+        placeholder="Kommentar hinzufügen..."
+        ) }}
+        <button type="submit" class="btn btn-sm btn-outline-secondary">
+          Kommentieren
+        </button>
+      </div>
+    </form>
+
+  </details>
+
+  <!-- Card Content -->
+  <h3 class="mb-1">{{ idea.title }}</h3>
+  <p class="idea-desc mb-2">{{ idea.description }}</p>
+  <small class="text-muted">
+    Erstellt von {{ idea.creator.username }} am {{ idea.created_at.strftime('%d.%m.%Y') }}
+  </small>
+
+</div>
+
   {% else %}
     <p>Noch keine Ideen eingereicht. Sei der Erste!</p>
   {% endfor %}
@@ -67,12 +113,12 @@
 
 
 
-<input type="checkbox" id="modalToggle" style="display: none;">
+<input type="checkbox" id="modalToggleNewIdea" style="display: none;">
 
 
 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; z-index: 1;" id="modalBackdrop"></div>
 <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 30px; border-radius: 8px; width: 400px; z-index: 2; display: none;" id="modalContent">
-    <label for="modalToggle" style="float: right; cursor: pointer; font-size: 24px; font-weight: bold; margin-top: 10px;">×</label>
+    <label for="modalToggleNewIdea" style="float: right; cursor: pointer; font-size: 24px; font-weight: bold; margin-top: 10px;">×</label>
     <h2>Neue Idee einreichen</h2>
     <h3>Schlage eine neue Idee für Deine WG vor.</h3>
     <form method="POST">
@@ -92,39 +138,16 @@
     
 </div>
 <style>
-    #modalToggle:checked ~ #modalBackdrop {
+    #modalToggleNewIdea:checked ~ #modalBackdrop {
         display: block !important;
     }
-    
-    #modalToggle:checked ~ #modalContent {
+
+    #modalToggleNewIdea:checked ~ #modalContent {
         display: block !important;
     }
 </style>   
 
-<table>
-    <thead>
-        <tr>
-            <th>Titel</th>
-            <th>Beschreibung</th>
-            <th>Erstellt von</th>
-            <th>Erstellt am</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for idea in ideas %}
-        <tr>
-            <td>{{ idea.title }}</td>
-            <td>{{ idea.description }}</td>
-            <td>{{ idea.creator.username }}</td>
-            <td>{{ idea.created_at.strftime('%d.%m.%Y') }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="4">Noch keine Ideen eingereicht. Sei der Erste!</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
 
 <style>
   .ideas-list{
@@ -141,6 +164,7 @@
     border-radius:8px;
     padding:15px;
     box-sizing:border-box;
+    
 
     /* wichtig: nicht fit-content! */
     flex: 0 1 520px;   /* Card ist "bis zu" 520px breit, schrumpft aber */
@@ -155,24 +179,26 @@
     word-break: break-word;   /* Fallback */
   }
 
+  .delete-btn{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 5;
+  }
+
     .idea-card h3 {
         margin-top: 0;
     }
 </style>
 
 <style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-
+  .idea-card{
+    position: relative;          /* für delete-btn Positionierung */
+  }
+  .delete-btn{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 5;
+  }
 </style>

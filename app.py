@@ -172,7 +172,7 @@ def toggle_cleaning_task(task_id):
 @app.route("/innovationboard/", methods=['GET', 'POST'])
 def innovation_board():
     form = InnovationForm()
-
+    
     #user_id = session.get("user_id")
     #if not user_id:
      #   flash("Bitte zuerst einloggen.", "error")
@@ -212,7 +212,7 @@ def innovation_board():
              .order_by(Idea.created_at.desc())
              .all())
     #ideas = Idea.query.filter_by(wg_id=user.wg_id).order_by(Idea.created_at.desc()).all()
-    return render_template("innovationboard.html", form=form, all_users=all_users,ideas=ideas)
+    return render_template("innovationboard.html", form=form, all_users=all_users,ideas=ideas, comment_form=CommentForm())
 
 @app.route("/innovation_board/idea/<int:idea_id>/delete", methods=["POST"])
 def delete_idea(idea_id):
@@ -234,12 +234,12 @@ def toggle_like(idea_id):
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
 
-    existing = Idea_Like.query.filter_by(idea_id=idea_id, user_id="testuser").first() #To be replaced with idea_id=idea_id, user_id=user_id
+    existing = Idea_Like.query.filter_by(idea_id=idea_id, user_id=1).first() #To be replaced with idea_id=idea_id, user_id=user_id
 
     if existing:
         db.session.delete(existing)   # unlike
     else:
-        db.session.add(Idea_Like(idea_id=idea_id, user_id="testuser"))  # like
+        db.session.add(Idea_Like(idea_id=idea_id, user_id=1))  # like
 
     try:
         db.session.commit()
@@ -256,22 +256,29 @@ def post_comment(idea_id):
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
+    if request.method == "POST":
+        print("Kommentar POST angekommen")
+        print("form.validate_on_submit():", form.validate_on_submit())
+        print("form.errors:", form.errors)
 
-    content = request.form.get("content", "").strip()
-    if content:
-        new_comment = Idea_Comment(
-            idea_id=idea_id,
-            user_id="testuser",  #To be replaced with user_id=user_id
-            content=content,
-            created_at=db.func.now()
-        )
-        db.session.add(new_comment)
-        db.session.commit()
-        flash("Kommentar hinzugefügt.", "success")
-    else:
-        flash("Kommentar darf nicht leer sein.", "error")
+        if form.validate_on_submit():
+            content = (request.form.get("content") or "").strip()
 
-    return redirect(url_for("innovation_board"), anchor=f"idea-{idea_id}",form=form)
+            if content:
+                new_comment = Idea_Comment(
+                    idea_id=idea_id,
+                    user_id=1,  #To be replaced with user_id=user_id 
+                    content=content,
+                    created_at=db.func.now()
+                )
+                db.session.add(new_comment)
+                db.session.commit()
+                flash("Kommentar hinzugefügt.", "success")
+            else:
+                flash("Kommentar darf nicht leer sein.", "error")
+        
+
+    return redirect(url_for("innovation_board"))
 
 @app.route("/activityboard/", methods=['GET'])
 def activity_board():
