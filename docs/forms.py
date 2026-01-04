@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 
-from wtforms import DateField, IntegerField, ValidationError
+from wtforms import DateField, IntegerField, ValidationError, TextAreaField
 from wtforms.fields import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, NumberRange
+from wtforms.validators import InputRequired, Length, NumberRange, DataRequired
 from db import User,db
 
 class UserExistsValidator:
@@ -33,4 +33,11 @@ class PutzplanForm(FlaskForm):
     von_datum = DateField('Von', validators=[InputRequired()], render_kw={"placeholder": "DD.MM.YYYY"})
     bis_datum = DateField('Bis', validators=[InputRequired()], render_kw={"placeholder": "DD.MM.YYYY"})
     submit = SubmitField('Erstellen')
+
+
+#Innovationboard Forms
+class InnovationForm(FlaskForm):
+    title = StringField('Titel', validators=[InputRequired(), Length(min=1, max=100)], render_kw={"placeholder": "Titel der Idee"})
+    description = TextAreaField("Beschreibung", validators=[DataRequired()], render_kw={"placeholder": "Beschreibe deine Idee hier..."})
+    submit = SubmitField('Idee einreichen')
 

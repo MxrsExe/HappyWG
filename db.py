@@ -106,7 +106,6 @@ class Idea(db.Model):
     idea_id = db.Column(db.Integer, primary_key=True, index=True)
     wg_id = db.Column(db.Integer, db.ForeignKey('WG.wg_id'), nullable=False)
     created_by = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=False)
-    category_id = db.Column(db.Integer)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime, server_default=db.func.now())

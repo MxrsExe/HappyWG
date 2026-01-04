@@ -2,7 +2,7 @@ from os import name
 from flask import Flask, flash, redirect, render_template,request, url_for
 
 from db import CleaningTask, CleaningTemplate,db, User
-from docs.forms import PutzplanForm
+from docs.forms import InnovationForm, PutzplanForm
 
 
 app = Flask(__name__)
@@ -150,10 +150,11 @@ def toggle_cleaning_task(task_id):
     return redirect(url_for("putzplan"))
 
 
-@app.route("/innovationboard/", methods=['GET'])
+@app.route("/innovationboard/", methods=['GET', 'POST'])
 def innovation_board():
-    return render_template("innovationboard.html")
+    form = InnovationForm()
 
+    return render_template("innovationboard.html", form=form)
 @app.route("/activityboard/", methods=['GET'])
 def activity_board():
     return render_template("activityboard.html")
