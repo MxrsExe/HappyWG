@@ -27,7 +27,7 @@ class User(db.Model):
     wg = db.relationship('Wg', back_populates='users')
     cleaning_tasks = db.relationship('CleaningTask', back_populates='assigned_user')
     activities_created = db.relationship('Activity', back_populates='creator')
-    ideas = db.relationship('Idea', back_populates='creator')
+    ideas = db.relationship('Idea', back_populates='creator',foreign_keys='Idea.created_by')
     idea_comments = db.relationship('Idea_Comment', back_populates='user')
     idea_likes = db.relationship('Idea_Like', back_populates='user')
     added_items = db.relationship('ShoppingItem', foreign_keys='ShoppingItem.added_by')
@@ -113,7 +113,7 @@ class Idea(db.Model):
     status = db.Column(db.String)
     #Beziehungen
     wg = db.relationship('Wg', back_populates='ideas')
-    creator = db.relationship('User', back_populates='ideas')
+    creator = db.relationship('User', back_populates='ideas', foreign_keys=[created_by])
     comments = db.relationship('Idea_Comment', back_populates='idea', cascade='all, delete-orphan')
     likes = db.relationship('Idea_Like', back_populates='idea', cascade='all, delete-orphan')
 

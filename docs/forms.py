@@ -38,6 +38,11 @@ class PutzplanForm(FlaskForm):
 #Innovationboard Forms
 class InnovationForm(FlaskForm):
     title = StringField('Titel', validators=[InputRequired(), Length(min=1, max=100)], render_kw={"placeholder": "Titel der Idee"})
-    description = TextAreaField("Beschreibung", validators=[DataRequired()], render_kw={"placeholder": "Beschreibe deine Idee hier..."})
+    description = TextAreaField("Beschreibung", validators=[DataRequired(), Length(min=1, max=500)], render_kw={"placeholder": "Beschreibe deine Idee hier..."})
     submit = SubmitField('Idee einreichen')
+
+class CommentForm(FlaskForm):
+    content = TextAreaField("Kommentar", validators=[DataRequired(), Length(min=1, max=300)], render_kw={"placeholder": "Schreibe einen Kommentar..."})
+    submit = SubmitField('Kommentar posten')
+    
 
