@@ -4,6 +4,11 @@ from db import db, User
 import os
 
 app = Flask(__name__)
+#Flask bekommt DB-Zugriff
+app.config['SECRET_KEY'] = 'HappyWG_Project_SecretKey'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
+
+db.init_app(app)
 
 @app.route('/', methods=['GET', 'POST'])
 
@@ -12,12 +17,28 @@ def index():
     if request.method == 'POST':
         return "This is a POST request"
     return "Hello, World! Get Request Received"
-    
+
+ #login-Funktion   
 @app.route("/login/", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        print("Benutzer eingeloggt")
+        username=request.form.get('username')
+        password=request.form.get('password')
+
+        if not username or not password:
+            return "Bitte Benutzername und Passwort eingeben", 400
+        
+        user = User.query.filter_by(username=username).first()
+
+        if not user:
+            return "Benutzer nicht gefunden", 401
+
+        if not check_password_hash(user.password_hash, password):
+            return "Falsches Passwort", 401
+
+        print(f"User {username} erfolgreich eingeloggt")
         return redirect(url_for("create_or_join_wg"))
+
     return render_template("login.html")
     
 
