@@ -54,7 +54,14 @@
         </form>
     </div>
     
-  
+
+  <!-- Card Content -->
+  <h3 class="mb-1">{{ idea.title }}</h3>
+  <p class="idea-desc mb-2">{{ idea.description }}</p>
+  <small class="text-muted">
+    Erstellt von {{ idea.creator.username }} am {{ idea.created_at.strftime('%d.%m.%Y') }}
+  </small>
+
   <details class="mt-2">
     <summary style="cursor:pointer; color:#28a745; font-weight:600;">
       💬 Kommentare ({{ idea.comments|length if idea.comments else 0 }})
@@ -68,7 +75,7 @@
             <strong>{{ c.user.username }}</strong>
             · {{ c.created_at.strftime('%d.%m.%Y %H:%M') }}
           </small>
-          <div>{{ c.content }}</div>
+          <div class ="comment-text">{{ c.content }}</div>
         </div>
       {% else %}
         <small class="text-muted">Noch keine Kommentare.</small>
@@ -97,13 +104,6 @@
 
   </details>
 
-  <!-- Card Content -->
-  <h3 class="mb-1">{{ idea.title }}</h3>
-  <p class="idea-desc mb-2">{{ idea.description }}</p>
-  <small class="text-muted">
-    Erstellt von {{ idea.creator.username }} am {{ idea.created_at.strftime('%d.%m.%Y') }}
-  </small>
-
 </div>
 
   {% else %}
@@ -112,9 +112,8 @@
 </div>
 
 
-
+<!-- Modal for New Idea -->
 <input type="checkbox" id="modalToggleNewIdea" style="display: none;">
-
 
 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; z-index: 1;" id="modalBackdrop"></div>
 <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 30px; border-radius: 8px; width: 400px; z-index: 2; display: none;" id="modalContent">
@@ -145,6 +144,9 @@
     #modalToggleNewIdea:checked ~ #modalContent {
         display: block !important;
     }
+
+    #modalBackdrop { z-index: 1000 !important; }
+    #modalContent  { z-index: 1001 !important; }
 </style>   
 
 
@@ -189,6 +191,13 @@
     .idea-card h3 {
         margin-top: 0;
     }
+
+    .comment-text{
+    white-space: pre-wrap;       /* Zeilenumbrüche behalten */
+    overflow-wrap: anywhere;     /* bricht lange Wörter */
+    word-break: break-word;      /* Fallback */
+    max-width: 100%;
+  }
 </style>
 
 <style>
@@ -203,7 +212,7 @@
   }
 </style>
 
-<style>
-  #modalBackdrop { z-index: 1000 !important; }
-  #modalContent  { z-index: 1001 !important; }
-</style>
+
+
+
+

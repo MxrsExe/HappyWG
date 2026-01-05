@@ -1,10 +1,11 @@
 from os import name
 from sqlite3 import IntegrityError
 from flask import Flask, flash, redirect, render_template,request, url_for,session
+from flask_migrate import Migrate
 from sqlalchemy.orm import joinedload
 
-from db import CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like,db, User
-from docs.forms import CommentForm, InnovationForm, PutzplanForm
+from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like,db, User
+from docs.forms import ActivityForm, CommentForm, InnovationForm, PutzplanForm
 
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ app.config['SECRET_KEY'] = 'HappyWG_Project_SecretKey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
 
 db.init_app(app)
-
+migrate = Migrate(app, db)
 #session["user_id"] = user.user_id
 #session["wg_id"] = user.wg_id  
 
@@ -239,7 +240,7 @@ def toggle_like(idea_id):
     if existing:
         db.session.delete(existing)   # unlike
     else:
-        db.session.add(Idea_Like(idea_id=idea_id, user_id=1))  # like
+        db.session.add(Idea_Like(idea_id=idea_id, user_id=1))  # like #TODO: To be replaced with user_id=user_id
 
     try:
         db.session.commit()
@@ -252,10 +253,12 @@ def toggle_like(idea_id):
 def post_comment(idea_id):
 
     form = CommentForm()
-    #user_id = session.get("user_id")
+    #user_id = session.get("user_id")               #TODO: get user_id from session
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
+
+        
     if request.method == "POST":
         print("Kommentar POST angekommen")
         print("form.validate_on_submit():", form.validate_on_submit())
@@ -280,9 +283,66 @@ def post_comment(idea_id):
 
     return redirect(url_for("innovation_board"))
 
-@app.route("/activityboard/", methods=['GET'])
+@app.route("/activityboard/", methods=['GET', 'POST'])
 def activity_board():
-    return render_template("activityboard.html")
+    form = ActivityForm()
+
+    all_users = User.query.all()
+
+    if request.method == "POST":
+        print("Aktivität hinzufügen POST angekommen")
+        print("form.validate_on_submit():", form.validate_on_submit())
+        print("form.errors:", form.errors)
+
+        if form.validate_on_submit():
+            flash("Aktivität erfolgreich hinzugefügt!", "success")
+
+            user = User.query.filter_by(username="testuser").first()  # To be replaced with current_user() or session user
+            new_activity = Activity(
+                wg_id=1,  # wg_id = user.wg_id
+                created_by=user.user_id,
+                title=form.title.data,
+                description=form.description.data,
+                date=form.date.data,
+                location=form.location.data,
+                max_participants=form.max_participants.data,
+                created_at=db.func.now()
+            )
+            db.session.add(new_activity)
+            db.session.commit()
+
+            return redirect(url_for("activity_board"))
+        else:
+            flash("Fehler beim Hinzufügen der Aktivität. Bitte überprüfen Sie die Eingaben.", "error")
+
+    activities = (Activity.query
+                  .filter_by(wg_id=1)  # wg_id = user.wg_id
+                  .options(joinedload(Activity.creator))
+                  .order_by(Activity.created_at.desc())
+                  .all())
+
+    return render_template("activityboard.html", form=form, activities=activities, all_users=all_users)
+
+@app.route("/activity/<int:activity_id>/join", methods=["POST"])
+def join_activity(activity_id):
+    #user_id = session.get("user_id")
+    #if not user_id:
+        #flash("Bitte zuerst einloggen.", "error")
+        #return redirect(url_for("login"))
+
+    activity = Activity.query.get_or_404(activity_id)
+    #existing_participant = Activity_Participant.query.filter_by(activity_id=activity_id, user_id=user_id).first()
+
+    if activity.max_participants and activity.participants >= activity.max_participants:
+        flash("Die Aktivität ist bereits voll.", "error")
+        return redirect(url_for("activity_board"))
+
+    #if not existing_participant:
+        #db.session.add(Activity_Participant(activity_id=activity_id, user_id=user_id))
+        #db.session.commit()
+        #flash("Erfolgreich teilgenommen!", "success")
+
+    return redirect(url_for("activity_board"))
 
 @app.route("/einkaufsplan/", methods=["GET", "POST"])
 def einkaufsplan():

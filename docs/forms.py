@@ -1,8 +1,9 @@
+
 from flask_wtf import FlaskForm
 
 from wtforms import DateField, IntegerField, ValidationError, TextAreaField
-from wtforms.fields import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, NumberRange, DataRequired
+from wtforms.fields import StringField, PasswordField, SubmitField, DateTimeLocalField
+from wtforms.validators import InputRequired, Length, NumberRange, DataRequired, Optional
 from db import User,db
 
 class UserExistsValidator:
@@ -44,5 +45,19 @@ class InnovationForm(FlaskForm):
 class CommentForm(FlaskForm):
     content = TextAreaField("Kommentar", validators=[DataRequired(), Length(min=1, max=300)], render_kw={"placeholder": "Schreibe einen Kommentar..."})
     submit = SubmitField('Kommentar posten')
+
+#Activity Forms
+class ActivityForm(FlaskForm):
+    title = StringField('Titel', validators=[InputRequired(), Length(min=1, max=100)], render_kw={"placeholder": "Titel der Aktivität"})
+    description = TextAreaField("Beschreibung", validators=[DataRequired(), Length(min=1, max=300)], render_kw={"placeholder": "Beschreibe deine Aktivität..."})
+    date = DateTimeLocalField("Uhrzeit",format="%Y-%m-%dT%H:%M", validators=[DataRequired()], render_kw={"placeholder": "Wähle Datum und Uhrzeit"})
+    location = StringField('Ort', validators=[InputRequired(), Length(min=1, max=100)], render_kw={"placeholder": "Ort der Aktivität"})
+    max_participants = IntegerField('Maximale Teilnehmerzahl', validators=[Optional(), NumberRange(min=1)], render_kw={"placeholder": "z.B. 10"})
+    submit = SubmitField('Aktivität hinzufügen')
+
+
+
+
+
     
 

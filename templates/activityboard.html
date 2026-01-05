@@ -1,1 +1,141 @@
-<h1>ActivityBoard</h1>
+<nav>
+  <a href="{{ url_for('dashboard') }}">Start</a>
+  <a href="{{ url_for('putzplan') }}">Putzplan</a>
+  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
+  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
+  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+</nav>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+  <h1 style="margin:0;">ActivityBoard</h1>
+
+  <label for="modalToggleNewActivity"
+         style="cursor:pointer; padding:10px 20px; background-color:#007bff; color:white; border-radius:5px; display:inline-block;">
+    + Neue Aktivität
+  </label>
+</div>
+
+<h2>Teile deine Aktivitäten und Erlebnisse in der WG</h2>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert-message {% if category == 'success' %}alert-success{% else %}alert-error{% endif %}" style="padding: 15px; margin-bottom: 20px; border-radius: 5px;" >
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="activities-list">
+  {% for activity in activities %}
+    <div class="activity-card">
+    
+      <h3 class="mb-1">{{ activity.title }}</h3>
+      <p class="activity-desc mb-2">{{ activity.description }}</p>
+      {% if activity.max_participants %}
+        <small>Max: {{ activity.max_participants }} Teilnehmer</small>
+        {% endif %}
+
+      <small class="text-muted">Gepostet von {{ activity.creator.username }} am {{ activity.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+      <small class="text-muted">📅 {{ activity.date.strftime('%d.%m.%Y %H:%M') }}</small>
+      {% if activity.location %}
+        <br>
+        <small class="text-muted">📍{{ activity.location }}</small>
+      {% endif %}
+    </div>
+  {% else %}
+    <p>Noch keine Aktivitäten geteilt. Sei der/die Erste!</p>
+  {% endfor %}
+
+</div>
+
+
+<!-- Modal for New Activity -->
+<input type="checkbox" id="modalToggleNewActivity" style="display:none;">
+
+<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; z-index: 1;" id="modalBackdrop"></div>
+<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 30px; border-radius: 8px; width: 400px; z-index: 2; display: none;" id="modalContent">
+    <label for="modalToggleNewActivity" style="float: right; cursor: pointer; font-size: 24px; font-weight: bold; margin-top: 10px;">×</label>
+    <h2>Neue Aktivität vorschlagen</h2>
+    <h3>Schlage eine neue Aktivität für Deine WG vor.</h3>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div style="margin-bottom: 15px;">
+            <label for="activity_title">Aktivität:</label>
+            {{ form.title(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="activity_description">Beschreibung:</label>
+            {{ form.description(
+                style="display:block; margin-top:5px; padding:8px; width:100%; height:100px; resize: vertical; white-space: pre-wrap;"
+            ) }}
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="activity_date">Datum und Uhrzeit:</label>
+            {{ form.date(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style = "margin-bottom: 15px;">
+            <label for="activity_location">Ort:</label>
+            {{ form.location(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label>Max. Teilnehmer (optional):</label>
+            
+            {{ form.max_participants(
+                style="display:block; margin-top:5px; padding:8px; width:100%;",
+                placeholder="z.B. 10"
+            ) }}
+            
+
+            {% if form.max_participants.errors %}
+                <span style="color:red;">{{ form.max_participants.errors[0] }}</span>
+            {% endif %}
+            
+        </div>
+
+        {{ form.submit() }}
+        
+    </form>
+</div>
+
+<style>
+    #modalToggleNewActivity:checked ~ #modalBackdrop {
+        display: block !important;
+    }
+
+    #modalToggleNewActivity:checked ~ #modalContent {
+        display: block !important;
+    }
+
+    #modalBackdrop { z-index: 1000 !important; }
+    #modalContent  { z-index: 1001 !important; }
+</style>   
+
+<style>
+    .activities-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .activity-card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        background-color: #f9f9f9;
+    }
+
+    .activity-card h3 {
+        margin-top: 0;
+    }
+    .activity-desc {
+        white-space: pre-wrap; /* Zeilenumbrüche behalten */
+        overflow-wrap: anywhere; /* Lange Wörter umbrechen */
+        word-break: break-word; /* Fallback */
+        max-width: 100%;
+    }
+</style>   
