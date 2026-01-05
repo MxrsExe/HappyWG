@@ -305,7 +305,9 @@ def activity_board():
                 title=form.title.data,
                 description=form.description.data,
                 date=form.date.data,
+                updated_at=form.updated_at.data,
                 location=form.location.data,
+                participants='planned',
                 max_participants=form.max_participants.data,
                 created_at=db.func.now()
             )
@@ -343,6 +345,19 @@ def join_activity(activity_id):
         #db.session.commit()
         #flash("Erfolgreich teilgenommen!", "success")
 
+    return redirect(url_for("activity_board"))
+
+@app.route("/activity/<int:activity_id>/delete_activity", methods=["POST"])
+def delete_activity(activity_id):
+    #current_user_id = session.get("user_id")
+    #if activity.creator.user_id != current_user_id:
+     #   flash("Sie können nur Ihre eigenen Aktivitäten löschen.", "error")
+        #abort(403)
+
+    activity = Activity.query.get_or_404(activity_id)
+    db.session.delete(activity)
+    db.session.commit()
+    flash("Aktivität erfolgreich gelöscht.", "success")
     return redirect(url_for("activity_board"))
 
 @app.route("/einkaufsplan/", methods=["GET", "POST"])
@@ -399,7 +414,7 @@ def activity_ics(activity_id):
         uid=f"activity-{activity.activity_id}@wgplanner",
         title=activity.title,
         start_dt=activity.date,     # oder activity.time
-        end_dt=activity.date,       # ggf. + timedelta(hours=2)
+        end_dt=activity.updated_at,       # ggf. + timedelta(hours=2)
         description=activity.description or "",
         location=activity.location or "",
     )

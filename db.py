@@ -93,9 +93,9 @@ class Activity(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     location = db.Column(db.String)
     max_participants = db.Column(db.Integer, nullable=True)
-    status = db.Column(db.String, default='planned')
+    participants = db.Column(db.String)  #participants 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    updated_at = db.Column(db.DateTime, nullable=False)  #new time varivable as to not migrate
     #Beziehungen
     wg = db.relationship('Wg', back_populates='activities')
     creator = db.relationship('User', back_populates='activities_created')
