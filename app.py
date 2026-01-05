@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template,request, url_for
-
+from werkzeug.security import check_password_hash
+from db import db, User 
 import os
 
 app = Flask(__name__)
