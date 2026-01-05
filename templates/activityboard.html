@@ -44,6 +44,8 @@
         <br>
         <small class="text-muted">📍{{ activity.location }}</small>
       {% endif %}
+      <a href="{{ url_for('activity_ics', activity_id=activity.activity_id) }}">📅 In Kalender speichern (.ics)</a>
+
     </div>
   {% else %}
     <p>Noch keine Aktivitäten geteilt. Sei der/die Erste!</p>

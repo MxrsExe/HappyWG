@@ -1,6 +1,7 @@
 from os import name
 from sqlite3 import IntegrityError
-from flask import Flask, flash, redirect, render_template,request, url_for,session
+from flask import Flask, flash, redirect, render_template,request, url_for,session, Response
+from datetime import timezone
 from flask_migrate import Migrate
 from sqlalchemy.orm import joinedload
 
@@ -350,5 +351,64 @@ def einkaufsplan():
         
         pass
     return render_template("einkaufsplan.html")
+
+from urllib.parse import urlencode
+
+def google_calendar_url(title, start_dt, end_dt, details="", location=""):
+    #In UTC umwandeln
+    fmt = "%Y%m%dT%H%M%S"
+    dates = f"{start_dt.strftime(fmt)}/{end_dt.strftime(fmt)}"
+
+    params = {
+        "action": "TEMPLATE",
+        "text": title,
+        "dates": dates,
+        "details": details,
+        "location": location,
+    }
+    return "https://calendar.google.com/calendar/render?" + urlencode(params)
+
+
+def dt_to_ics(dt):
+    # am besten UTC
+    dt_utc = dt.replace(tzinfo=timezone.utc)
+    return dt_utc.strftime("%Y%m%dT%H%M%SZ")
+
+def build_ics(uid, title, start_dt, end_dt, description="", location=""):
+    return "\r\n".join([
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//WG Planner//DE",
+        "BEGIN:VEVENT",
+        f"UID:{uid}",
+        f"DTSTART:{dt_to_ics(start_dt)}",
+        f"DTEND:{dt_to_ics(end_dt)}",
+        f"SUMMARY:{title}",
+        f"DESCRIPTION:{description}",
+        f"LOCATION:{location}",
+        "END:VEVENT",
+        "END:VCALENDAR",
+        ""
+    ])
+
+@app.route("/activities/<int:activity_id>/ics")
+def activity_ics(activity_id):
+    activity = Activity.query.get_or_404(activity_id)
+
+    ics = build_ics(
+        uid=f"activity-{activity.activity_id}@wgplanner",
+        title=activity.title,
+        start_dt=activity.date,     # oder activity.time
+        end_dt=activity.date,       # ggf. + timedelta(hours=2)
+        description=activity.description or "",
+        location=activity.location or "",
+    )
+
+    return Response(
+        ics,
+        mimetype="text/calendar",
+        headers={"Content-Disposition": f'attachment; filename="activity-{activity_id}.ics"'}
+    )
+
 
 
