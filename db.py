@@ -15,6 +15,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+activity_participants = db.Table(
+    "ACTIVITY_PARTICIPANTS",
+    db.Column("activity_id", db.Integer, db.ForeignKey("ACTIVITY.activity_id"), primary_key=True),
+    db.Column("user_id", db.Integer, db.ForeignKey("USER.user_id"), primary_key=True),
+    )
+
 class User(db.Model):
     __tablename__ = 'USER'
     user_id = db.Column(db.Integer, primary_key=True, index=True)
@@ -93,7 +99,13 @@ class Activity(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     location = db.Column(db.String)
     max_participants = db.Column(db.Integer, nullable=True)
-    participants = db.Column(db.String)  #participants 
+    
+    participants = db.relationship(
+        "User",
+        secondary=activity_participants,
+        back_populates="joined_activities"
+    )  #participants 
+    
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, nullable=False)  #new time varivable as to not migrate
     #Beziehungen

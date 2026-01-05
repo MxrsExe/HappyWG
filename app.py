@@ -307,7 +307,7 @@ def activity_board():
                 date=form.date.data,
                 updated_at=form.updated_at.data,
                 location=form.location.data,
-                participants='planned',
+                
                 max_participants=form.max_participants.data,
                 created_at=db.func.now()
             )
@@ -328,18 +328,21 @@ def activity_board():
 
 @app.route("/activity/<int:activity_id>/join", methods=["POST"])
 def join_activity(activity_id):
-    #user_id = session.get("user_id")
+    user_id = session.get("user_id",1)  #Temporary set to 1 for testing
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
-
+    user = User.query.get(1)  #To be replaced with user_id=user_id
     activity = Activity.query.get_or_404(activity_id)
     #existing_participant = Activity_Participant.query.filter_by(activity_id=activity_id, user_id=user_id).first()
 
-    if activity.max_participants and activity.participants >= activity.max_participants:
+    if activity.max_participants and len(activity.participants) >= activity.max_participants:
         flash("Die Aktivität ist bereits voll.", "error")
         return redirect(url_for("activity_board"))
 
+    activity.participants.append(user)
+    db.session.commit()
+    flash("Du bist beigetreten!", "success")    
     #if not existing_participant:
         #db.session.add(Activity_Participant(activity_id=activity_id, user_id=user_id))
         #db.session.commit()
