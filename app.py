@@ -2,8 +2,11 @@ from flask import Flask, redirect, render_template,request, url_for
 from werkzeug.security import check_password_hash
 from db import db, User 
 import os
+from flask import session
 
 app = Flask(__name__)
+#session
+app.secret_key = "super-secret-key"
 #Flask bekommt DB-Zugriff
 app.config['SECRET_KEY'] = 'HappyWG_Project_SecretKey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
@@ -36,8 +39,10 @@ def login():
         if not check_password_hash(user.password_hash, password):
             return "Falsches Passwort", 401
 
+        session['user_id'] = user.user_id
         print(f"User {username} erfolgreich eingeloggt")
         return redirect(url_for("create_or_join_wg"))
+    
 
     return render_template("login.html")
     
