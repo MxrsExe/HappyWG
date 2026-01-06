@@ -15,9 +15,15 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+activity_participants = db.Table(
+    "ACTIVITY_PARTICIPANTS",
+    db.Column("activity_id", db.Integer, db.ForeignKey("ACTIVITY.activity_id"), primary_key=True),
+    db.Column("user_id", db.Integer, db.ForeignKey("USER.user_id"), primary_key=True),
+    )
+
 class User(db.Model):
     __tablename__ = 'USER'
-    user_id = db.Column(db.Integer, primary_key=True, index=True)
+    user_id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
     username = db.Column(db.String, nullable=False, unique=True)
     password_hash = db.Column(db.String, nullable=False, unique=True)
     email = db.Column(db.String, nullable=False, unique=True)
@@ -32,6 +38,13 @@ class User(db.Model):
     idea_likes = db.relationship('Idea_Like', back_populates='user')
     added_items = db.relationship('ShoppingItem', foreign_keys='ShoppingItem.added_by')
     assigned_items = db.relationship('ShoppingItem', foreign_keys='ShoppingItem.assigned_to')
+
+    
+    joined_activities = db.relationship(
+        "Activity",
+        secondary=activity_participants,
+        back_populates="participants"
+    )  #joined_activities
 
 class Wg(db.Model):
     __tablename__ = 'WG'
@@ -85,21 +98,28 @@ class CleaningTask(db.Model):
 
 class Activity(db.Model):
     __tablename__ = 'ACTIVITY'
-    activity_id = db.Column(db.Integer, primary_key=True, index=True)
+    activity_id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
     wg_id = db.Column(db.Integer, db.ForeignKey('WG.wg_id'), nullable=False)
     created_by = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=False)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
-    start_datetime = db.Column(db.DateTime, nullable=False)
-    end_datetime = db.Column(db.DateTime)
+    date = db.Column(db.DateTime, nullable=False)
     location = db.Column(db.String)
-    max_participants = db.Column(db.Integer)
-    status = db.Column(db.String, default='planned')
+    max_participants = db.Column(db.Integer, nullable=True)
+    
+    participants = db.relationship(
+        "User",
+        secondary=activity_participants,
+        back_populates="joined_activities"
+    )  #participants 
+    
     created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    updated_at = db.Column(db.DateTime, nullable=False)  #new time varivable as to not migrate
     #Beziehungen
     wg = db.relationship('Wg', back_populates='activities')
     creator = db.relationship('User', back_populates='activities_created')
+    
+    
 
 class Idea(db.Model):
     __tablename__ = 'IDEA'
