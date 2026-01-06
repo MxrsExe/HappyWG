@@ -40,11 +40,21 @@
 
       <h3 class="mb-1">{{ activity.title }}</h3>
       <p class="activity-desc mb-2">{{ activity.description }}</p>
-      {% if activity.max_participants %}
-        <small>👤 {{activity.participants|length}}/{{ activity.max_participants }} </small>
-         {%else%}
-        <small>👤 {{activity.participants|length}} </small>
+      <small class="text-muted">
+        {% if activity.max_participants %}
+          👤 {{ activity.participants|length }}/{{ activity.max_participants }}
+        {% else %}
+          👥 {{ activity.participants|length }}
         {% endif %}
+
+        {% if activity.participants|length > 0 %}
+          ·
+          {% for u in activity.participants %}
+            {{ u.username }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        {% endif %}
+      </small>
+
         <br>
 
       <small class="text-muted">📅 {{ activity.date.strftime('%d.%m.%Y %H:%M') }} bis {{ activity.updated_at.strftime('%d.%m.%Y %H:%M') }}</small>
@@ -61,7 +71,7 @@
             {% set is_joined = current_user_id and (activity.participants   
             | selectattr('user_id', 'equalto', current_user_id)
             | list | length > 0) %}
-
+        
         <form method="POST"
               action="{% if is_joined %}{{ url_for('leave_activity', activity_id=activity.activity_id) }}{% else %}{{ url_for('join_activity', activity_id=activity.activity_id) }}{% endif %}"
               class="m-0 action-form">
@@ -72,6 +82,7 @@
             {% if is_joined %}𝗟𝖾𝖺𝗏𝖾 ✘{% else %}𝖩𝗈𝗂𝗇 ➥{% endif %}
           </button>
         </form>
+        
     </div>
 
 
