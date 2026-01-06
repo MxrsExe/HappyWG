@@ -4,6 +4,11 @@ from db import db, User
 import os
 from flask import session
 
+def login_required():
+    if 'user_id' not in session:
+        return False
+    return True
+
 app = Flask(__name__)
 #session
 app.secret_key = "super-secret-key"
@@ -50,12 +55,16 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('login'))
-    
+
+
 @app.route("/welcome/", methods=['GET', 'POST'])
 def create_or_join_wg():
     if request.method == 'POST':
        
         return redirect(url_for("create_wg"))
+   # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
+
     return render_template("welcome.html")
 
 @app.route("/welcome/create_wg/", methods=['GET', 'POST'])
@@ -63,6 +72,8 @@ def create_wg():
     if request.method == 'POST':
         print("WG erstellt")
         return redirect(url_for("create_or_join_wg"))
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
     return render_template("create_wg.html")
 
 @app.route("/welcome/join_wg/", methods=['GET', 'POST'])
@@ -70,24 +81,33 @@ def join_wg():
     if request.method == 'POST':
         print("WG beigetreten")
         return redirect(url_for("dashboard"))
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
+
     return render_template("join_wg.html")
 
 @app.route("/dashboard/", methods=['GET'])
 def dashboard():
     if request.method == 'GET':
         return redirect(url_for("dashboard"))
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
     return render_template("dashboard.html")
 
 @app.route("/putzplan/", methods=['GET'])
 def putzplan():
     if request.method == 'GET':
         return redirect(url_for("putzplan"))
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
     return render_template("putzplan.html")
 
 @app.route("/create_cleaning_object/", methods=['GET'])
 def create_cleaning_object():
     if request.method == 'GET':
         return redirect(url_for("create_cleaning_object"))
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
     return render_template("create_cleaning_object.html")
 
 
@@ -95,12 +115,16 @@ def create_cleaning_object():
 def innovation_board():
     if request.method == 'GET':
         return redirect(url_for("innovation_board"))
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
     return render_template("innovationboard.html")
 
 @app.route("/new_innovation/", methods=['GET', 'POST'])
 def create_innovation():
     if request.method == 'POST':
         print("Innovation erstellt")
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
         return redirect(url_for("innovation_board"))
 
     print("Das ist später die neue Innovation erstellen Seite")
@@ -110,6 +134,8 @@ def create_innovation():
 def activity_board():
     if request.method == 'GET':
         return redirect(url_for("activity_board"))
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
     return render_template("activityboard.html")
 
 @app.route("/new_activity/", methods=['GET', 'POST'])
@@ -118,6 +144,8 @@ def create_activity():
         print("Aktivität erstellt")
         return redirect(url_for("activityboard"))
     print("Das ist später die neue Aktivitäten Seite")
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
     return render_template("create_activity.html")
 
 
@@ -125,6 +153,8 @@ def create_activity():
 def einkaufsplan():
     if request.method == 'GET':
         return redirect(url_for("einkaufsplan"))
+    # if 'user_id' not in session:
+    #    return redirect(url_for('login'))
     return render_template("einkaufsplan.html")
 
 
