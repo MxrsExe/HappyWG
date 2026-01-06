@@ -28,14 +28,22 @@
     {% endif %}
 {% endwith %}
 
+
 <div class="activities-list">
   {% for activity in activities %}
     <div class="activity-card">
-    
+      <form method="POST" action="{{ url_for('delete_activity', activity_id=activity.activity_id) }}" class="delete-form">
+          <button type="submit" class="delete-btn"
+            
+            onclick="return confirm('Aktivität wirklich löschen?');">🗑️</button>
+      </form>
+
       <h3 class="mb-1">{{ activity.title }}</h3>
       <p class="activity-desc mb-2">{{ activity.description }}</p>
       {% if activity.max_participants %}
-        <small>👤   /{{ activity.max_participants }} </small>
+        <small>👤 {{activity.participants|length}}/{{ activity.max_participants }} </small>
+         {%else%}
+        <small>👤 {{activity.participants|length}} </small>
         {% endif %}
         <br>
 
@@ -45,31 +53,28 @@
         <small class="text-muted">📍{{ activity.location }}</small>
       {% endif %}
         <br>
-      <small class="text-muted" style="margin-top: 5px; margin-bottom: 5px;">Gepostet von {{ activity.creator.username }} am {{ activity.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
-        <br>
+      
       <a href="{{ url_for('activity_ics', activity_id=activity.activity_id) }}">📅 In Kalender speichern (.ics)</a>
+        <br>
+      <small class="text-muted" style="margin-top: 20px; margin-bottom: 5px;">Gepostet von {{ activity.creator.username }} am {{ activity.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+        <br>
+            {% set is_joined = current_user_id and (activity.participants   
+            | selectattr('user_id', 'equalto', current_user_id)
+            | list | length > 0) %}
 
-    </div>
-    <div class="d-flex justify-content-end align-items-center mb-2">
-        <form method="POST" action="{{ url_for('delete_activity', activity_id=activity.activity_id) }}" class="m-0">
+        <form method="POST"
+              action="{% if is_joined %}{{ url_for('leave_activity', activity_id=activity.activity_id) }}{% else %}{{ url_for('join_activity', activity_id=activity.activity_id) }}{% endif %}"
+              class="m-0 action-form">
 
-          <button type="submit" class="delete-btn"
-                  style="cursor:pointer; padding:10px 20px; background-color:#dc3545; color:white; border-radius:5px; display:inline-block;"
-                  onclick="return confirm('Aktivität wirklich löschen?');">
-            🗑️
+          <button type="submit"
+                  class="action-btn {% if is_joined %}action-leave{% else %}action-join{% endif %}"
+                  onclick="return confirm('{% if is_joined %}Von der Aktivität wirklich abmelden?{% else %}Aktivität wirklich beitreten?{% endif %}');">
+            {% if is_joined %}𝗟𝖾𝖺𝗏𝖾 ✘{% else %}𝖩𝗈𝗂𝗇 ➥{% endif %}
           </button>
         </form>
     </div>
-    <div class="d-flex justify-content-end align-items-center mb-2">
-        <form method="POST" action="{{ url_for('join_activity', activity_id=activity.activity_id) }}" class="m-0">
 
-          <button type="submit" class="join-btn"
-                  style="cursor:pointer; padding:10px 20px; background-color:#5935dc; color:white; border-radius:5px; display:inline-block;"
-                  onclick="return confirm('Aktivität wirklich beitreten?');">
-            𝖩𝗈𝗂𝗇 ➥
-          </button>
-        </form>
-    </div>
+
     
   {% else %}
     <p>Noch keine Aktivitäten geteilt. Sei der/die Erste!</p>
@@ -150,23 +155,74 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
+        align-items: flex-start;
     }
 
     .activity-card {
+        
+        position: relative;
         border: 1px solid #ddd;
         border-radius: 5px;
         padding: 15px;
+        padding-bottom: 60px;
         background-color: #f9f9f9;
         box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 500px;
+    }
+    
+
+    .activity-card .action-form{
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      margin: 0;
     }
 
-    .activity-card h3 {
-        margin-top: 0;
+    .activity-card .action-btn{
+      display: inline-block;
+      width: auto;
+      height: auto;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid black;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      white-space: nowrap;
     }
-    .activity-desc {
-        white-space: pre-wrap; /* Zeilenumbrüche behalten */
-        overflow-wrap: anywhere; /* Lange Wörter umbrechen */
-        word-break: break-word; /* Fallback */
-        max-width: 100%;
+
+  .activity-card .action-join{
+    background-color: rgb(89, 55, 175);
+  }
+
+  .activity-card .action-leave{
+    background-color: rgb(218, 84, 84);
+  }
+
+  .activity-card .delete-btn{
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      margin: 0;
+      background-color: tomato;
     }
+
+      .activity-card h3 {
+          padding-right: 60px; /* Platz für  Delete schaffen */
+
+      }
+
+      .activity-card{
+        padding-bottom: 40px; /* Platz für Join schaffen */
+      }
+
+      .activity-desc {
+          white-space: pre-wrap; /* Zeilenumbrüche behalten */
+          overflow-wrap: anywhere; /* Lange Wörter umbrechen */
+          word-break: break-word; /* Fallback */
+          max-width: 100%;
+      }
+    
+
 </style>   

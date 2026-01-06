@@ -320,21 +320,25 @@ def activity_board():
 
     activities = (Activity.query
                   .filter_by(wg_id=1)  # wg_id = user.wg_id
-                  .options(joinedload(Activity.creator))
+                  .options(joinedload(Activity.creator), joinedload(Activity.participants))
                   .order_by(Activity.created_at.desc())
                   .all())
 
-    return render_template("activityboard.html", form=form, activities=activities, all_users=all_users)
+    return render_template("activityboard.html", form=form, activities=activities, all_users=all_users, current_user_id=1)  #To be replaced with current_user().user_id
 
-@app.route("/activity/<int:activity_id>/join", methods=["POST"])
+@app.route("/activity/<int:activity_id>/join_activity", methods=["POST"])
 def join_activity(activity_id):
     user_id = session.get("user_id",1)  #Temporary set to 1 for testing
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
-    user = User.query.get(1)  #To be replaced with user_id=user_id
+    user = User.query.get(user_id)  #To be replaced with user_id=user_id
     activity = Activity.query.get_or_404(activity_id)
     #existing_participant = Activity_Participant.query.filter_by(activity_id=activity_id, user_id=user_id).first()
+
+    if user in activity.participants:
+        flash("Du nimmst bereits teil.", "error")
+        return redirect(url_for("activity_board"))
 
     if activity.max_participants and len(activity.participants) >= activity.max_participants:
         flash("Die Aktivität ist bereits voll.", "error")
@@ -349,6 +353,31 @@ def join_activity(activity_id):
         #flash("Erfolgreich teilgenommen!", "success")
 
     return redirect(url_for("activity_board"))
+
+@app.route("/activity/<int:activity_id>/leave_activity", methods=["POST"])
+def leave_activity(activity_id):
+    user_id = session.get("user_id",1)  #Temporary set to 1 for testing
+    #if not user_id:
+        #flash("Bitte zuerst einloggen.", "error")
+        #return redirect(url_for("login"))
+    user = User.query.get(user_id)  #To be replaced with user_id=user_id
+    activity = Activity.query.get_or_404(activity_id)
+
+    if user not in activity.participants:
+        flash("Du nimmst nicht teil.", "error")
+        return redirect(url_for("activity_board"))
+
+    activity.participants.remove(user)
+    db.session.commit()
+    flash("Du hast die Aktivität verlassen.", "success")    
+    #existing_participant = Activity_Participant.query.filter_by(activity_id=activity_id, user_id=user_id).first()
+
+    #if existing_participant:
+        #db.session.delete(existing_participant)
+        #db.session.commit()
+        #flash("Erfolgreich ausgetreten!", "success")
+
+    return redirect(url_for("activity_board"),)
 
 @app.route("/activity/<int:activity_id>/delete_activity", methods=["POST"])
 def delete_activity(activity_id):
