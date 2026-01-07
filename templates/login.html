@@ -1,1 +1,10 @@
-<h1>Login webseite</h1>
+<h1>Login</h1>
+
+<form method="post">
+    <input type="text" name="username" placeholder="Benutzername" required>
+    <input type="password" name="password" placeholder="Passwort" required>
+    <button type="submit">Login</button>
+</form>
+
+<p>Noch kein Account?</p>
+<a href="{{ url_for('register') }}">Jetzt registrieren</a>

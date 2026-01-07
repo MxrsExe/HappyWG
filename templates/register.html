@@ -1,0 +1,10 @@
+<h1>Register</h1>
+
+<form method="post">
+    <input type="text" name="username" placeholder="Benutzername" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Passwort" required>
+    <button type="submit">Registrieren</button>
+</form>
+
+<a href="{{ url_for('login') }}">Zurück zum Login</a>
