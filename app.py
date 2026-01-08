@@ -414,18 +414,18 @@ def einkaufsplan():
         
         
         if form.validate_on_submit():
-            user_id = session.get("user_id",1)  #Temporary set to 1 for testing
+            user_id = session.get("user_id")  #Temporary set to 1 for testing
             #if not user_id:
                 #flash("Bitte zuerst einloggen.", "error")
                 #return redirect(url_for("login"))
             current_user = User.query.get(user_id)
             wg_id = current_user.wg_id  #Temporary set to 1 for testing
             
-            print("users in wg:", User.query.filter_by(wg_id=wg_id).count())
+            #print("users in wg:", User.query.filter_by(wg_id=wg_id).count())
 
             u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first()
             assigned_to = u.user_id if u else None  #Temporary assigned_to random user for testing
-            print("users in wg=1:", User.query.filter_by(wg_id=wg_id).count())
+            #print("users in wg=1:", User.query.filter_by(wg_id=wg_id).count())
 
             new_item = ShoppingItem(
             wg_id=wg_id,  #wg_id = user.wg_id
@@ -438,9 +438,8 @@ def einkaufsplan():
         db.session.add(new_item)
         
         db.session.commit()
-        print("gespeichert, item_id =", new_item.item_id)
-        print("count wg=1 =", ShoppingItem.query.filter_by(wg_id=1).count())
-       
+        #print("gespeichert, item_id =", new_item.item_id)
+        #print("count wg=1 =", ShoppingItem.query.filter_by(wg_id=1).count())
 
         flash("Artikel zum Einkaufsplan hinzugefügt!", "success")
         return redirect(url_for("einkaufsplan"))
