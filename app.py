@@ -396,44 +396,65 @@ def delete_activity(activity_id):
     return redirect(url_for("activity_board"))
 
 
+from sqlalchemy.sql import func
+from sqlalchemy.orm import joinedload
+
 @app.route("/einkaufsplan/", methods=["GET", "POST"])
 def einkaufsplan():
     form = EinkaufsplanForm()
 
-    # Immer Testuser nehmen, wenn keiner in session ist
+    # --- Fake current_user: Session -> sonst testuser ---
     user_id = session.get("user_id")
     current_user = User.query.get(user_id) if user_id else None
     if not current_user:
         current_user = User.query.filter_by(username="testuser").first()
 
+    # Falls es den testuser noch nicht gibt -> abbrechen/Fehlermeldung
+    if not current_user:
+        flash("Testuser fehlt. Bitte einmal anlegen (username='testuser', wg_id=1).", "error")
+        return render_template("einkaufsplan.html", form=form, shopping_items=[])
+
     wg_id = current_user.wg_id or 1
 
-    if form.validate_on_submit():
-        # random assigned_to aus derselben WG (notfalls testuser)
-        u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first()
-        assigned_to = u.user_id if u else current_user.user_id
+    # --- POST: Item speichern ---
+    if request.method == "POST":
+        print("Einkaufsplan POST angekommen")
+        print("form.validate_on_submit():", form.validate_on_submit())
+        print("form.errors:", form.errors)
 
-        new_item = ShoppingItem(
-            wg_id=wg_id,
-            added_by=current_user.user_id,
-            name=form.item.data,
-            quantity=form.quantity.data,
-            assigned_to=assigned_to
-        )
-        db.session.add(new_item)
-        db.session.commit()
-        flash("Artikel erfolgreich hinzugefügt!", "success")
-        return redirect(url_for("einkaufsplan"))
+        if form.validate_on_submit():
+            # random zuständig aus der WG (fallback: current_user)
+            u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first()
+            assigned_to = u.user_id if u else current_user.user_id
 
+            new_item = ShoppingItem(
+                wg_id=wg_id,
+                added_by=current_user.user_id,
+                name=form.item.data,
+                quantity=form.quantity.data,
+                assigned_to=assigned_to
+            )
+            db.session.add(new_item)
+            db.session.commit()
+
+            flash("Artikel erfolgreich hinzugefügt!", "success")
+            return redirect(url_for("einkaufsplan"))
+        else:
+            flash("Fehler beim Hinzufügen. Bitte Eingaben prüfen.", "error")
+
+    # --- GET (oder POST mit Fehlern): Items anzeigen ---
     shopping_items = (ShoppingItem.query
         .filter_by(wg_id=wg_id)
-        .options(joinedload(ShoppingItem.assigned_to_user),
-                 joinedload(ShoppingItem.added_by_user))
+        .options(
+            joinedload(ShoppingItem.assigned_to_user),
+            joinedload(ShoppingItem.added_by_user)
+        )
         .order_by(ShoppingItem.item_id.desc())
         .all()
     )
 
     return render_template("einkaufsplan.html", form=form, shopping_items=shopping_items)
+
 
   #wg_id = user.wg_id  #Temporary set to 1 for testing
      
