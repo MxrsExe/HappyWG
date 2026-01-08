@@ -3,6 +3,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from db import db, User 
 import os
 from flask import session
+from forms import LoginForm, RegisterForm
 
 def login_required():
     if 'user_id' not in session:
@@ -29,20 +30,20 @@ def index():
  #login-Funktion   
 @app.route("/login/", methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
+    form = LoginForm()
 
-        username=request.form.get('username')
-        password=request.form.get('password')
-
-        if not username or not password:
-            return "Bitte Benutzername und Passwort eingeben", 400
-        
-        user = User.query.filter_by(username=username).first()
+    if form.validate_on_submit():
+        user = User.query.filter_by(
+            username=form.username.data
+        ).first()
 
         if not user:
             return "Benutzer nicht gefunden", 401
 
-        if not check_password_hash(user.password_hash, password):
+        if not check_password_hash(
+            user.password_hash,
+            form.password.data
+        ):
             return "Falsches Passwort", 401
 
         session['user_id'] = user.user_id
@@ -50,47 +51,40 @@ def login():
         return redirect(url_for("create_or_join_wg"))
     
 
-    return render_template("login.html")
+    return render_template("login.html", form=form)
     
-@app.route('/logout/')
+@app.route("/logout/")
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
-@app.route('/register/', methods=['GET', 'POST'])
+@app.route("/register/", methods=['GET', 'POST'])
 def register():
-    #Seite anzeigen
-    if request.method =='GET':
-        return render_template("register.html")
-    #Formular wurde abgeschickt
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
+    form = RegisterForm()
 
-        if not username or not email or not password:
-            return "Bitte alle Felder ausfüllen", 400
-    
-        if User.query.filter_by(username=username).first():
+    if form.validate_on_submit():
+
+        if User.query.filter_by(username=form.username.data).first():
             return "Benutzername existiert bereits", 400
-    
-        if User.query.filter_by(email=email).first():
+        
+        if User.query.filter_by(email=form.email.data).first():
             return "Email existiert bereits", 400
-    #Passwort hashen und User erstellen
+
+        #Passwort hashen und User erstellen
         new_user = User(
             username=username,
             email=email,
             password_hash=generate_password_hash(password),
             role='member' 
-    )
+        )
 
-    db.session.add(new_user)
-    db.session.commit()
+        db.session.add(new_user)
+        db.session.commit()
 
-    #Session setzen -> direkt eingeloggt
-    session['user_id'] =new_user.user_id
-
-    return redirect(url_for('create_or_join_wg'))
+        #Session setzen -> direkt eingeloggt
+        session['user_id'] =new_user.user_id
+        return redirect(url_for('create_or_join_wg'))
+    return render_template("register.html", form=form)
 
 
 @app.route("/welcome/", methods=['GET', 'POST'])
