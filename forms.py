@@ -29,7 +29,7 @@ class RegisterForm(FlaskForm):
 
     confirm_password = PasswordField(
         "Passwort bestätigen",
-        validators=[DataRequired(),EqualTo("password", message="Passwörter stimmen nicht überein")]
+        validators=[DataRequired(),EqualTo('password', message="Passwörter stimmen nicht überein")]
     )
-    
+
     submit = SubmitField("Registrieren")

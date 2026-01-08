@@ -68,10 +68,12 @@ def register():
     if form.validate_on_submit():
 
         if User.query.filter_by(username=form.username.data).first():
-            return "Benutzername existiert bereits", 400
+            flash("Benutzername existiert bereits", "danger")
+            return render_template("register.html", "danger")
         
         if User.query.filter_by(email=form.email.data).first():
-            return "Email existiert bereits", 400
+            flash("Email existiert bereits", "danger")
+            return render_template("register.html", form=form)
 
         #Passwort hashen und User erstellen
         new_user = User(
@@ -86,7 +88,9 @@ def register():
 
         #Session setzen -> direkt eingeloggt
         session['user_id'] =new_user.user_id
+        flash("Registrierung erfolgreich! Willkommen!", "success")
         return redirect(url_for('create_or_join_wg'))
+        
     return render_template("register.html", form=form)
 
 
