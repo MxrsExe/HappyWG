@@ -30,16 +30,16 @@
             <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
     
-    
         {{ form.quantity() }}<br>
         {% for error in form.quantity.errors %}
             <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
-    
-        {{ form.submit() }}
+        <div class = "submit-btn">
+            {{ form.submit() }}
+        </div>
     </div>  
 </form>
-
+<
 <div class="shopping-list">
   {% for item in shopping_items %}
     <div class="shopping-item-card">
@@ -62,9 +62,9 @@
         {% endif %}
       </small>
         <br>
-
+      
         {% if item.assigned_to_user %}
-        <small class = "assigned_to">{{ item.assigned_to_user.username }}</small>
+        <small class = "assigned-to">{{ item.assigned_to_user.username }}</small>
         
         {% endif %}
 
@@ -75,66 +75,233 @@
   {% endfor %}
 </div>
 
-<p>DEBUG: items={{ shopping_list|length }}</p>
-
 <style>
-    .shopping-list {
-        display:flex;
-        flex-wrap:wrap;
-        gap:20px;
-        align-items:flex-start;
-        justify-content:center;
-    }
+  :root{
+    --bg: #f6f7fb;
+    --surface: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
 
-    .shopping-item-card {
-        border: 1px solid #161414;
-        border-radius: 5px;
-        padding: 15px;
-        margin-bottom: 15px;
-        position: relative;
-        background-color: #f9f9f9;
-        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
-        width: 100%;
-        max-width: 500px;
-        box-sizing: border-box;
-        
-    }
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
 
+    --radius: 14px;
+    --shadow: 0 10px 25px rgba(17, 24, 39, 0.08);
+    --shadow-sm: 0 6px 16px rgba(17, 24, 39, 0.08);
+  }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    line-height: 1.4;
+  }
+
+  /* NAV */
+  nav{
+    display:flex;
+    gap:10px;
+    flex-wrap: wrap;
+    margin: 18px auto 18px;
+    max-width: 980px;
+    padding: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+  }
+  nav a{
+    text-decoration:none;
+    color: var(--muted);
+    padding: 8px 12px;
+    border-radius: 10px;
+    transition: 0.15s ease;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  nav a:hover{
+    background: #eef2ff;
+    color: var(--primary);
+  }
+
+  /* PAGE HEADINGS */
+  h1, h2{
+    max-width: 980px;
+    margin: 14px auto;
+    padding: 0 6px;
+  }
+  h1{ font-size: 28px; letter-spacing: -0.02em; }
+  h2{ font-size: 16px; color: var(--muted); font-weight: 600; }
+
+  /* FLASH */
+  .alert-message{
+    max-width: 980px;
+    margin: 10px auto 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .alert-success{
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #065f46;
+  }
+  .alert-error{
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #7f1d1d;
+  }
+
+  /* FORM */
+  form{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 6px;
+  }
+
+  .item-forms{
+    display: grid;
+    grid-template-columns: 1fr 140px 160px;
+    gap: 12px;
+    align-items: end;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 18px;
+  }
+
+  /* inputs (WTForms rendert meistens input/select) */
+  .item-forms input[type="text"],
+  .item-forms input[type="number"],
+  .item-forms input,
+  .item-forms select{
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: #fafafa;
+    outline: none;
+    font-size: 14px;
+    transition: 0.15s ease;
+  }
+  .item-forms input:focus,
+  .item-forms select:focus{
+    background: #fff;
+    border-color: rgba(37, 99, 235, 0.45);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  }
+
+  /* submit (WTForms submit ist meist input[type=submit]) */
+  .item-forms input[type="submit"],
+  .item-forms button[type="submit"]{
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 0;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
+  .item-forms input[type="submit"]:hover,
+  .item-forms button[type="submit"]:hover{
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+  }
+
+  /* SHOPPING LIST GRID */
+  .shopping-list{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 6px 30px;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .shopping-item-card{
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 14px 48px;
+    box-shadow: var(--shadow);
+    transition: 0.15s ease;
+  }
+  .shopping-item-card:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(17,24,39,0.10);
+  }
+
+  .shopping-item-card h3{
+    margin: 0 0 8px;
+    font-size: 18px;
+    padding-right: 44px; /* Platz für Delete */
+  }
+
+  .item-quantity{
+    margin: 0 0 8px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .text-muted{
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* Delete button */
+  .delete-btn{
+    position:absolute;
+    top: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid #fecaca;
+    background: #fff;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: 0.15s ease;
+  }
+  .delete-btn:hover{
+    background: #fef2f2;
+    border-color: #fca5a5;
+    transform: translateY(-1px);
+  }
+
+  /* Assigned badge bottom-right */
+  .assigned-to{
+    position:absolute;
+    bottom: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #3730a3;
+    font-weight: 700;
+    font-size: 13px;
+    border: 1px solid #c7d2fe;
+    max-width: 75%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Responsive: Form stacked */
+  @media (max-width: 700px){
     .item-forms{
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
-        margin-bottom: 20px;
+      grid-template-columns: 1fr;
     }
-
-    .delete-btn {
-        position: absolute;
-        right: 12px;
-        top: 12px;
-        margin: 0;
-        background-color: tomato;
-        cursor: pointer;
-    }
-    .delete-btn:hover {
-        color: red;
-    }
-
-    .item-quantity {
-        font-weight: bold;
-    }
-
-    .assigned_to {
-        position: absolute;
-        bottom: 12px;
-        right: 12px;
-        font-style: italic;
-        color: #555;
-        font-size: large;
-        border: black;
-        padding: 2px 6px;
-        background-color: #e0e0e0;
-        border-radius: 5px;
-        margin-top: auto;
-    }
-
+  }
 </style>
+

@@ -36,8 +36,8 @@ class User(db.Model):
     ideas = db.relationship('Idea', back_populates='creator',foreign_keys='Idea.created_by')
     idea_comments = db.relationship('Idea_Comment', back_populates='user')
     idea_likes = db.relationship('Idea_Like', back_populates='user')
-    added_items = db.relationship('ShoppingItem', foreign_keys='ShoppingItem.added_by')
-    assigned_items = db.relationship('ShoppingItem', foreign_keys='ShoppingItem.assigned_to')
+    added_items = db.relationship('ShoppingItem', foreign_keys='ShoppingItem.added_by', back_populates='added_by_user')
+    assigned_items = db.relationship('ShoppingItem', foreign_keys='ShoppingItem.assigned_to', back_populates='assigned_to_user')
 
     
     joined_activities = db.relationship(
@@ -63,13 +63,13 @@ class ShoppingItem(db.Model):
     item_id = db.Column(db.Integer, primary_key=True, index=True)
     wg_id = db.Column(db.Integer, db.ForeignKey('WG.wg_id'), nullable=False)
     added_by = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=False)
-    assigned_to = db.Column(db.Integer, db.ForeignKey('USER.user_id'))
+    assigned_to = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=True)
     name = db.Column(db.String, nullable=False)
     quantity = db.Column(db.String)
     #Beziehungen
     wg = db.relationship('Wg', back_populates='shopping_items')
-    added_by_user = db.relationship('User', foreign_keys=[added_by])
-    assigned_to_user = db.relationship('User', foreign_keys=[assigned_to])
+    added_by_user = db.relationship('User', foreign_keys=[added_by], back_populates='added_items')
+    assigned_to_user = db.relationship('User', foreign_keys=[assigned_to], back_populates='assigned_items')
 
 class CleaningTemplate(db.Model):
     __tablename__ = 'CLEANING_TEMPLATE'
@@ -159,6 +159,7 @@ class Idea_Like(db.Model):
     
 
     
+
 
 
 

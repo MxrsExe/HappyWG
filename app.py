@@ -395,56 +395,48 @@ def delete_activity(activity_id):
     flash("Aktivität erfolgreich gelöscht.", "success")
     return redirect(url_for("activity_board"))
 
+
 @app.route("/einkaufsplan/", methods=["GET", "POST"])
 def einkaufsplan():
-
     form = EinkaufsplanForm()
 
-    shopping_items = (ShoppingItem.query
-                      .filter_by(wg_id=1)          # TODO: später user.wg_id
-                      .order_by(ShoppingItem.item_id)
-                      .all())
-    
-    if request.method == 'POST':
-        
-        print("Einkaufsplan POST angekommen")
-        print("form.validate_on_submit():", form.validate_on_submit())
-        print("form.errors:", form.errors)
+    # Immer Testuser nehmen, wenn keiner in session ist
+    user_id = session.get("user_id")
+    current_user = User.query.get(user_id) if user_id else None
+    if not current_user:
+        current_user = User.query.filter_by(username="testuser").first()
 
-        
-        
-        if form.validate_on_submit():
-            user_id = session.get("user_id")  #Temporary set to 1 for testing
-            #if not user_id:
-                #flash("Bitte zuerst einloggen.", "error")
-                #return redirect(url_for("login"))
-            current_user = User.query.get(user_id)
-            wg_id = current_user.wg_id  #Temporary set to 1 for testing
-            
-            #print("users in wg:", User.query.filter_by(wg_id=wg_id).count())
+    wg_id = current_user.wg_id or 1
 
-            u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first()
-            assigned_to = u.user_id if u else None  #Temporary assigned_to random user for testing
-            #print("users in wg=1:", User.query.filter_by(wg_id=wg_id).count())
+    if form.validate_on_submit():
+        # random assigned_to aus derselben WG (notfalls testuser)
+        u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first()
+        assigned_to = u.user_id if u else current_user.user_id
 
-            new_item = ShoppingItem(
-            wg_id=wg_id,  #wg_id = user.wg_id
-            added_by=user_id,  #To be replaced with user.user_id
+        new_item = ShoppingItem(
+            wg_id=wg_id,
+            added_by=current_user.user_id,
             name=form.item.data,
             quantity=form.quantity.data,
-            assigned_to=assigned_to  #Temporary assigned_to random user_id between 1 and 3 for testing
-
+            assigned_to=assigned_to
         )
         db.session.add(new_item)
-        
         db.session.commit()
-        #print("gespeichert, item_id =", new_item.item_id)
-        #print("count wg=1 =", ShoppingItem.query.filter_by(wg_id=1).count())
-
-        flash("Artikel zum Einkaufsplan hinzugefügt!", "success")
+        flash("Artikel erfolgreich hinzugefügt!", "success")
         return redirect(url_for("einkaufsplan"))
 
-    return render_template("einkaufsplan.html", form=form, shopping_items=shopping_items)  #wg_id = user.wg_id
+    shopping_items = (ShoppingItem.query
+        .filter_by(wg_id=wg_id)
+        .options(joinedload(ShoppingItem.assigned_to_user),
+                 joinedload(ShoppingItem.added_by_user))
+        .order_by(ShoppingItem.item_id.desc())
+        .all()
+    )
+
+    return render_template("einkaufsplan.html", form=form, shopping_items=shopping_items)
+
+  #wg_id = user.wg_id  #Temporary set to 1 for testing
+     
 
 @app.route("/einkaufsplan/item/<int:item_id>/delete", methods=["POST"])
 def delete_shopping_item(item_id):
