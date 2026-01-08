@@ -90,7 +90,7 @@ def register():
     #Session setzen -> direkt eingeloggt
     session['user_id'] =new_user.user_id
 
-    return redirect(url_for('create_or_join_wg>'))
+    return redirect(url_for('create_or_join_wg'))
 
 
 @app.route("/welcome/", methods=['GET', 'POST'])
