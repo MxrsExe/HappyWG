@@ -72,9 +72,9 @@ def register():
 
         #Passwort hashen und User erstellen
         new_user = User(
-            username=username,
-            email=email,
-            password_hash=generate_password_hash(password),
+            username=form.username.data,
+            email=form.email.data,
+            password_hash=generate_password_hash(form.password.data),
             role='member' 
         )
 
