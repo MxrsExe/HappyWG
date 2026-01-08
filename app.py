@@ -1,12 +1,15 @@
 from os import name
+from random import random
 from sqlite3 import IntegrityError
 from flask import Flask, flash, redirect, render_template,request, url_for,session, Response
 from datetime import timezone
 from flask_migrate import Migrate
+from sqlalchemy import func
 from sqlalchemy.orm import joinedload
+import random
 
-from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like,db, User
-from docs.forms import ActivityForm, CommentForm, InnovationForm, PutzplanForm
+from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User
+from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm
 
 
 app = Flask(__name__)
@@ -394,10 +397,63 @@ def delete_activity(activity_id):
 
 @app.route("/einkaufsplan/", methods=["GET", "POST"])
 def einkaufsplan():
+
+    form = EinkaufsplanForm()
+
+    shopping_items = (ShoppingItem.query
+                      .filter_by(wg_id=1)          # TODO: später user.wg_id
+                      .order_by(ShoppingItem.item_id)
+                      .all())
+    
     if request.method == 'POST':
         
-        pass
-    return render_template("einkaufsplan.html")
+        print("Einkaufsplan POST angekommen")
+        print("form.validate_on_submit():", form.validate_on_submit())
+        print("form.errors:", form.errors)
+
+        
+        
+        if form.validate_on_submit():
+            user_id = session.get("user_id",1)  #Temporary set to 1 for testing
+            #if not user_id:
+                #flash("Bitte zuerst einloggen.", "error")
+                #return redirect(url_for("login"))
+            current_user = User.query.get(user_id)
+            wg_id = current_user.wg_id  #Temporary set to 1 for testing
+            
+            print("users in wg:", User.query.filter_by(wg_id=wg_id).count())
+
+            u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first()
+            assigned_to = u.user_id if u else None  #Temporary assigned_to random user for testing
+            print("users in wg=1:", User.query.filter_by(wg_id=wg_id).count())
+
+            new_item = ShoppingItem(
+            wg_id=wg_id,  #wg_id = user.wg_id
+            added_by=user_id,  #To be replaced with user.user_id
+            name=form.item.data,
+            quantity=form.quantity.data,
+            assigned_to=assigned_to  #Temporary assigned_to random user_id between 1 and 3 for testing
+
+        )
+        db.session.add(new_item)
+        
+        db.session.commit()
+        print("gespeichert, item_id =", new_item.item_id)
+        print("count wg=1 =", ShoppingItem.query.filter_by(wg_id=1).count())
+       
+
+        flash("Artikel zum Einkaufsplan hinzugefügt!", "success")
+        return redirect(url_for("einkaufsplan"))
+
+    return render_template("einkaufsplan.html", form=form, shopping_items=shopping_items)  #wg_id = user.wg_id
+
+@app.route("/einkaufsplan/item/<int:item_id>/delete", methods=["POST"])
+def delete_shopping_item(item_id):
+    item = ShoppingItem.query.get_or_404(item_id)
+    db.session.delete(item)
+    db.session.commit()
+    flash("Artikel erfolgreich gelöscht.", "success")
+    return redirect(url_for("einkaufsplan"))
 
 from urllib.parse import urlencode
 

@@ -1,1 +1,136 @@
+<nav>
+  <a href="{{ url_for('dashboard') }}">Start</a>
+  <a href="{{ url_for('putzplan') }}">Putzplan</a>
+  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
+  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
+  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+</nav>
+
 <h1>Einkaufsplan</h1>
+
+<h2>Gemeinsame Einkaufsliste für die WG</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert-message {% if category == 'success' %}alert-success{% else %}alert-error{% endif %}" style="padding: 15px; margin-bottom: 20px; border-radius: 5px;" >
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<h2>Neuen Einkaufsartikel hinzufügen</h2>
+
+<form method = "POST" action="{{ url_for('einkaufsplan') }}" >
+    {{ form.hidden_tag() }}
+    <div class="item-forms">
+        {{ form.item(size=32) }}<br>
+        {% for error in form.item.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    
+    
+        {{ form.quantity() }}<br>
+        {% for error in form.quantity.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    
+        {{ form.submit() }}
+    </div>  
+</form>
+
+<div class="shopping-list">
+  {% for item in shopping_items %}
+    <div class="shopping-item-card">
+        <form method="POST" action="{{ url_for('delete_shopping_item', item_id=item.item_id) }}" class="delete-form">
+            <button type="submit" class="delete-btn"
+                
+                onclick="return confirm('Einkaufsartikel wirklich löschen?');">🗑️
+            </button>
+        </form>
+
+      <h3 class="mb-1">{{ item.name }}</h3>
+      <p class="item-quantity mb-2">Menge: {{ item.quantity }}</p>
+
+      <small class="text-muted">
+        Hinzugefügt von:
+        {% if item.added_by_user %}
+          {{ item.added_by_user.username }}
+        {% else %}
+          {{ item.added_by }}
+        {% endif %}
+      </small>
+        <br>
+
+        {% if item.assigned_to_user %}
+        <small class = "assigned_to">{{ item.assigned_to_user.username }}</small>
+        
+        {% endif %}
+
+    </div>
+  {% else %}
+    <p>Noch keine Einkäufe eingetragen.</p>
+
+  {% endfor %}
+</div>
+
+<p>DEBUG: items={{ shopping_list|length }}</p>
+
+<style>
+    .shopping-list {
+        display:flex;
+        flex-wrap:wrap;
+        gap:20px;
+        align-items:flex-start;
+        justify-content:center;
+    }
+
+    .shopping-item-card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+        position: relative;
+        background-color: #f9f9f9;
+        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+        width: 100%;
+        max-width: 500px;
+        box-sizing: border-box;
+        
+    }
+
+    .item-forms{
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .delete-btn {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        margin: 0;
+        background-color: tomato;
+        cursor: pointer;
+    }
+    .delete-btn:hover {
+        color: red;
+    }
+
+    .item-quantity {
+        font-weight: bold;
+    }
+
+    .assigned_to {
+        font-style: italic;
+        color: #555;
+        font-size: large;
+        border: black;
+        padding: 2px 6px;
+        background-color: #e0e0e0;
+        border-radius: 5px;
+    }
+
+</style>

@@ -56,7 +56,10 @@ class ActivityForm(FlaskForm):
     max_participants = IntegerField('Maximale Teilnehmerzahl', validators=[Optional(), NumberRange(min=1)], render_kw={"placeholder": "z.B. 10"})
     submit = SubmitField('Aktivität hinzufügen')
 
-
+class EinkaufsplanForm(FlaskForm):
+    item = StringField(validators=[InputRequired(), Length(min=1, max=100)], render_kw={"placeholder": "Artikel hinzufügen..."})
+    quantity = IntegerField(validators=[InputRequired()], render_kw={"placeholder": "Menge"})
+    submit = SubmitField('+')
 
 
 
