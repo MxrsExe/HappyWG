@@ -4,6 +4,7 @@ from db import db, User
 import os
 from flask import session
 from forms import LoginForm, RegisterForm
+from flask import flash
 
 def login_required():
     if 'user_id' not in session:
@@ -38,16 +39,18 @@ def login():
         ).first()
 
         if not user:
-            return "Benutzer nicht gefunden", 401
+            flash("Benutzername existiert nicht", "danger")
+            return render_template("login.html", form=form)
 
         if not check_password_hash(
             user.password_hash,
             form.password.data
         ):
-            return "Falsches Passwort", 401
+            flash("Falsches Passwort", "danger")
+            return render_template("login.html", form=form)
 
         session['user_id'] = user.user_id
-        print(f"User {username} erfolgreich eingeloggt")
+        flash("Erfolgreich eingeloggt", "success")
         return redirect(url_for("create_or_join_wg"))
     
 
