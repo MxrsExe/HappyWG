@@ -1,5 +1,5 @@
 from flask import Flask, redirect, render_template,request, url_for
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from db import db, User 
 import os
 from flask import session
@@ -30,6 +30,7 @@ def index():
 @app.route("/login/", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+
         username=request.form.get('username')
         password=request.form.get('password')
 
@@ -56,28 +57,31 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
-@app.rout('/register/', methods=['GET', 'POST'])
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
+    #Seite anzeigen
+    if request.method =='GET':
+        return render_template("register.html")
+    #Formular wurde abgeschickt
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
 
-    if not username or not email or not password:
-        return "Bitte alle Felder ausfüllen", 400
+        if not username or not email or not password:
+            return "Bitte alle Felder ausfüllen", 400
     
-    if User.query.filter_by(username=username).first():
-        return "Benutzername existiert bereits", 400
+        if User.query.filter_by(username=username).first():
+            return "Benutzername existiert bereits", 400
     
-    if User.query.filter_by(email=email).first():
-        return "Email existiert bereits", 400
+        if User.query.filter_by(email=email).first():
+            return "Email existiert bereits", 400
     #Passwort hashen und User erstellen
-    new_user = User(
-        username=username,
-        email=email,
-        password_hash=generate_password_hash(password),
-        role='member'
-        wg=wg
+        new_user = User(
+            username=username,
+            email=email,
+            password_hash=generate_password_hash(password),
+            role='member' 
     )
 
     db.session.add(new_user)
@@ -86,9 +90,8 @@ def register():
     #Session setzen -> direkt eingeloggt
     session['user_id'] =new_user.user_id
 
-    return redirect(url_for('welcome'))
+    return redirect(url_for('create_or_join_wg>'))
 
-return render_template("register.html")
 
 @app.route("/welcome/", methods=['GET', 'POST'])
 def create_or_join_wg():
@@ -190,4 +193,8 @@ def einkaufsplan():
     #    return redirect(url_for('login'))
     return render_template("einkaufsplan.html")
 
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()  # erstellt alle Tabellen in der Datenbank
+    app.run(debug=True)
 
