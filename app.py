@@ -126,12 +126,6 @@ def create_wg():
         if not wg_name:
             flash("Bitte einen WG-Namen eingeben", "danger")
             return redirect(url_for("create_wg"))
-        
-        def generate_unique_code():
-            while True:
-                code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-                if not Wg.query.filter_by(invite_code=code).first():
-                    return code
 
         invite_code = generate_unique_code()
 
@@ -162,21 +156,20 @@ def join_wg():
             flash("Ungültiger Einladungscode.", "danger")
             return redirect(url_for('join_wg'))
 
-        user = User.query.get(session[user_id])
+        user = User.query.get(session['user_id'])
         user.wg_id = wg.wg_id
         db.session.commit()  
 
-        flash(f"Du bits der WG '{wg.name}' erfolgreich beigetreten!", "success")
+        flash(f"Du bist der WG '{wg.name}' erfolgreich beigetreten!", "success")
         return redirect(url_for('dashboard'))
 
     return render_template("join_wg.html")
 
 @app.route("/dashboard/", methods=['GET'])
 def dashboard():
-    if request.method == 'GET':
-        return redirect(url_for("dashboard"))
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     return render_template("dashboard.html")
 
 @app.route("/putzplan/", methods=['GET'])
