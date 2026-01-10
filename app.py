@@ -69,7 +69,7 @@ def register():
 
         if User.query.filter_by(username=form.username.data).first():
             flash("Benutzername existiert bereits", "danger")
-            return render_template("register.html", "danger")
+            return render_template("register.html", form=form)
         
         if User.query.filter_by(email=form.email.data).first():
             flash("Email existiert bereits", "danger")
@@ -90,7 +90,7 @@ def register():
         session['user_id'] =new_user.user_id
         flash("Registrierung erfolgreich! Willkommen!", "success")
         return redirect(url_for('create_or_join_wg'))
-        
+
     return render_template("register.html", form=form)
 
 
