@@ -96,13 +96,12 @@ def register():
 
 @app.route("/welcome/", methods=['GET', 'POST'])
 def create_or_join_wg():
-    if request.method == 'POST':
-       
-        return redirect(url_for("create_wg"))
-   # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    user = User.query.get(session['user_id'])
 
-    return render_template("welcome.html")
+    return render_template("welcome.html", username=user.username)
 
 @app.route("/welcome/create_wg/", methods=['GET', 'POST'])
 def create_wg():
