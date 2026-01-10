@@ -147,11 +147,27 @@ def create_wg():
 
 @app.route("/welcome/join_wg/", methods=['GET', 'POST'])
 def join_wg():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
-        print("WG beigetreten")
-        return redirect(url_for("dashboard"))
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+        invite_code = request.form.get('invite_code', '').strip().upper()
+
+        if not invite_code:
+            flash("Bitte gib einen Einladungscode ein.", "danger")
+            return redirect(url_for('join_wg'))
+
+        wg = Wg.query.filter_by(invite_code=invite_code).first()
+        if not wg:
+            flash("Ungültiger Einladungscode.", "danger")
+            return redirect(url_for('join_wg'))
+
+        user = User.query.get(session[user_id])
+        user.wg_id = wg.wg_id
+        db.session.commit()  
+
+        flash(f"Du bits der WG '{wg.name}' erfolgreich beigetreten!", "success")
+        return redirect(url_for('dashboard'))
 
     return render_template("join_wg.html")
 

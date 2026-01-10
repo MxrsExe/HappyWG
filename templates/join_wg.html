@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
+
+    <h3 class="text-center mb-3">WG beitreten</h3>
+    <p class="text-center text-muted">
+      Trage den Einladungscode deiner WG ein
+    </p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+
+      <div class="mb-3">
+        <label class="form-label">Einladungscode</label>
+        <input type="text" name="invite_code" class="form-control" placeholder="z. B. AB12CD" required>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <!-- Zurück-Button -->
+        <a href="{{ url_for('create_or_join_wg') }}" class="btn btn-secondary">
+          Zurück
+        </a>
+
+        <!-- Beitreten -->
+        <button type="submit" class="btn btn-success">
+          WG beitreten
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
