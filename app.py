@@ -105,11 +105,26 @@ def create_or_join_wg():
 
 @app.route("/welcome/create_wg/", methods=['GET', 'POST'])
 def create_wg():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
-        print("WG erstellt")
-        return redirect(url_for("create_or_join_wg"))
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+        wg_name = request.form.get("wg_name")
+    
+        if not wg_name:
+            flash("Bitte einen WG-Namen eingeben", "danger")
+            return redirect(url_for("create_wg"))
+        
+        invite_code = generate_invite_code()
+
+        new_wg = WG(name=wg_name, invite_code=invite_code)
+
+        db.session.add(new_wg)
+        db.session.commit()
+
+        flash("WG erfolgreich erstellt! Einladungscode: " + invite_code, "success")
+        return redirect(url_for("join_wg"))
+    
     return render_template("create_wg.html")
 
 @app.route("/welcome/join_wg/", methods=['GET', 'POST'])
