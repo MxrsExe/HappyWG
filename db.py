@@ -51,6 +51,7 @@ class Wg(db.Model):
     wg_id = db.Column(db.Integer, primary_key=True, index=True)
     name = db.Column(db.String, nullable=False, unique=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+    invite_code = db.Column(db.String(6), nullable=True)
     shopping_items = db.relationship('ShoppingItem', back_populates='wg', cascade='all, delete-orphan')
     users = db.relationship('User', back_populates='wg')
     cleaning_templates = db.relationship('CleaningTemplate', back_populates='wg', cascade='all, delete-orphan')
