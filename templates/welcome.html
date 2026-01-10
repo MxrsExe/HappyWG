@@ -11,6 +11,17 @@
 
 <div class="container vh-100 d-flex flex-column justify-content-center">
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
     <!-- Begrüßung -->
     <div class="text-center mb-5">
         <h2>Willkommen, <strong>{{ username }}</strong>! </h2>

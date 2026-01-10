@@ -1,13 +1,20 @@
 from flask import Flask, redirect, render_template,request, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
-from db import db, User 
+from db import db, User, Wg 
 import os
 from flask import session
 from forms import LoginForm, RegisterForm
 from flask import flash
 from flask_migrate import Migrate
 
+import random, string
+def generate_unique_code(length=6):
+    while True:
+        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
 
+        if not Wg.query.filter_by(invite_code=code).first():
+            return code
+    
 def login_required():
     if 'user_id' not in session:
         return False
@@ -54,7 +61,7 @@ def login():
             return render_template("login.html", form=form)
 
         session['user_id'] = user.user_id
-        flash("Erfolgreich eingeloggt", "success")
+        flash("Erfolgreich eingeloggt!", "success")
         return redirect(url_for("create_or_join_wg"))
     
 
@@ -126,9 +133,9 @@ def create_wg():
                 if not Wg.query.filter_by(invite_code=code).first():
                     return code
 
-        invite_code = generate_invite_code()
+        invite_code = generate_unique_code()
 
-        new_wg = WG(name=wg_name, invite_code=invite_code)
+        new_wg = Wg(name=wg_name, invite_code=invite_code)
 
         db.session.add(new_wg)
         db.session.commit()
