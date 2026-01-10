@@ -5,6 +5,8 @@ import os
 from flask import session
 from forms import LoginForm, RegisterForm
 from flask import flash
+from flask_migrate import Migrate
+
 
 def login_required():
     if 'user_id' not in session:
@@ -19,6 +21,8 @@ app.config['SECRET_KEY'] = 'HappyWG_Project_SecretKey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
 
 db.init_app(app)
+migrate = Migrate(app, db)   #brauch man um neue Spalten zu erstellten Tabellen hinzuzufügen
+
 
 @app.route('/', methods=['GET', 'POST'])
 
