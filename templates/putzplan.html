@@ -124,9 +124,15 @@
    {%set task = eintrag.tasks[0] if eintrag.tasks else None %}
    {%set assigned_name = (eintrag.tasks[0].assigned_user.username if eintrag.tasks and eintrag.tasks[0].assigned_user else "-")%}
    <div class="putzplan-card">
+    {%if task%}
+      <form method = "POST" action="{{ url_for('delete_cleaning_task', template_id=eintrag.template_id) }}" class="delete-form"> 
+        <button type="submit" class="delete-btn" onclick="return confirm('Aufgabe wirklich löschen?');">🗑️ </button> 
+      </form>
+    {%endif%}
     <div class =putzplan-top>
       <div class ="putzplan-title">
         {%if task%}
+        
         <form method ="POST" action="{{url_for('toggle_cleaning_task',task_id=task.task_id)}}" class = "m-0">
             <label class="putzplan-checkbox">
               <input type="checkbox" name ="done" onchange="this.form.submit()"
@@ -165,6 +171,7 @@
   }
 
   .putzplan-card{
+    position: relative;
     width: 100%;
     max-width: 700px;
     border: 1px solid #000
@@ -224,6 +231,33 @@
     font-weight:bold;
     margin-right:6px;
   
+  }
+
+  .delete-btn{
+    position:absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid #fecaca;
+    background: #fff;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: 0.15s ease;
+  }
+  .delete-btn:hover{
+    background: #fef2f2;
+    border-color: #fca5a5;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 700px){
+    .item-forms{
+      grid-template-columns: 1fr;
+    }
   }
 
   .progress-stacked {

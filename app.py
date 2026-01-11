@@ -148,12 +148,12 @@ def putzplan():
             db.session.commit()
             flash("Eintrag erfolgreich erstellt!", "success")
             return redirect(url_for("putzplan"))
-
+    
     putzplan_eintraege = (CleaningTemplate.query
                           .filter_by(wg_id=1, is_active=True) #wg_id = user.wg_id
                           .order_by(CleaningTemplate.template_id.desc())
                           .all())
-    
+
     tasks = (CleaningTask.query
          .join(CleaningTemplate)
          .filter(CleaningTemplate.wg_id == 1)
@@ -163,7 +163,7 @@ def putzplan():
     completed_tasks = sum(1 for t in tasks if t.status == "completed")
     progress = int((completed_tasks / total_tasks) * 100) if total_tasks else 0
 
-    return render_template("putzplan.html", form=form, putzplan=putzplan_eintraege, all_users=all_users,
+    return render_template("putzplan.html", form=form, all_users=all_users,putzplan=putzplan_eintraege,
                            total_tasks=total_tasks, completed_tasks=completed_tasks, progress=progress)
 
 @app.route("/putzplan/task/<int:task_id>/toggle", methods=["POST"])
@@ -172,6 +172,19 @@ def toggle_cleaning_task(task_id):
     task.status = "completed" if request.form.get("done") == "on" else "open"
     db.session.commit()
     return redirect(url_for("putzplan"))
+
+@app.route("/putzplan/task/<int:template_id>/delete", methods=["POST"])
+def delete_cleaning_task(template_id):
+    #current_user_id = session.get("user_id")
+    #if idea.creator.user_id != current_user_id:
+     #   flash("Sie können nur Ihre eigenen Tasks löschen.", "error")
+        #abort(403)
+    template = CleaningTemplate.query.get_or_404(template_id)
+    db.session.delete(template)
+    db.session.commit()
+    flash("Aufgabe erfolgreich gelöscht.", "success")
+    return redirect(url_for("putzplan"))
+
 
 
 @app.route("/innovationboard/", methods=['GET', 'POST'])
