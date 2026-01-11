@@ -119,65 +119,111 @@
     }
 </style>
 
-<table>
-  <thead>
-    <tr>
-      <th>Aufgabe</th>
-      <th>Zeitraum</th>
-      <th>Zuständig</th>
-    </tr>
-  </thead>
-  
-  <tbody>
-    {% for eintrag in putzplan %}
-    
-    <tr>
-        <td>
-    {% set task = eintrag.tasks[0] if eintrag.tasks else None %}
-
-    {% if task %}
-      <form method="POST"
-            action="{{ url_for('toggle_cleaning_task', task_id=task.task_id) }}"
-            class="m-0">
-        <label class="d-flex align-items-center gap-2 m-0">
-          <input class="form-check-input m-0"
-                 type="checkbox"
-                 name="done"
-                 onchange="this.form.submit()"
-                 {% if task.status == 'completed' %}checked{% endif %}>
-          <span>{{ eintrag.name }}</span>
-        </label>
-      </form>
-    {% else %}
-      {{ eintrag.name }}
-    {% endif %}
-  </td>
-
-      <td>{{ eintrag.description }}</td>
-    
-        <td>
-        {% if eintrag.tasks and eintrag.tasks[0].assigned_user %}
-          {{ eintrag.tasks[0].assigned_user.username }}
-        {% else %}
-          -
-        {% endif %}
-      </td>
-       
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="putzplan-list">
+  {%for eintrag in putzplan%}
+   {%set task = eintrag.tasks[0] if eintrag.tasks else None %}
+   {%set assigned_name = (eintrag.tasks[0].assigned_user.username if eintrag.tasks and eintrag.tasks[0].assigned_user else "-")%}
+   <div class="putzplan-card">
+    <div class =putzplan-top>
+      <div class ="putzplan-title">
+        {%if task%}
+        <form method ="POST" action="{{url_for('toggle_cleaning_task',task_id=task.task_id)}}" class = "m-0">
+            <label class="putzplan-checkbox">
+              <input type="checkbox" name ="done" onchange="this.form.submit()"
+              {%if task.status =="completed" %}checked{% endif %}>
+              <span class ="putzplan-name">{{eintrag.name}}</span>
+            </label>
+        </form>
+        {%else%}
+          <span class="putzplan-name">{{eintrag.name}}</span>
+        {%endif%}
+      </div>
+      <div class = "putzplan-assigned">{{assigned_name}}</div>
+    </div>
+    <div class="putzplan-metadata">
+      <span class ="putzplan-label">Zeitraum:</span>
+      <span>{{eintrag.description}}</span>
+    </div>
+   </div>
+   {%else%}
+   <p>Noch keine Einträge im Putzplan. Sei die/der Erste!</p>
+   {%endfor%}
+</div>
 
 <p>Einträge geladen: {{ putzplan|length }}</p>
 
-<style>
-    
 
-
-</style>
 
 <style>
-  
+
+  .putzplan-list{
+    display:flex;
+    flex-direction: table-column;
+    gap: 14px;
+    margin-top: 18px;
+    align-items:flex-start;
+  }
+
+  .putzplan-card{
+    width: 100%;
+    max-width: 700px;
+    border: 1px solid #000
+    border-radius 12px;
+    padding: 14px 16px;
+    background: #f9f9f9;
+    box-shadow: 2px 2px 2px;
+    box-sizing: border-box;
+  }
+
+  .putzplan-top{
+    display:flex;
+    justify-content: space-between;
+    gap:12px;
+    align-items: flex-start;
+  }
+
+  .putzplan-title{
+    min-width: 0;
+    flex:1;
+  }
+
+  .putzplan-checkbox{
+
+    display:flex;
+    align-items: center;
+    gap:10px;
+    margin:0;
+    cursor:pointer;
+  }
+
+  .putzplan-name{
+    font-size: 1.05rem;
+    font-weight:700;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .putzplan-assigned{
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: #e0e0e0;
+    border: 1px solid #000;
+    font-style:oblique;
+    white-space: nowrap;
+  }
+
+  .putzplan-metadata{
+    margin-top:10px;
+    color:#444;
+    overflow-wrap: anywhere;
+  }
+
+  .putzplan-label{
+    font-weight:700px;
+    margin-right:6px;
+  }
+
   .progress-stacked {
     height: 18px !important;
     border-radius: 10px !important;
