@@ -40,6 +40,7 @@ class PutzplanForm(FlaskForm):
 class InnovationForm(FlaskForm):
     title = StringField('Titel', validators=[InputRequired(), Length(min=1, max=100)], render_kw={"placeholder": "Titel der Idee"})
     description = TextAreaField("Beschreibung", validators=[DataRequired(), Length(min=1, max=500)], render_kw={"placeholder": "Beschreibe deine Idee hier..."})
+    color = StringField('Farbe', validators=[InputRequired(), Length(min=7, max=7)], render_kw={"type": "color"})
     submit = SubmitField('Idee einreichen')
 
 class CommentForm(FlaskForm):

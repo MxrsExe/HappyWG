@@ -202,7 +202,9 @@ def innovation_board():
                     created_by=user.user_id,
                     title=form.title.data,
                     description=form.description.data,
+                    color=form.color.data or "#ffffff",
                     created_at=db.func.now()
+                
                 )
                 db.session.add(new_idea)
                 db.session.commit()

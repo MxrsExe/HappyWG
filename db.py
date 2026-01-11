@@ -131,6 +131,7 @@ class Idea(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     status = db.Column(db.String)
+    color = db.Column(db.String(7), nullable=False, default="#ffffff")
     #Beziehungen
     wg = db.relationship('Wg', back_populates='ideas')
     creator = db.relationship('User', back_populates='ideas', foreign_keys=[created_by])
