@@ -123,6 +123,7 @@
   {%for eintrag in putzplan%}
    {%set task = eintrag.tasks[0] if eintrag.tasks else None %}
    {%set assigned_name = (eintrag.tasks[0].assigned_user.username if eintrag.tasks and eintrag.tasks[0].assigned_user else "-")%}
+  
    <div class="putzplan-card">
     {%if task%}
       <form method = "POST" action="{{ url_for('delete_cleaning_task', template_id=eintrag.template_id) }}" class="delete-form"> 
@@ -259,6 +260,16 @@
       grid-template-columns: 1fr;
     }
   }
+  /* wenn erledigt */
+  .putzplan-card.is-done {
+    opacity: 0.6;                 /* ausgrauen */
+  }
+
+  .putzplan-card.is-done .putzplan-name,
+  .putzplan-card.is-done .putzplan-metadata {
+    text-decoration: line-through; /* durchstreichen */
+  }
+
 
   .progress-stacked {
     height: 18px !important;
