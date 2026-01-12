@@ -1,1 +1,238 @@
-<h1>ActivityBoard</h1>
+<nav>
+  <a href="{{ url_for('dashboard') }}">Start</a>
+  <a href="{{ url_for('putzplan') }}">Putzplan</a>
+  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
+  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
+  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+</nav>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+  <h1 style="margin:0;">ActivityBoard</h1>
+
+  <label for="modalToggleNewActivity"
+         style="cursor:pointer; padding:10px 20px; background-color:#007bff; color:white; border-radius:5px; display:inline-block;">
+    + Neue Aktivität
+  </label>
+</div>
+
+<h2>Teile deine Aktivitäten und Erlebnisse in der WG</h2>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert-message {% if category == 'success' %}alert-success{% else %}alert-error{% endif %}" style="padding: 15px; margin-bottom: 20px; border-radius: 5px;" >
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+<div class="activities-list">
+  {% for activity in activities %}
+    <div class="activity-card">
+      <form method="POST" action="{{ url_for('delete_activity', activity_id=activity.activity_id) }}" class="delete-form">
+          <button type="submit" class="delete-btn"
+            
+            onclick="return confirm('Aktivität wirklich löschen?');">🗑️</button>
+      </form>
+
+      <h3 class="mb-1">{{ activity.title }}</h3>
+      <p class="activity-desc mb-2">{{ activity.description }}</p>
+      <small class="text-muted">
+        {% if activity.max_participants %}
+          👤 {{ activity.participants|length }}/{{ activity.max_participants }}
+        {% else %}
+          👥 {{ activity.participants|length }}
+        {% endif %}
+
+        {% if activity.participants|length > 0 %}
+          ·
+          {% for u in activity.participants %}
+            {{ u.username }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        {% endif %}
+      </small>
+
+        <br>
+
+      <small class="text-muted">📅 {{ activity.date.strftime('%d.%m.%Y %H:%M') }} bis {{ activity.updated_at.strftime('%d.%m.%Y %H:%M') }}</small>
+      {% if activity.location %}
+        <br>
+        <small class="text-muted">📍{{ activity.location }}</small>
+      {% endif %}
+        <br>
+      
+      <a href="{{ url_for('activity_ics', activity_id=activity.activity_id) }}">📅 In Kalender speichern (.ics)</a>
+        <br>
+      <small class="text-muted" style="margin-top: 20px; margin-bottom: 5px;">Gepostet von {{ activity.creator.username }} am {{ activity.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+        <br>
+            {% set is_joined = current_user_id and (activity.participants   
+            | selectattr('user_id', 'equalto', current_user_id)
+            | list | length > 0) %}
+        
+        <form method="POST"
+              action="{% if is_joined %}{{ url_for('leave_activity', activity_id=activity.activity_id) }}{% else %}{{ url_for('join_activity', activity_id=activity.activity_id) }}{% endif %}"
+              class="m-0 action-form">
+
+          <button type="submit"
+                  class="action-btn {% if is_joined %}action-leave{% else %}action-join{% endif %}"
+                  onclick="return confirm('{% if is_joined %}Von der Aktivität wirklich abmelden?{% else %}Aktivität wirklich beitreten?{% endif %}');">
+            {% if is_joined %}𝗟𝖾𝖺𝗏𝖾 ✘{% else %}𝖩𝗈𝗂𝗇 ➥{% endif %}
+          </button>
+        </form>
+        
+    </div>
+    
+  {% else %}
+    <p>Noch keine Aktivitäten geteilt. Sei der/die Erste!</p>
+  {% endfor %}
+
+</div>
+
+
+<!-- Modal for New Activity -->
+<input type="checkbox" id="modalToggleNewActivity" style="display:none;">
+
+<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; z-index: 1;" id="modalBackdrop"></div>
+<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 30px; border-radius: 8px; width: 400px; z-index: 2; display: none;" id="modalContent">
+    <label for="modalToggleNewActivity" style="float: right; cursor: pointer; font-size: 24px; font-weight: bold; margin-top: 10px;">×</label>
+    <h2>Neue Aktivität vorschlagen</h2>
+    <h3>Schlage eine neue Aktivität für Deine WG vor.</h3>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div style="margin-bottom: 15px;">
+            <label for="activity_title">Aktivität:</label>
+            {{ form.title(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="activity_description">Beschreibung:</label>
+            {{ form.description(
+                style="display:block; margin-top:5px; padding:8px; width:100%; height:100px; resize: vertical; white-space: pre-wrap;"
+            ) }}
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="activity_date">Am / um</label>
+            {{ form.date(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="activity_date">Bis zum / um</label>
+            {{ form.updated_at(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style = "margin-bottom: 15px;">
+            <label for="activity_location">Ort:</label>
+            {{ form.location(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label>Max. Teilnehmer (optional):</label>
+            
+            {{ form.max_participants(
+                style="display:block; margin-top:5px; padding:8px; width:100%;",
+                placeholder="z.B. 10"
+            ) }}
+            
+
+            {% if form.max_participants.errors %}
+                <span style="color:red;">{{ form.max_participants.errors[0] }}</span>
+            {% endif %}
+            
+        </div>
+
+        {{ form.submit() }}
+        
+    </form>
+</div>
+
+<style>
+    #modalToggleNewActivity:checked ~ #modalBackdrop {
+        display: block !important;
+    }
+
+    #modalToggleNewActivity:checked ~ #modalContent {
+        display: block !important;
+    }
+
+    #modalBackdrop { z-index: 1000 !important; }
+    #modalContent  { z-index: 1001 !important; }
+</style>   
+
+<style>
+    .activities-list {
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .activity-card {
+        
+        position: relative;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        padding-bottom: 60px;
+        background-color: #f9f9f9;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 500px;
+    }
+    
+
+    .activity-card .action-form{
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      margin: 0;
+    }
+
+    .activity-card .action-btn{
+      display: inline-block;
+      width: auto;
+      height: auto;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid black;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+  .activity-card .action-join{
+    background-color: rgb(89, 55, 175);
+  }
+
+  .activity-card .action-leave{
+    background-color: rgb(218, 84, 84);
+  }
+
+  .activity-card .delete-btn{
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      margin: 0;
+      background-color: tomato;
+    }
+
+      .activity-card h3 {
+          padding-right: 60px; /* Platz für  Delete schaffen */
+
+      }
+
+      .activity-card{
+        padding-bottom: 40px; /* Platz für Join schaffen */
+      }
+
+      .activity-desc {
+          white-space: pre-wrap; /* Zeilenumbrüche behalten */
+          overflow-wrap: anywhere; /* Lange Wörter umbrechen */
+          word-break: break-word; /* Fallback */
+          max-width: 100%;
+      }
+    
+
+</style>   

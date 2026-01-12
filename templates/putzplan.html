@@ -1,1 +1,297 @@
 <h1>Putzplan</h1>
+<link rel="stylesheet" href="putzplan.css">
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert-message {% if category == 'success' %}alert-success{% else %}alert-error{% endif %}" style="padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+
+<nav>
+  <a href="{{ url_for('dashboard') }}">Start</a>
+  <a href="{{ url_for('putzplan') }}">Putzplan</a>
+  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
+  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
+  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+</nav>
+
+
+{% set remaining = 100 - progress %}
+
+<div class="mt-3 mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <strong>Fortschritt</strong>
+    <span class="text-muted">{{ completed_tasks }}/{{ total_tasks }} erledigt ({{ progress }}%)</span>
+  </div>
+
+  <div class="progress-stacked" style="height: 18px;">
+    <div class="progress" role="progressbar"
+         aria-label="Erledigt"
+         aria-valuenow="{{ progress|int }}" aria-valuemin="0" aria-valuemax="100"
+         style="width: {{ progress|int }}%;">
+      <div class="progress-bar bg-success"></div>
+    </div>
+
+    <div class="progress" role="progressbar"
+         aria-label="Offen"
+         aria-valuenow="{{ remaining|int }}" aria-valuemin="0" aria-valuemax="100"
+         style="width: {{ remaining|int }}%;">
+      <div class="progress-bar bg-secondary"></div>
+    </div>
+  </div>
+</div>
+
+
+
+<input type="checkbox" id="modalToggle" style="display: none;">
+
+<label for="modalToggle" style="cursor: pointer; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px; display: inline-block;">
+    + Neuen Eintrag erstellen
+</label>
+
+<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; z-index: 1;" id="modalBackdrop"></div>
+
+<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 30px; border-radius: 8px; width: 400px; z-index: 2; display: none;" id="modalContent">
+    <label for="modalToggle" style="float: right; cursor: pointer; font-size: 24px; font-weight: bold;">×</label>
+    <h2>Neuen Eintrag erstellen</h2>
+    <h3>Bestimme, wer für was zuständig ist</h3>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
+        <div style="margin-bottom: 15px;">
+            <label for="woche">Kalenderwoche:</label>
+            {{ form.woche(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label for="von_datum">Von:</label>
+            {{ form.von_datum(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="bis_datum">Bis:</label>
+            {{ form.bis_datum(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="aufgabe">Aufgabe:</label>
+            {{ form.aufgabe(style="display: block; margin-top: 5px; padding: 8px; width: 100%;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label for="zustaendig">Zuständig:</label>
+
+        {{ form.zustaendig(
+            list="users",
+            id="zustaendig",
+            style="display:block; margin-top:5px; padding:8px; width:100%;",
+            placeholder="z.B. Max"
+        ) }}
+
+        <datalist id="users">
+            {% for user in all_users %}
+            <option value="{{ user.username }}"></option>
+            {% endfor %}
+        </datalist>
+
+        {% if form.zustaendig.errors %}
+            <span style="color:red;">{{ form.zustaendig.errors[0] }}</span>
+        {% endif %}
+        </div>
+
+        {{ form.submit() }}
+    </form>
+</div>
+
+<style>
+    #modalToggle:checked ~ #modalBackdrop {
+        display: block !important;
+    }
+    
+    #modalToggle:checked ~ #modalContent {
+        display: block !important;
+    }
+</style>
+
+<div class="putzplan-list">
+  {%for eintrag in putzplan%}
+   {%set task = eintrag.tasks[0] if eintrag.tasks else None %}
+   {%set assigned_name = (eintrag.tasks[0].assigned_user.username if eintrag.tasks and eintrag.tasks[0].assigned_user else "-")%}
+  
+   <div class="putzplan-card">
+    {%if task%}
+      <form method = "POST" action="{{ url_for('delete_cleaning_task', template_id=eintrag.template_id) }}" class="delete-form"> 
+        <button type="submit" class="delete-btn" onclick="return confirm('Aufgabe wirklich löschen?');">🗑️ </button> 
+      </form>
+    {%endif%}
+    <div class =putzplan-top>
+      <div class ="putzplan-title">
+        {%if task%}
+        
+        <form method ="POST" action="{{url_for('toggle_cleaning_task',task_id=task.task_id)}}" class = "m-0">
+            <label class="putzplan-checkbox">
+              <input type="checkbox" name ="done" onchange="this.form.submit()"
+              {%if task.status =="completed" %}checked{% endif %}>
+              <span class ="putzplan-name">{{eintrag.name}}</span>
+            </label>
+        </form>
+        {%else%}
+          <span class="putzplan-name">{{eintrag.name}}</span>
+        {%endif%}
+      </div>
+      <div class = "putzplan-assigned">{{assigned_name}}</div>
+    </div>
+    <div class="putzplan-metadata">
+      <span class ="putzplan-label">Zeitraum:</span>
+      <span>{{eintrag.description}}</span>
+    </div>
+   </div>
+   {%else%}
+   <p>Noch keine Einträge im Putzplan. Sei die/der Erste!</p>
+   {%endfor%}
+</div>
+
+<p>Einträge geladen: {{ putzplan|length }}</p>
+
+
+
+<style>
+
+  .putzplan-list{
+    display:flex;
+    flex-direction:column;
+    gap: 14px;
+    margin-top: 18px;
+    align-items:flex-start;
+  }
+
+  .putzplan-card{
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    border: 1px solid #000
+    border-radius 12px;
+    padding: 14px 16px;
+    background: #f9f9f9;
+    box-shadow: 2px 2px 2px;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+
+  .putzplan-top{
+    display:flex;
+    justify-content: space-between;
+    gap:12px;
+    align-items: flex-start;
+  }
+
+  .putzplan-title{
+    min-width: 0;
+    flex:1;
+  }
+
+  .putzplan-checkbox{
+
+    display:flex;
+    align-items: center;
+    gap:10px;
+    margin:0;
+    cursor:pointer;
+  }
+
+  .putzplan-name{
+    font-size: 1.05rem;
+    font-weight:700;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .putzplan-assigned{
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: #e0e0e0;
+    border: 1px solid #000;
+    font-style:oblique;
+    white-space: nowrap;
+  }
+
+  .putzplan-metadata{
+    margin-top:10px;
+    color:#444;
+    overflow-wrap: anywhere;
+  }
+
+  .putzplan-label{
+    font-weight:bold;
+    margin-right:6px;
+  
+  }
+
+  .delete-btn{
+    position:absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid #fecaca;
+    background: #fff;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: 0.15s ease;
+  }
+  .delete-btn:hover{
+    background: #fef2f2;
+    border-color: #fca5a5;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 700px){
+    .item-forms{
+      grid-template-columns: 1fr;
+    }
+  }
+  /* wenn erledigt */
+  .putzplan-card.is-done {
+    opacity: 0.6;                 /* ausgrauen */
+  }
+
+  .putzplan-card.is-done .putzplan-name,
+  .putzplan-card.is-done .putzplan-metadata {
+    text-decoration: line-through; /* durchstreichen */
+  }
+
+
+  .progress-stacked {
+    height: 18px !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+  }
+  .progress {
+    height: 18px !important;
+    background-color: #0080ff !important;
+  }
+  .progress-bar {
+    transition: width .6s ease !important;
+  }
+</style>
+
+
+
+
+
+
+
+
+
+    
+    
