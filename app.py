@@ -7,6 +7,7 @@ from forms import LoginForm, RegisterForm
 from flask import flash
 from flask_migrate import Migrate
 from flask_mail import Mail, Message
+from datetime import datetime
 
 
 import random, string
@@ -215,11 +216,15 @@ def join_wg():
 
     return render_template("join_wg.html")
 
-@app.route("/dashboard/", methods=['GET', 'POST'])
+@app.route("/dashboard/", methods=['GET'])
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    user = User.query.get(session['user_id'])
+    wg = user.wg
+
+    heute = datetime.now().strftime("%A, %d.%m.%Y")
     
     return render_template("dashboard.html")
 
