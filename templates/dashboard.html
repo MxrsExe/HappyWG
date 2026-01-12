@@ -1,59 +1,108 @@
-<h1>Willkommen zurück, {{username}}!</h1>
-<p>Schön, dass du da bist! Hier ist deine WG-Übersicht für heute.</p>
+{% extends "base.html" %}
+{% block content %}
 
-<nav>
-  <a href="{{ url_for('dashboard') }}">Start</a>
-  <a href="{{ url_for('putzplan') }}">Putzplan</a>
-  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
-  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
-  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+<!--  TOP BAR  -->
+<nav class="navbar navbar-light bg-white shadow-sm px-4">
+    <div>
+        <strong>{{ wg_name }}</strong><br>
+        <small class="text-muted">{{ username }}</small>
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">
+        Abmelden
+    </a>
 </nav>
 
-<div>
-    <h3>Offene Putzaufgaben</h3>
-    <ul>
-        {% for task in tasks %}
-            <li>count_tasks()</li>
-        {% else %}
-            <li>Keine offenen Putzaufgaben!</li>
-        {% endfor %}
+<!--  NAVIGATION  -->
+<div class="container mt-4">
+    <div class="card shadow-sm p-3 mb-4">
+        <div class="d-flex justify-content-around fw-semibold">
+            <span class="text-primary">Start</span>
+            <span class="text-muted">Putzplan</span>
+            <span class="text-muted">Ideen</span>
+            <span class="text-muted">Aktivitäten</span>
+            <span class="text-muted">Einkauf</span>
+        </div>
+    </div>
+
+    <!-- WELCOME BOX  -->
+    <div class="card shadow-sm p-4 mb-4">
+        <h4>Willkommen zurück, {{ username }}!</h4>
+        <p class="text-muted mb-1">{{ heute }}</p>
+        <p class="mb-0">
+            Schön, dass du da bist! Hier ist deine WG-Übersicht für heute.
+        </p>
+    </div>
+
+    <!--  STAT BOXES  -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h2>{{ offene_putzaufgaben }}</h2>
+                <p class="mb-0">Putzaufgaben</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h2>{{ neue_ideen }}</h2>
+                <p class="mb-0">Neue Ideen</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h2>{{ kommende_events }}</h2>
+                <p class="mb-0">Events</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h2>{{ einkauf_items }}</h2>
+                <p class="mb-0">Einkauf</p>
+            </div>
+        </div>
+    </div>
+
+    <!--  INFO BOXES  -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-3">
+                <h5>Wichtige Hinweise</h5>
+                <p class="text-muted">Deine persönlichen To-Dos und Erinnerungen</p>
+                <ul class="mb-0">
+                    {% for hinweis in wichtige_hinweise %}
+                        <li>{{ hinweis }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm p-3">
+                <h5>Letzte Aktivitäten</h5>
+                <p class="text-muted">Was ist in der WG passiert?</p>
+                <ul class="mb-0">
+                    {% for aktivitaet in letzte_aktivitaeten %}
+                        <li>{{ aktivitaet }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!--  MEMBERS  -->
+    <div class="card shadow-sm p-4 mb-5">
+        <h5>WG-Mitglieder</h5>
+        <p class="text-muted">Deine WG-Mitglieder im Überblick</p>
+
+        <ul class="list-group">
+            {% for member in wg_mitglieder %}
+                <li class="list-group-item">{{ member }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 
-<div>
-    <h3>Neue Ideen</h3>
-    <ul>
-        {% for idea in ideas %}
-            <li>count_ideas()</li>
-        {% else %}
-            <li>Keine neuen Ideen!</li>
-        {% endfor %}
-</div>
-
-<div>
-    <h3>Kommende Events</h3>
-    <ul>
-        {% for event in events %}
-            <li>count_events()</li>
-        {% else %}
-            <li>Keine bevorstehenden Events!</li>
-        {% endfor %}
-</div>
-
-<div>
-    <h3>Einkaufsliste</h3>
-    <ul>
-        {% for item in shopping_list %}
-            <li>count_items()</li>
-        {% else %}
-            <li>Deine Einkaufsliste ist leer!</li>
-        {% endfor %}
-</div>
-
-<h2>WG-Mitglieder</h2>
-<ul>
-    {% for member in members %}
-        <li>{{ member.name }} - {{ member.role }}</li>
-    {% else %}
-        <li>Keine Mitglieder in der WG.</li>
-    {% endfor %}
-
+{% endblock %}
