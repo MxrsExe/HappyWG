@@ -6,6 +6,8 @@ from flask import session
 from forms import LoginForm, RegisterForm
 from flask import flash
 from flask_migrate import Migrate
+from flask_mail import Mail, Message
+
 
 import random, string
 def generate_unique_code(length=6):
@@ -174,35 +176,44 @@ def dashboard():
 
 @app.route("/putzplan/", methods=['GET'])
 def putzplan():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'GET':
         return redirect(url_for("putzplan"))
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+   
     return render_template("putzplan.html")
 
 @app.route("/create_cleaning_object/", methods=['GET'])
 def create_cleaning_object():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'GET':
         return redirect(url_for("create_cleaning_object"))
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+    
+
     return render_template("create_cleaning_object.html")
 
 
 @app.route("/innovationboard/", methods=['GET'])
 def innovation_board():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'GET':
         return redirect(url_for("innovation_board"))
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+   
     return render_template("innovationboard.html")
 
 @app.route("/new_innovation/", methods=['GET', 'POST'])
 def create_innovation():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         print("Innovation erstellt")
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+    
         return redirect(url_for("innovation_board"))
 
     print("Das ist später die neue Innovation erstellen Seite")
@@ -210,29 +221,35 @@ def create_innovation():
 
 @app.route("/activityboard/", methods=['GET'])
 def activity_board():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'GET':
         return redirect(url_for("activity_board"))
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+    
     return render_template("activityboard.html")
 
 @app.route("/new_activity/", methods=['GET', 'POST'])
 def create_activity():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         print("Aktivität erstellt")
         return redirect(url_for("activityboard"))
     print("Das ist später die neue Aktivitäten Seite")
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+   
     return render_template("create_activity.html")
 
 
 @app.route("/einkaufsplan/", methods = ["GET", "POST"])
 def einkaufsplan():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'GET':
         return redirect(url_for("einkaufsplan"))
-    # if 'user_id' not in session:
-    #    return redirect(url_for('login'))
+    
     return render_template("einkaufsplan.html")
 
 if __name__ == "__main__":

@@ -9,19 +9,21 @@
 </head>
 <body class="bg-light">
 
-<div class="container vh-100 d-flex flex-column justify-content-center">
-
+<div class="container-fluid pt-3">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{ category }} alert-dismissible fade show mx-auto col-md-6" role="alert">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             {% endfor %}
         {% endif %}
     {% endwith %}
-    
+</div>
+
+<div class="container vh-100 d-flex flex-column justify-content-center">
+
     <!-- Begrüßung -->
     <div class="text-center mb-5">
         <h2>Willkommen, <strong>{{ username }}</strong>! </h2>
