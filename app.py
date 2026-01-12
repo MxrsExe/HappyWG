@@ -1,6 +1,5 @@
 from flask import Flask, redirect, render_template,request, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
-from db import db, User, Wg 
 import os
 from flask import session
 from forms import LoginForm, RegisterForm
@@ -36,8 +35,9 @@ from flask_migrate import Migrate
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 import random
+import random, string
 
-from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User
+from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User, Wg
 from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm
 
 
@@ -90,6 +90,18 @@ def index():
         return "This is a POST request"
     return "Hello, World! Get Request Received"
 
+def generate_unique_code(length=6):
+    while True:
+        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+
+        if not Wg.query.filter_by(invite_code=code).first():
+            return code
+    
+def login_required():
+    if 'user_id' not in session:
+        return False
+    return True
+    
  #login-Funktion   
 @app.route("/login/", methods=['GET', 'POST'])
 def login():
@@ -222,11 +234,50 @@ def dashboard():
         return redirect(url_for('login'))
 
     user = User.query.get(session['user_id'])
-    wg = user.wg
+    if not user or not user.wg_id:
+        return redirect(url_for('create_or_join_wg'))
+
+    wg = Wg.query.get(user.wg_id)
+
+
+
+    offene_putzaufgaben_count = CleaningTask.query.filter_by(assigned_to=user.user_id, status='offen').count()
+    neue_ideen_count = Idea.query.filter_by(wg_id=wg.wg_id).count()
+    kommende_events = Activity.query.filter(Activity.wg_id==wg.wg_id, Activity.date >= datetime.now()).count()
+    einkauf_count = ShoppingItem.query.filter_by(wg_id=wg.wg_id, assigned_to=None).count()
+
+    counting_boxes = {
+        'putzaufgaben': offene_putzaufgaben_count,
+        'ideen': neue_ideen_count,
+        'events': kommende_events,
+        'einkauf': offene_einkaufs_items
+    }
+
+    wichtige_hinweise = []
+
+    putz_tasks = CleaningTask.query.filter_by(assignes_to=user.user_id, status="offen").all()
+
+    for task in putz_tasks.
+        wichtige_hinweise.append(
+            f"Denk noch an deine Putzaufgabe: {task.template.name}"
+        )
+    
+    if not wichtige_hinweise:
+        wichtige_hinweise.append("Momentan gibt es keine offenen Aufgaben!")
+    
+
+    letzte_aktivitaeten = []
+
+    letzte_ideen = Idea.query.filter_by(
+        wg_id=wg.wg_id
+    ).order_by(Idea.created_at.desc()).limit(10).all()
+
+    if not letzte_aktivitaten:
+        letzte_aktivitaeten.append("Momentan gibt es keine Aktivitäten")
 
     heute = datetime.now().strftime("%A, %d.%m.%Y")
-    
-    return render_template("dashboard.html")
+
+    return render_template("dashboard.html", username=user.username, wg_name=wg.name, heute=heute, counting_boxes=counting_boxes, wichtige_hinweise=wichtige_hinweise, letzte_aktivitaeten=letzte_aktivitaeten, wg_mitglieder=wg_mitglieder)
 
 
 
