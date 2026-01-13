@@ -1,15 +1,20 @@
-from flask import Flask, redirect, render_template,request, url_for
-from werkzeug.security import check_password_hash, generate_password_hash
-from db import db, User, Wg 
-import os
-from flask import session
-from forms import LoginForm, RegisterForm
-from flask import flash
+from os import name
+from random import random
+from sqlite3 import IntegrityError
+from flask import Flask, flash, redirect, render_template,request, url_for,session, Response
+from datetime import timezone
 from flask_migrate import Migrate
-from flask_mail import Mail, Message
-
-
+from sqlalchemy import func
+from sqlalchemy.orm import joinedload
+import random
+#from flask_mail import Mail, Message
 import random, string
+
+from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User, Wg
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm, RegisterForm, LoginForm
+
 def generate_unique_code(length=6):
     while True:
         code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
@@ -26,18 +31,6 @@ app = Flask(__name__)
 #session
 app.secret_key = "super-secret-key"
 #Flask bekommt DB-Zugriff
-from os import name
-from random import random
-from sqlite3 import IntegrityError
-from flask import Flask, flash, redirect, render_template,request, url_for,session, Response
-from datetime import timezone
-from flask_migrate import Migrate
-from sqlalchemy import func
-from sqlalchemy.orm import joinedload
-import random
-
-from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User
-from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm
 
 
 app = Flask(__name__)
@@ -47,7 +40,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
 db.init_app(app)
 migrate = Migrate(app, db)   #brauch man um neue Spalten zu erstellten Tabellen hinzuzufügen
 
-migrate = Migrate(app, db)
 #session["user_id"] = user.user_id
 #session["wg_id"] = user.wg_id  
 

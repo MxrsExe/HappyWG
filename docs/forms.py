@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 
 from wtforms import DateField, IntegerField, ValidationError, TextAreaField
 from wtforms.fields import StringField, PasswordField, SubmitField, DateTimeLocalField
-from wtforms.validators import InputRequired, Length, NumberRange, DataRequired, Optional
+from wtforms.validators import InputRequired, Length, NumberRange, DataRequired, Optional,Email, EqualTo
 from db import User,db
 
 class UserExistsValidator:
@@ -16,14 +16,36 @@ class UserExistsValidator:
             raise ValidationError(self.message)
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[InputRequired(), Length(min=4, max=25)])
-    password = PasswordField('Password', validators=[InputRequired(), Length(min=6, max=100)])
-    submit = SubmitField('Login')
+    username = StringField(
+        "Benutzername",
+        validators=[DataRequired(), Length(min=3, max=50)]
+    )
+    password = PasswordField(
+        "Passwort",
+        validators=[DataRequired()]
+    )
+    submit = SubmitField("Login")
 
-class CreateTodoForm(FlaskForm):
-    title = StringField('Title', validators=[InputRequired(), Length(min=1, max=100)])
-    description = StringField('Description', validators=[Length(max=500)])
-    submit = SubmitField('Create Todo')
+class RegisterForm(FlaskForm):
+    username = StringField(
+        "Benutzername",
+        validators=[DataRequired(), Length(min=3, max=50)]
+    )
+    email = StringField(
+        "E-Mail",
+        validators=[DataRequired(), Email()]
+    )
+    password = PasswordField(
+        "Passwort",
+        validators=[DataRequired(), Length(min=6)]
+    )
+
+    confirm_password = PasswordField(
+        "Passwort bestätigen",
+        validators=[DataRequired(),EqualTo('password', message="Passwörter stimmen nicht überein")]
+    )
+
+    submit = SubmitField("Registrieren")
 
 #Putzplan Forms
 class PutzplanForm(FlaskForm):
