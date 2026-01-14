@@ -28,15 +28,21 @@
   {% for activity in activities %}
     <div class="activity-card">
       <form method="POST" action="{{ url_for('delete_activity', activity_id=activity.activity_id) }}" style="position: absolute; top: 12px; right: 12px; margin: 0;">
-          <button type="submit" class="btn btn-sm btn-outline-danger"
-            
+          <button type="submit" class="btn btn-sm btn-outline-danger" 
+            title = "löschen" aria-label="löschen"
             onclick="return confirm('Aktivität wirklich löschen?');">🗑️</button>
       </form>
 
-      <h3 class="d-inline-block px-3 py-2 rounded-3 bg-white text-dark shadow-sm">{{ activity.title }}</h3>
+      <form method = "POST" action="{{url_for('activity_ics', activity_id=activity.activity_id)}}" style="position: absolute; top: 12px; right: 50px; margin-right: 10px;">
+          <button type="submit" class="btn btn-sm btn-outline-primary" title="In Kalender speichern (.ics)" aria-label="In Kalender speichern (.ics)">
+            📅
+          </button>
+      </form>
+      <h3 class="d-inline-block px-3 py-2 rounded-3 bg-white text-dark shadow-sm" style="margin-bottom: 15px;">{{ activity.title }}</h3>
       <br>
       <p class="activity-desc mb-2">{{ activity.description }}</p>
-        <div class="pb-3 mb-3 border-bottom">
+      <br>
+        <div class="pb-3 mb-3 border-bottom background-light p-2 rounded-3">
           <small class="text-muted">
             {% if activity.max_participants %}
               👤 {{ activity.participants|length }}/{{ activity.max_participants }}
@@ -52,15 +58,13 @@
             {% endif %}
           </small>
         </div>
-      <small class="text-muted">📅 {{ activity.date.strftime('%d.%m.%Y %H:%M') }} bis {{ activity.updated_at.strftime('%d.%m.%Y %H:%M') }}</small>
+      <small class="text-muted" style = "margin-bottom: 10px;">📅 {{ activity.date.strftime('%d.%m.%Y %H:%M') }} bis {{ activity.updated_at.strftime('%d.%m.%Y %H:%M') }}</small>
       {% if activity.location %}
         <br>
-        <small class="text-muted">📍{{ activity.location }}</small>
+        <small class="text-muted" style = "margin-bottom: 10px;">📍{{ activity.location }}</small>
       {% endif %}
         <br>
-      
-      <a href="{{ url_for('activity_ics', activity_id=activity.activity_id) }}">📅 In Kalender speichern (.ics)</a>
-        <br>
+
       <small class="text-muted" style="margin-top: 20px; margin-bottom: 5px;">Gepostet von {{ activity.creator.username }} am {{ activity.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
       <br>
             {% set is_joined = current_user_id and (activity.participants   
