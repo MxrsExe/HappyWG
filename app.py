@@ -9,7 +9,8 @@ from sqlalchemy.orm import joinedload
 import random
 #from flask_mail import Mail, Message
 from datetime import datetime
-import random, string
+from datetime import timezone
+
 
 from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User, Wg
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -31,20 +32,6 @@ def login_required():
 app = Flask(__name__)
 #session
 app.secret_key = "super-secret-key"
-#Flask bekommt DB-Zugriff
-from os import name
-from random import random
-from sqlite3 import IntegrityError
-from flask import Flask, flash, redirect, render_template,request, url_for,session, Response
-from datetime import timezone
-from flask_migrate import Migrate
-from sqlalchemy import func
-from sqlalchemy.orm import joinedload
-import random
-
-from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User
-from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'HappyWG_Project_SecretKey'
