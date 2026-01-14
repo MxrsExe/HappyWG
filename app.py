@@ -247,10 +247,10 @@ def dashboard():
     einkauf_count = ShoppingItem.query.filter_by(wg_id=wg.wg_id, assigned_to=None).count()
 
     counting_boxes = {
-        'putzaufgaben': offene_putzaufgaben_count,
-        'ideen': neue_ideen_count,
-        'events': kommende_events,
-        'einkauf': einkauf_count
+        'putzaufgaben': max(offene_putzaufgaben_count, 0),
+        'ideen': max(neue_ideen_count, 0),
+        'events': max(kommende_events, 0),
+        'einkauf': max(einkauf_count, 0)
     }
 
     wichtige_hinweise = []
@@ -275,7 +275,7 @@ def dashboard():
 
     heute = datetime.now().strftime("%A, %d.%m.%Y")
 
-    return render_template("dashboard.html", username=user.username, wg_name=wg.name, heute=heute, counting_boxes=counting_boxes, wichtige_hinweise=wichtige_hinweise, letzte_aktivitaeten=letzte_aktivitaeten, wg_mitglieder=wg_mitglieder)
+    return render_template("dashboard.html", active_page="dashboard", username=user.username, wg_name=wg.name, heute=heute, counting_boxes=counting_boxes, wichtige_hinweise=wichtige_hinweise, letzte_aktivitaeten=letzte_aktivitaeten, wg_mitglieder=wg_mitglieder)
 
 
 
