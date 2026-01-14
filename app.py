@@ -252,16 +252,27 @@ def dashboard():
         'events': max(kommende_events, 0),
         'einkauf': max(einkauf_count, 0)
     }
-
+    #Hinweis-Box
     wichtige_hinweise = []
 
     putz_tasks = CleaningTask.query.filter_by(assigned_to=user.user_id, status="offen").all()
-
     if putz_tasks:
-        wichtige_hinweise = [f"Denk noch an deine Putzaufgabe: {t.template.name}"for t in putz_tasks]
-    else:
-        wichtige_hinweise = ["Momentan gibt es keine offenen Aufgaben!"]  
+        wichtige_hinweise += [f"Denk noch an deine Putzaufgabe: {t.template.name}"for t in putz_tasks]
 
+    offene_einkaufs_items = ShoppingItem.query.filter_by(wg_id=wg.wg_id, assigned_to=None).all()
+    if offene_einkaufs_items:
+        wichtige_hinweise += ["Folgende Einkaufsitems müssen noch besorgt werden:"]
+        for item in offene_einkaufs_items:
+            wichtige_hinweise.append(f"-{item.name}")
+
+    kommende_events_list = Activity.query.filter(Activity.wg_id==wg.wg_id, Activity.date >= datetime.now()).order_by(Activity.date.asc()).limit(5).all()
+    if kommende_events_list:
+        wichtige_hinweise += [f"Kommendes Event: {e.title} am {e.date.strftime('%d.%m.%Y')}" for e in kommende_events_list] 
+
+    if not wichtige_hinweise:
+        wichtige_hinweise = ["Momentan gitbt es keine offenen Aufgaben oder Hinweise!"]
+
+    #Activity-Box
     letzte_aktivitaeten = []
 
     letzte_ideen = Idea.query.filter_by(
