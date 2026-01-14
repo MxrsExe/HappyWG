@@ -516,6 +516,8 @@ def activity_board():
 
     form = ActivityForm()
 
+    current_user_id = int(session["user_id"])
+
     all_users = User.query.all()
 
     if request.method == "POST":
@@ -526,7 +528,7 @@ def activity_board():
         if form.validate_on_submit():
             flash("Aktivität erfolgreich hinzugefügt!", "success")
 
-            user = User.query.filter_by(username="testuser").first()  # To be replaced with current_user() or session user
+            user = User.query.filter_by(current_user_id)  # To be replaced with current_user() or session user
             new_activity = Activity(
                 wg_id=1,  # wg_id = user.wg_id
                 created_by=user.user_id,
@@ -552,14 +554,14 @@ def activity_board():
                   .order_by(Activity.created_at.desc())
                   .all())
 
-    return render_template("activityboard.html", form=form, activities=activities, all_users=all_users, current_user_id=1)  #To be replaced with current_user().user_id
+    return render_template("activityboard.html", form=form, activities=activities, all_users=all_users, current_user_id=current_user_id)  #To be replaced with current_user().user_id
 
 @app.route("/activity/<int:activity_id>/join_activity", methods=["POST"])
 def join_activity(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    user_id = session.get("user_id",1)  #Temporary set to 1 for testing
+    user_id = int(session["user_id"])  #Temporary set to 1 for testing
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
@@ -590,7 +592,7 @@ def leave_activity(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    user_id = session.get("user_id",1)  #Temporary set to 1 for testing
+    user_id = session.get("user_id")  #Temporary set to 1 for testing
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
@@ -611,7 +613,7 @@ def leave_activity(activity_id):
         #db.session.commit()
         #flash("Erfolgreich ausgetreten!", "success")
 
-    return redirect(url_for("activity_board"),)
+    return redirect(url_for("activity_board"))
 
 @app.route("/activity/<int:activity_id>/delete_activity", methods=["POST"])
 def delete_activity(activity_id):
@@ -630,9 +632,6 @@ def delete_activity(activity_id):
     return redirect(url_for("activity_board"))
 
 
-from sqlalchemy.sql import func
-from sqlalchemy.orm import joinedload
-
 @app.route("/einkaufsplan/", methods=["GET", "POST"])
 def einkaufsplan():
     if 'user_id' not in session:
@@ -646,14 +645,14 @@ def einkaufsplan():
     if not current_user:
         current_user = User.query.filter_by(username="testuser").first()
 
-    # Falls es den testuser noch nicht gibt -> abbrechen/Fehlermeldung
+    #Falls es den testuser noch nicht gibt -> abbrechen/Fehlermeldung
     if not current_user:
         flash("Testuser fehlt. Bitte einmal anlegen (username='testuser', wg_id=1).", "error")
         return render_template("einkaufsplan.html", form=form, shopping_items=[])
 
     wg_id = current_user.wg_id or 1
 
-    # --- POST: Item speichern ---
+    # POST: Item speichern 
     if request.method == "POST":
         print("Einkaufsplan POST angekommen")
         print("form.validate_on_submit():", form.validate_on_submit())

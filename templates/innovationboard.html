@@ -12,17 +12,18 @@
     <a class="nav-link" href="{{ url_for('einkaufsplan') }}">Einkauf</a>
 </nav>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
   <h1 style="margin:0;">InnovationBoard</h1>
-    <h5 class="text-body-secondary">Teile deine Ideen zur Verbesserung des WG-Lebens</h5>
+    
   <label for="modalToggleNewIdea"
          class="btn btn-lg btn-primary">
     ✨Neue Idee
   </label>
 </div>
+<h5 class="text-body-secondary" style="margin-bottom: 20px;">Teile deine Ideen zur Verbesserung des WG-Lebens</h5>
 
 <br>
-
+  
 <div class="ideas-list d-flex flex-wrap justify-content-center gap-3">
 
   {% for idea in ideas %}
@@ -95,7 +96,7 @@
         <form method="POST" action="{{ url_for('post_comment', idea_id=idea.idea_id) }}" class="mt-3">
           {{ comment_form.hidden_tag() }}
           <div class="input-group">
-            {{ comment_form.content(class="form-control", placeholder="Kommentar hinzufügen...") }}
+            {{ comment_form.content(class="form-control") }}
             <button class="btn btn-outline-secondary" type="submit">Kommentieren</button>
           </div>
         </form>
