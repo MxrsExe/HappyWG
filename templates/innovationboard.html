@@ -1,114 +1,114 @@
-<nav>
-  <a href="{{ url_for('dashboard') }}">Start</a>
-  <a href="{{ url_for('putzplan') }}">Putzplan</a>
-  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
-  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
-  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+{% extends "base.html" %}
+{% block title %}InnovationBoard{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('dashboard') }}">Start</a>
+  <div class="navbar-nav">
+    <a class="nav-link" href="{{ url_for('putzplan') }}">Putzplan</a>
+    <a class="nav-link" href="{{ url_for('innovation_board') }}">InnovationBoard</a>
+    <a class="nav-link" href="{{ url_for('activity_board') }}">ActivityBoard</a>
+    <a class="nav-link" href="{{ url_for('einkaufsplan') }}">Einkauf</a>
 </nav>
 
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
   <h1 style="margin:0;">InnovationBoard</h1>
-
+    <h5 class="text-body-secondary">Teile deine Ideen zur Verbesserung des WG-Lebens</h5>
   <label for="modalToggleNewIdea"
-         style="cursor:pointer; padding:10px 20px; background-color:#007bff; color:white; border-radius:5px; display:inline-block;">
-    + Neue Idee
+         class="btn btn-lg btn-primary">
+    ✨Neue Idee
   </label>
 </div>
 
-<h2>Teile deine Ideen zur Verbesserung des WG-Lebens</h2>
+<br>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert-message {% if category == 'success' %}alert-success{% else %}alert-error{% endif %}" style="padding: 15px; margin-bottom: 20px; border-radius: 5px;" >
-            {{ message }}
-        </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+<div class="ideas-list d-flex flex-wrap justify-content-center gap-3">
 
-
-<div class="ideas-list">
   {% for idea in ideas %}
-    <div class="idea-card" style="background-color: {{ idea.color or '#ffffff' }}; ">
+    <div class="card shadow-sm border-0"
+     style="background-color: {{ idea.color or '#0d6efd' }};">
+  <div class="card-body text-white">
 
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <!-- Like -->
-        <form method="POST" action="{{ url_for('toggle_like', idea_id=idea.idea_id) }}" class="m-0">
-          
-          <button type="submit" class="btn btn-sm btn-outline-primary"
-                  style="cursor:pointer; padding:10px 20px; background-color:#007bff; color:white; border-radius:5px; display:inline-block;">
-            👍 {{ idea.likes|length }}
-          </button>
-        </form>
-      </div>
-        <!-- Delete -->
-    <div class="d-flex justify-content-end align-items-center mb-2">
-        <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.idea_id) }}" class="m-0">
+    <!-- Top row: Like left, Delete right -->
+    <div class="d-flex justify-content-between align-items-start mb-3">
 
-          <button type="submit" class="delete-btn"
-                  style="cursor:pointer; padding:10px 20px; background-color:#dc3545; color:white; border-radius:5px; display:inline-block;"
-                  onclick="return confirm('Idee wirklich löschen?');">
-            🗑️
-          </button>
-        </form>
-    </div>
-    
-
-  <!-- Card Content -->
-  <h3 class="mb-1">{{ idea.title }}</h3>
-  <p class="idea-desc mb-2">{{ idea.description }}</p>
-  <small class="text-muted">
-    Erstellt von {{ idea.creator.username }} am {{ idea.created_at.strftime('%d.%m.%Y') }}
-  </small>
-
-  <details class="mt-2">
-    <summary style="cursor:pointer; color:#28a745; font-weight:600;">
-      💬 Kommentare ({{ idea.comments|length if idea.comments else 0 }})
-    </summary>
-
-    <!-- bestehende Kommentare -->
-    <div style="margin-top:10px;">
-      {% for c in idea.comments %}
-        <div style="border-top:1px solid #ddd; padding-top:6px; margin-top:6px;">
-          <small>
-            <strong>{{ c.user.username }}</strong>
-            · {{ c.created_at.strftime('%d.%m.%Y %H:%M') }}
-          </small>
-          <div class ="comment-text">{{ c.content }}</div>
-        </div>
-      {% else %}
-        <small class="text-muted">Noch keine Kommentare.</small>
-      {% endfor %}
-    </div>
-
-    <!-- Kommentar schreiben -->
-    <form method="POST"
-      action="{{ url_for('post_comment', idea_id=idea.idea_id) }}"
-      style="margin-top:10px;">
-      {{ comment_form.hidden_tag() }}
-
-      <div style="display:flex; gap:10px; align-items:center;">
-        {{ comment_form.content(
-        id="content-" ~ idea.idea_id,
-        class="form-control",
-        rows="3",
-        style ="resize:vertical; flex-grow:1;",
-        placeholder="Kommentar hinzufügen..."
-        ) }}
-        <button type="submit" class="btn btn-sm btn-outline-secondary">
-          Kommentieren
+      <form method="POST" action="{{ url_for('toggle_like', idea_id=idea.idea_id) }}" class="m-0">
+        <button type="submit" class="btn btn-light btn-sm rounded-pill">
+          👍 <span class="ms-1">{{ idea.likes|length }}</span>
         </button>
+      </form>
+
+      <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.idea_id) }}" class="m-0">
+        <button type="submit"
+                class="btn btn-danger btn-sm rounded-circle"
+                style="width: 38px; height: 38px;"
+                onclick="return confirm('Idee wirklich löschen?');">
+          🗑️
+        </button>
+      </form>
+
+    </div>
+
+    <!-- Title -->
+    <h5 class="mb-2">
+      <span class="d-inline-block px-3 py-2 rounded-3 bg-white text-dark shadow-sm">
+        {{ idea.title }}
+      </span>
+    </h5>
+
+    <!-- Description -->
+    <p class="mb-3 text-white-50" style="white-space: pre-wrap; overflow-wrap: anywhere;">
+      {{ idea.description }}
+    </p>
+
+    <!-- Meta -->
+    <small class="d-block mb-3 text-white-50">
+      Erstellt von {{ idea.creator.username }} am {{ idea.created_at.strftime('%d.%m.%Y') }}
+    </small>
+
+    <!-- Comments toggle (Bootstrap collapse) -->
+    <a class="link-light fw-semibold text-decoration-none"
+       data-bs-toggle="collapse"
+       href="#comments-{{ idea.idea_id }}"
+       role="button"
+       aria-expanded="false"
+       aria-controls="comments-{{ idea.idea_id }}">
+      💬 Kommentare ({{ idea.comments|length if idea.comments else 0 }})
+    </a>
+
+    <div class="collapse mt-2" id="comments-{{ idea.idea_id }}">
+      <div class="bg-white text-dark rounded-3 p-3">
+
+        {% for c in idea.comments %}
+          <div class="border-top pt-2 mt-2">
+            <small class="text-muted">
+              <strong>{{ c.user.username }}</strong> · {{ c.created_at.strftime('%d.%m.%Y %H:%M') }}
+            </small>
+            <div style="overflow-wrap:anywhere;">{{ c.content }}</div>
+          </div>
+        {% else %}
+          <small class="text-muted">Noch keine Kommentare.</small>
+        {% endfor %}
+
+        <form method="POST" action="{{ url_for('post_comment', idea_id=idea.idea_id) }}" class="mt-3">
+          {{ comment_form.hidden_tag() }}
+          <div class="input-group">
+            {{ comment_form.content(class="form-control", placeholder="Kommentar hinzufügen...") }}
+            <button class="btn btn-outline-secondary" type="submit">Kommentieren</button>
+          </div>
+        </form>
+
       </div>
-    </form>
+    </div>
 
-  </details>
-
+  </div>
 </div>
 
   {% else %}
     <p>Noch keine Ideen eingereicht. Sei der Erste!</p>
   {% endfor %}
+
 </div>
 
 
@@ -151,68 +151,10 @@
 
     #modalBackdrop { z-index: 1000 !important; }
     #modalContent  { z-index: 1001 !important; }
-</style>   
-
-
-
-<style>
-  .ideas-list{
-    display:flex;
-    flex-wrap:wrap;
-    gap:20px;
-    align-items:flex-start;
-    justify-content:center;
-  }
-
-  .idea-card{
-    
-    border:1px solid #000;
-    border-radius:8px;
-    padding:15px;
-    box-sizing:border-box;
-    box-shadow:2px 2px 5px rgba(0,0,0,0.1);
-    flex: 0 1 520px;   /* Card ist "bis zu" 520px breit, schrumpft aber */
-    max-width: 100%;   /* nie breiter als Bildschirm */
-    min-width: 0;      /* wichtig in Flexbox, damit Text wirklich umbrechen darf */
-  }
-
-  /* Text in der Beschreibung umbrechen, auch ohne Leerzeichen */
-  .idea-desc{
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;  /* bricht lange Strings/URLs */
-    word-break: break-word;   /* Fallback */
-  }
-
-  .delete-btn{
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 5;
-  }
-
-    .idea-card h3 {
-        margin-top: 0;
-    }
-
-    .comment-text{
-    white-space: pre-wrap;       /* Zeilenumbrüche behalten */
-    overflow-wrap: anywhere;     /* bricht lange Wörter */
-    word-break: break-word;      /* Fallback */
-    max-width: 100%;
-  }
 </style>
 
-<style>
-  .idea-card{
-    position: relative;          /* für delete-btn Positionierung */
-  }
-  .delete-btn{
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 5;
-  }
-</style>
+{% endblock %}
+
 
 
 
