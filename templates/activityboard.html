@@ -1,9 +1,15 @@
-<nav>
-  <a href="{{ url_for('dashboard') }}">Start</a>
-  <a href="{{ url_for('putzplan') }}">Putzplan</a>
-  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
-  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
-  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+{% extends "base.html" %}
+{% block title %}InnovationBoard{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('dashboard') }}">Start</a>
+  <div class="navbar-nav">
+    <a class="nav-link" href="{{ url_for('putzplan') }}">Putzplan</a>
+    <a class="nav-link" href="{{ url_for('innovation_board') }}">InnovationBoard</a>
+    <a class="nav-link" href="{{ url_for('activity_board') }}">ActivityBoard</a>
+    <a class="nav-link" href="{{ url_for('einkaufsplan') }}">Einkauf</a>
 </nav>
 
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
@@ -157,7 +163,10 @@
 
     #modalBackdrop { z-index: 1000 !important; }
     #modalContent  { z-index: 1001 !important; }
-</style>   
+</style>
+{% endblock %}
+
+{% block styles %}   
 
 <style>
     .activities-list {
@@ -236,3 +245,4 @@
     
 
 </style>   
+{% endblock %}

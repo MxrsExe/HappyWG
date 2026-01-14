@@ -26,9 +26,10 @@
 <div class="ideas-list d-flex flex-wrap justify-content-center gap-3">
 
   {% for idea in ideas %}
-    <div class="card shadow-sm border-0"
-     style="background-color: {{ idea.color or '#0d6efd' }};">
-  <div class="card-body text-white">
+    <div class="card shadow-sm border-0">
+     <div class="card-header" style="background-color: {{ idea.color or '#0d6efd' }};">
+     </div>
+  <div class="card-body">
 
     <!-- Top row: Like left, Delete right -->
     <div class="d-flex justify-content-between align-items-start mb-3">
@@ -41,7 +42,7 @@
 
       <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.idea_id) }}" class="m-0">
         <button type="submit"
-                class="btn btn-danger btn-sm rounded-circle"
+                class="btn btn-sm btn-outline-danger"
                 style="width: 38px; height: 38px;"
                 onclick="return confirm('Idee wirklich löschen?');">
           🗑️
@@ -58,7 +59,7 @@
     </h5>
 
     <!-- Description -->
-    <p class="mb-3 text-white-50" style="white-space: pre-wrap; overflow-wrap: anywhere;">
+    <p class="mb-3 text-black-50" style="white-space: pre-wrap; overflow-wrap: anywhere;">
       {{ idea.description }}
     </p>
 
@@ -68,7 +69,7 @@
     </small>
 
     <!-- Comments toggle (Bootstrap collapse) -->
-    <a class="link-light fw-semibold text-decoration-none"
+    <a class="fw-semibold text-decoration-none text-black-50"
        data-bs-toggle="collapse"
        href="#comments-{{ idea.idea_id }}"
        role="button"
@@ -133,9 +134,31 @@
             ) }}
         </div>
         <div style="margin-bottom: 15px;">
-          <label>Farbe:</label>
-          {{ form.color(style="display:block; width:60px; height:40px; padding:0; border:none;") }}
-        </div>
+          <label for="color" class ="form-label">Farbe auswählen:</label>
+          <div class="d-flex flex-wrap gap-2 mb-2">
+            {% set presets = [
+              ("Blau", "#0d6efd"),
+              ("Violett", "#6610f2"),
+              ("Lila", "#6f42c1"),
+              ("Pink", "#d63384"),
+              ("Rot", "#dc3545"),
+              ("Orange", "#fd7e14"),
+              ("Gelb", "#ffc107"),
+              ("Grün", "#198754"),
+              ("Mint", "#20c997"),
+              ("Cyan", "#0dcaf0"),
+              ("Grau", "#6c757d"),
+              ("Schwarz", "#212529")
+            ] %}
+            {% for name,c in presets %}
+              <label class="btn btn-outline-secondary btn-sm rounded-pill">
+                <input type="radio" class="btn-check" name="color" value="{{ c }}"
+                      {% if form.color.data == c %}checked{% endif %}>
+                <span class="me-1" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:{{ c }};vertical-align:-2px;"></span>
+                {{ name }}
+              </label>
+            {% endfor %}
+          </div>
         {{ form.submit() }}
     </form>
     
