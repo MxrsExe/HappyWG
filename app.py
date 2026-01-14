@@ -275,12 +275,21 @@ def dashboard():
     #Activity-Box
     letzte_aktivitaeten = []
 
-    letzte_ideen = Idea.query.filter_by(
-        wg_id=wg.wg_id
-    ).order_by(Idea.created_at.desc()).limit(10).all()
+    erledigte_putzaufgaben = CleaningTask.query.filter_by(assigned_to=user.user_id, status="erledigt").order_by(CleaningTask.completed_at.desc()).limit(10).all()
+    letzte_aktivitaeten += [f"{t.user.username} hat {t.template.name} geputzt" for t in erledigte_putzaufgaben]
 
+    neue_einkaufs_items = ShoppingItem.query.filter(ShoppingItem.wg_id == wg.wg_id,).order_by(ShoppingItem.item_id.desc()).limit(10).all()
+    letzte_aktivitaeten += [f"{i.added_by_user.username} hat '{i.name}' zur Einkaufsliste hinzugefügt" for i in neue_einkaufs_items]
+
+    letzte_ideen = Idea.query.filter_by(wg_id=wg.wg_id).order_by(Idea.created_at.desc()).limit(10).all()
+    letzte_aktivitaeten += [f"{i.creator.username} hat eine Idee hinzugefügt: '{i.title}'" for i in letzte_ideen]
+
+    kommende_events_list = Activity.query.filter(Activity.wg_id == wg.wg_id, Activity.date >= datetime.now()).order_by(Activity.date.asc()).limit(5).all()
+    letzte_aktivitaeten += [f"{e.creator.username} hat ein Event hinzugefügt: '{e.title}' am {e.date.strftime('%d.%m.%Y')}" for e in kommende_events_list]
+    
     if not letzte_aktivitaeten:
         letzte_aktivitaeten.append("Momentan gibt es keine Aktivitäten")
+
 
     wg_mitglieder = User.query.filter_by(wg_id=wg.wg_id).all()
 

@@ -94,12 +94,15 @@
         </div>
     </div>
 
-    <!--  INFO BOXES  -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-6">
-            <div class="card shadow-sm p-3">
-                <h5>Wichtige Hinweise</h5>
-                <p class="text-muted">Deine persönlichen To-Dos und Erinnerungen</p>
+    <!-- INFO BOXES -->
+<div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5>Wichtige Hinweise</h5>
+            <p class="text-muted">Deine persönlichen To-Dos und Erinnerungen</p>
+
+            <div style="max-height: 220px; overflow-y: auto;">
                 <ul class="mb-0">
                     {% for hinweis in wichtige_hinweise %}
                         <li>{{ hinweis }}</li>
@@ -107,11 +110,14 @@
                 </ul>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-6">
-            <div class="card shadow-sm p-3">
-                <h5>Letzte Aktivitäten</h5>
-                <p class="text-muted">Was ist in der WG passiert?</p>
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5>Letzte Aktivitäten</h5>
+            <p class="text-muted">Was ist in der WG passiert?</p>
+
+            <div style="max-height: 220px; overflow-y: auto;">
                 <ul class="mb-0">
                     {% for aktivitaet in letzte_aktivitaeten %}
                         <li>{{ aktivitaet }}</li>
@@ -120,6 +126,9 @@
             </div>
         </div>
     </div>
+
+</div>
+
 
     <!--  MEMBERS  -->
     <div class="card shadow-sm p-4 mb-5">
