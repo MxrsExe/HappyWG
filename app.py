@@ -486,7 +486,7 @@ def join_activity(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    user_id = session.get("user_id",1)  #Temporary set to 1 for testing
+    user_id = session.get("user_id")  #Temporary set to 1 for testing
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
@@ -517,7 +517,7 @@ def leave_activity(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    user_id = session.get("user_id",1)  #Temporary set to 1 for testing
+    user_id = session.get("user_id")  #Temporary set to 1 for testing
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
@@ -538,7 +538,7 @@ def leave_activity(activity_id):
         #db.session.commit()
         #flash("Erfolgreich ausgetreten!", "success")
 
-    return redirect(url_for("activity_board"),)
+    return redirect(url_for("activity_board"))
 
 @app.route("/activity/<int:activity_id>/delete_activity", methods=["POST"])
 def delete_activity(activity_id):
@@ -557,9 +557,6 @@ def delete_activity(activity_id):
     return redirect(url_for("activity_board"))
 
 
-from sqlalchemy.sql import func
-from sqlalchemy.orm import joinedload
-
 @app.route("/einkaufsplan/", methods=["GET", "POST"])
 def einkaufsplan():
     if 'user_id' not in session:
@@ -573,14 +570,14 @@ def einkaufsplan():
     if not current_user:
         current_user = User.query.filter_by(username="testuser").first()
 
-    # Falls es den testuser noch nicht gibt -> abbrechen/Fehlermeldung
+    #Falls es den testuser noch nicht gibt -> abbrechen/Fehlermeldung
     if not current_user:
         flash("Testuser fehlt. Bitte einmal anlegen (username='testuser', wg_id=1).", "error")
         return render_template("einkaufsplan.html", form=form, shopping_items=[])
 
     wg_id = current_user.wg_id or 1
 
-    # --- POST: Item speichern ---
+    # POST: Item speichern 
     if request.method == "POST":
         print("Einkaufsplan POST angekommen")
         print("form.validate_on_submit():", form.validate_on_submit())
