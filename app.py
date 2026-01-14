@@ -443,6 +443,8 @@ def activity_board():
 
     form = ActivityForm()
 
+    current_user_id = int(session["user_id"])
+
     all_users = User.query.all()
 
     if request.method == "POST":
@@ -453,7 +455,7 @@ def activity_board():
         if form.validate_on_submit():
             flash("Aktivität erfolgreich hinzugefügt!", "success")
 
-            user = User.query.filter_by(username="testuser").first()  # To be replaced with current_user() or session user
+            user = User.query.filter_by(current_user_id)  # To be replaced with current_user() or session user
             new_activity = Activity(
                 wg_id=1,  # wg_id = user.wg_id
                 created_by=user.user_id,
@@ -479,14 +481,14 @@ def activity_board():
                   .order_by(Activity.created_at.desc())
                   .all())
 
-    return render_template("activityboard.html", form=form, activities=activities, all_users=all_users, current_user_id=1)  #To be replaced with current_user().user_id
+    return render_template("activityboard.html", form=form, activities=activities, all_users=all_users, current_user_id=current_user_id)  #To be replaced with current_user().user_id
 
 @app.route("/activity/<int:activity_id>/join_activity", methods=["POST"])
 def join_activity(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    user_id = session.get("user_id")  #Temporary set to 1 for testing
+    user_id = int(session["user_id"])  #Temporary set to 1 for testing
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
