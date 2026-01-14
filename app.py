@@ -8,6 +8,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 import random
 #from flask_mail import Mail, Message
+from datetime import datetime
 import random, string
 
 from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User, Wg
@@ -31,6 +32,18 @@ app = Flask(__name__)
 #session
 app.secret_key = "super-secret-key"
 #Flask bekommt DB-Zugriff
+from os import name
+from random import random
+from sqlite3 import IntegrityError
+from flask import Flask, flash, redirect, render_template,request, url_for,session, Response
+from datetime import timezone
+from flask_migrate import Migrate
+from sqlalchemy import func
+from sqlalchemy.orm import joinedload
+import random
+
+from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User
+from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm
 
 
 app = Flask(__name__)
@@ -81,6 +94,18 @@ def index():
         return "This is a POST request"
     return "Hello, World! Get Request Received"
 
+def generate_unique_code(length=6):
+    while True:
+        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+
+        if not Wg.query.filter_by(invite_code=code).first():
+            return code
+    
+def login_required():
+    if 'user_id' not in session:
+        return False
+    return True
+    
  #login-Funktion   
 @app.route("/login/", methods=['GET', 'POST'])
 def login():
@@ -207,13 +232,74 @@ def join_wg():
 
     return render_template("join_wg.html")
 
-@app.route("/dashboard/", methods=['GET', 'POST'])
+@app.route("/dashboard/", methods=['GET'])
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    user = User.query.get(session['user_id'])
+    if not user or not user.wg_id:
+        return redirect(url_for('create_or_join_wg'))
+
+    wg = Wg.query.get(user.wg_id)
+
+
+
+    offene_putzaufgaben_count = CleaningTask.query.filter_by(assigned_to=user.user_id, status='offen').count()
+    neue_ideen_count = Idea.query.filter_by(wg_id=wg.wg_id).count()
+    kommende_events = Activity.query.filter(Activity.wg_id==wg.wg_id, Activity.date >= datetime.now()).count()
+    einkauf_count = ShoppingItem.query.filter_by(wg_id=wg.wg_id, assigned_to=None).count()
+
+    counting_boxes = {
+        'putzaufgaben': max(offene_putzaufgaben_count, 0),
+        'ideen': max(neue_ideen_count, 0),
+        'events': max(kommende_events, 0),
+        'einkauf': max(einkauf_count, 0)
+    }
+    #Hinweis-Box
+    wichtige_hinweise = []
+
+    putz_tasks = CleaningTask.query.filter_by(assigned_to=user.user_id, status="offen").all()
+    if putz_tasks:
+        wichtige_hinweise += [f"Denk noch an deine Putzaufgabe: {t.template.name}"for t in putz_tasks]
+
+    offene_einkaufs_items = ShoppingItem.query.filter_by(wg_id=wg.wg_id, assigned_to=None).all()
+    if offene_einkaufs_items:
+        wichtige_hinweise += ["Folgende Einkaufsitems müssen noch besorgt werden:"]
+        for item in offene_einkaufs_items:
+            wichtige_hinweise.append(f"-{item.name}")
+
+    kommende_events_list = Activity.query.filter(Activity.wg_id==wg.wg_id, Activity.date >= datetime.now()).order_by(Activity.date.asc()).limit(5).all()
+    if kommende_events_list:
+        wichtige_hinweise += [f"Kommendes Event: {e.title} am {e.date.strftime('%d.%m.%Y')}" for e in kommende_events_list] 
+
+    if not wichtige_hinweise:
+        wichtige_hinweise = ["Momentan gitbt es keine offenen Aufgaben oder Hinweise!"]
+
+    #Activity-Box
+    letzte_aktivitaeten = []
+
+    erledigte_putzaufgaben = CleaningTask.query.filter_by(assigned_to=user.user_id, status="erledigt").order_by(CleaningTask.completed_at.desc()).limit(10).all()
+    letzte_aktivitaeten += [f"{t.user.username} hat {t.template.name} geputzt" for t in erledigte_putzaufgaben]
+
+    neue_einkaufs_items = ShoppingItem.query.filter(ShoppingItem.wg_id == wg.wg_id,).order_by(ShoppingItem.item_id.desc()).limit(10).all()
+    letzte_aktivitaeten += [f"{i.added_by_user.username} hat '{i.name}' zur Einkaufsliste hinzugefügt" for i in neue_einkaufs_items]
+
+    letzte_ideen = Idea.query.filter_by(wg_id=wg.wg_id).order_by(Idea.created_at.desc()).limit(10).all()
+    letzte_aktivitaeten += [f"{i.creator.username} hat eine Idee hinzugefügt: '{i.title}'" for i in letzte_ideen]
+
+    kommende_events_list = Activity.query.filter(Activity.wg_id == wg.wg_id, Activity.date >= datetime.now()).order_by(Activity.date.asc()).limit(5).all()
+    letzte_aktivitaeten += [f"{e.creator.username} hat ein Event hinzugefügt: '{e.title}' am {e.date.strftime('%d.%m.%Y')}" for e in kommende_events_list]
     
-    return render_template("dashboard.html")
+    if not letzte_aktivitaeten:
+        letzte_aktivitaeten.append("Momentan gibt es keine Aktivitäten")
+
+
+    wg_mitglieder = User.query.filter_by(wg_id=wg.wg_id).all()
+
+    heute = datetime.now().strftime("%A, %d.%m.%Y")
+
+    return render_template("dashboard.html", active_page="dashboard", username=user.username, wg_name=wg.name, heute=heute, counting_boxes=counting_boxes, wichtige_hinweise=wichtige_hinweise, letzte_aktivitaeten=letzte_aktivitaeten, wg_mitglieder=wg_mitglieder)
 
 
 

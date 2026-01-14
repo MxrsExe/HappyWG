@@ -1,59 +1,149 @@
-<h1>Willkommen zurück, {{username}}!</h1>
-<p>Schön, dass du da bist! Hier ist deine WG-Übersicht für heute.</p>
+{% extends "base.html" %}
+{% block content %}
 
-<nav>
-  <a href="{{ url_for('dashboard') }}">Start</a>
-  <a href="{{ url_for('putzplan') }}">Putzplan</a>
-  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
-  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
-  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+<!--  TOP BAR  -->
+<nav class="navbar navbar-light bg-white shadow-sm px-4">
+    <div>
+        <small class="text-muted">WG-Name:</small><br>
+        <strong>{{ wg_name }}</strong><br>
+        <small class="text-muted">WG-Mitglied:</small><br>
+        <span>{{ username }}</span>
+    </div>
+
+    <div class="text-center flex-grow-1">
+        <h3 class="fw-bold text-primary mb-0">HappyWG</h3>
+    </div>
+    
+    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">
+        Abmelden
+    </a>
 </nav>
 
-<div>
-    <h3>Offene Putzaufgaben</h3>
-    <ul>
-        {% for task in tasks %}
-            <li>count_tasks()</li>
-        {% else %}
-            <li>Keine offenen Putzaufgaben!</li>
-        {% endfor %}
+<!-- NAVIGATION / REITER -->
+<div class="card shadow-sm my-4">
+    <div class="card-body py-2">
+        <ul class="nav nav-pills justify-content-between">
+            <li class="nav-item">
+                <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}"
+                   href="{{ url_for('dashboard') }}">
+                    Start
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('putzplan') }}">
+                    Putzplan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('innovation_board') }}">
+                    Ideen
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('activity_board') }}">
+                    Aktivitäten
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('einkaufsplan') }}">
+                    Einkauf
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 
-<div>
-    <h3>Neue Ideen</h3>
-    <ul>
-        {% for idea in ideas %}
-            <li>count_ideas()</li>
-        {% else %}
-            <li>Keine neuen Ideen!</li>
-        {% endfor %}
+
+    <!-- WELCOME BOX  -->
+    <div class="card shadow-sm p-4 mb-4">
+        <h4>Willkommen zurück, {{ username }}!</h4>
+        <p class="text-muted mb-1">{{ heute }}</p>
+        <p class="mb-0">
+            Schön, dass du da bist! Hier ist deine WG-Übersicht für heute.
+        </p>
+    </div>
+
+    <!--  STAT BOXES  -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h2>{{ counting_boxes.putzaufgaben }}</h2>
+                <p class="mb-0">Putzaufgaben</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h2>{{ counting_boxes.ideen }}</h2>
+                <p class="mb-0">Neue Ideen</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h2>{{ counting_boxes.events }}</h2>
+                <p class="mb-0">Events</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h2>{{ counting_boxes.einkauf }}</h2>
+                <p class="mb-0">Einkauf</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- INFO BOXES -->
+<div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5>Wichtige Hinweise</h5>
+            <p class="text-muted">Deine persönlichen To-Dos und Erinnerungen</p>
+
+            <div style="max-height: 220px; overflow-y: auto;">
+                <ul class="mb-0">
+                    {% for hinweis in wichtige_hinweise %}
+                        <li>{{ hinweis }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm p-3">
+            <h5>Letzte Aktivitäten</h5>
+            <p class="text-muted">Was ist in der WG passiert?</p>
+
+            <div style="max-height: 220px; overflow-y: auto;">
+                <ul class="mb-0">
+                    {% for aktivitaet in letzte_aktivitaeten %}
+                        <li>{{ aktivitaet }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<div>
-    <h3>Kommende Events</h3>
-    <ul>
-        {% for event in events %}
-            <li>count_events()</li>
-        {% else %}
-            <li>Keine bevorstehenden Events!</li>
+
+    <!--  MEMBERS  -->
+    <div class="card shadow-sm p-4 mb-5">
+        <h5>WG-Mitglieder</h5>
+        <p class="text-muted">Deine WG-Mitglieder im Überblick</p>
+
+        <ul class="list-group list-group-flush">
+        {% for member in wg_mitglieder %}
+            <li class="list-group-item {% if member.user_id == session['user_id'] %}fw-bold text-primary{% endif %}">
+                {{ member.username }}
+                {% if member.user_id == session['user_id'] %} (du) {% endif %}
+            </li>
         {% endfor %}
+    </ul>
+    </div>
 </div>
 
-<div>
-    <h3>Einkaufsliste</h3>
-    <ul>
-        {% for item in shopping_list %}
-            <li>count_items()</li>
-        {% else %}
-            <li>Deine Einkaufsliste ist leer!</li>
-        {% endfor %}
-</div>
-
-<h2>WG-Mitglieder</h2>
-<ul>
-    {% for member in members %}
-        <li>{{ member.name }} - {{ member.role }}</li>
-    {% else %}
-        <li>Keine Mitglieder in der WG.</li>
-    {% endfor %}
-
+{% endblock %}
