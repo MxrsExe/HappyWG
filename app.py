@@ -442,7 +442,7 @@ def activity_board():
         return redirect(url_for('login'))
 
     form = ActivityForm()
-
+    
     current_user_id = int(session["user_id"])
 
     all_users = User.query.all()
@@ -455,7 +455,8 @@ def activity_board():
         if form.validate_on_submit():
             flash("Aktivität erfolgreich hinzugefügt!", "success")
 
-            user = User.query.filter_by(current_user_id)  # To be replaced with current_user() or session user
+            user = User.query.get_or_404(current_user_id)
+  
             new_activity = Activity(
                 wg_id=1,  # wg_id = user.wg_id
                 created_by=user.user_id,
