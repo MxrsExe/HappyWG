@@ -4,26 +4,55 @@
 <!--  TOP BAR  -->
 <nav class="navbar navbar-light bg-white shadow-sm px-4">
     <div>
+        <small class="text-muted">WG-Name:</small><br>
         <strong>{{ wg_name }}</strong><br>
-        <small class="text-muted">{{ username }}</small>
+        <small class="text-muted">WG-Mitglied:</small><br>
+        <span>{{ username }}</span>
     </div>
 
+    <div class="text-center flex-grow-1">
+        <h3 class="fw-bold text-primary mb-0">HappyWG</h3>
+    </div>
+    
     <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">
         Abmelden
     </a>
 </nav>
 
-<!--  NAVIGATION  -->
-<div class="container mt-4">
-    <div class="card shadow-sm p-3 mb-4">
-        <div class="d-flex justify-content-around fw-semibold">
-            <span class="text-primary">Start</span>
-            <span class="text-muted">Putzplan</span>
-            <span class="text-muted">Ideen</span>
-            <span class="text-muted">Aktivitäten</span>
-            <span class="text-muted">Einkauf</span>
-        </div>
+<!-- NAVIGATION / REITER -->
+<div class="card shadow-sm my-4">
+    <div class="card-body py-2">
+        <ul class="nav nav-pills justify-content-between">
+            <li class="nav-item">
+                <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}"
+                   href="{{ url_for('dashboard') }}">
+                    Start
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('putzplan') }}">
+                    Putzplan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('innovationboard') }}">
+                    Ideen
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('activityboard') }}">
+                    Aktivitäten
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('einkaufsplan') }}">
+                    Einkauf
+                </a>
+            </li>
+        </ul>
     </div>
+</div>
+
 
     <!-- WELCOME BOX  -->
     <div class="card shadow-sm p-4 mb-4">

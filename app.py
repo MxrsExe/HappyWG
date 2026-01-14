@@ -250,21 +250,17 @@ def dashboard():
         'putzaufgaben': offene_putzaufgaben_count,
         'ideen': neue_ideen_count,
         'events': kommende_events,
-        'einkauf': offene_einkaufs_items
+        'einkauf': einkauf_count
     }
 
     wichtige_hinweise = []
 
-    putz_tasks = CleaningTask.query.filter_by(assignes_to=user.user_id, status="offen").all()
+    putz_tasks = CleaningTask.query.filter_by(assigned_to=user.user_id, status="offen").all()
 
-    for task in putz_tasks.
-        wichtige_hinweise.append(
-            f"Denk noch an deine Putzaufgabe: {task.template.name}"
-        )
-    
-    if not wichtige_hinweise:
-        wichtige_hinweise.append("Momentan gibt es keine offenen Aufgaben!")
-    
+    if putz_tasks:
+        wichtige_hinweise = [f"Denk noch an deine Putzaufgabe: {t.template.name}"for t in putz_tasks]
+    else:
+        wichtige_hinweise = ["Momentan gibt es keine offenen Aufgaben!"]  
 
     letzte_aktivitaeten = []
 
@@ -272,8 +268,10 @@ def dashboard():
         wg_id=wg.wg_id
     ).order_by(Idea.created_at.desc()).limit(10).all()
 
-    if not letzte_aktivitaten:
+    if not letzte_aktivitaeten:
         letzte_aktivitaeten.append("Momentan gibt es keine Aktivitäten")
+
+    wg_mitglieder = User.query.filter_by(wg_id=wg.wg_id).all()
 
     heute = datetime.now().strftime("%A, %d.%m.%Y")
 
