@@ -673,7 +673,7 @@ def build_ics(uid, title, start_dt, end_dt, description="", location=""):
         ""
     ])
 
-@app.route("/activities/<int:activity_id>/ics")
+@app.route("/activities/<int:activity_id>/ics", methods=["POST"])
 def activity_ics(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))

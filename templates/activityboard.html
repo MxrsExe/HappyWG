@@ -33,10 +33,14 @@
             onclick="return confirm('Aktivität wirklich löschen?');">🗑️</button>
       </form>
 
-      <form method = "POST" action="{{url_for('activity_ics', activity_id=activity.activity_id)}}" style="position: absolute; top: 12px; right: 50px; margin-right: 10px;">
-          <button type="submit" class="btn btn-sm btn-outline-primary" title="In Kalender speichern (.ics)" aria-label="In Kalender speichern (.ics)">
-            📅
-          </button>
+      <form method="POST" action="{{ url_for('activity_ics', activity_id=activity.activity_id) }}"
+      style="position:absolute; top:12px; right:50px; margin-right:10px;">
+        <button type="submit"
+                class="btn btn-sm btn-outline-primary"
+                title="In Kalender speichern (.ics)"
+                aria-label="In Kalender speichern (.ics)">
+          📅
+        </button>
       </form>
       <h3 class="d-inline-block px-3 py-2 rounded-3 bg-white text-dark shadow-sm" style="margin-bottom: 15px;">{{ activity.title }}</h3>
       <br>
@@ -58,6 +62,7 @@
             {% endif %}
           </small>
         </div>
+      
       <small class="text-muted" style = "margin-bottom: 10px;">📅 {{ activity.date.strftime('%d.%m.%Y %H:%M') }} bis {{ activity.updated_at.strftime('%d.%m.%Y %H:%M') }}</small>
       {% if activity.location %}
         <br>
