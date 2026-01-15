@@ -269,13 +269,13 @@ def dashboard():
     #Activity-Box
     letzte_aktivitaeten = []
 
-    erledigte_putzaufgaben = CleaningTask.query.filter_by(assigned_to=user.user_id, status="erledigt").order_by(CleaningTask.completed_at.desc()).limit(10).all()
+    erledigte_putzaufgaben = CleaningTask.query.filter_by(assigned_to=user.user_id, status="completed").order_by(CleaningTask.completed_at.desc()).limit(10).all()
     for t in erledigte_putzaufgaben:
-        letzte_aktivitaeten.append({"zeitpunkt": t.completed_at, "text": f"<strong>{t.user.username}</strong> hat {t.template.name} geputzt", "typ": "putz"})
+        letzte_aktivitaeten.append({"zeitpunkt": t.completed_at, "text": f"<strong>{t.assigned_user.username}</strong> hat {t.template.name} geputzt", "typ": "putz"})
 
     neue_einkaufs_items = ShoppingItem.query.filter(ShoppingItem.wg_id == wg.wg_id).order_by(ShoppingItem.created_at.desc()).limit(10).all()
     for ein in neue_einkaufs_items:
-        letzte_aktivitaeten.append({"zeitpunkt": ein.created_at, "text": f"<strong>{ein.added_by_user.username}</strong> hat '{ein.name}' zur Einkaufsliste hinzugefügt", "typ": "einkauf"})
+        letzte_aktivitaeten.append({"zeitpunkt": ein.created_at, "text": f"<strong>{ein.added_by_user.username}</strong>  hat '{ein.name}' zur Einkaufsliste hinzugefügt", "typ": "einkauf"})
 
     letzte_ideen = Idea.query.filter_by(wg_id=wg.wg_id).order_by(Idea.created_at.desc()).limit(10).all()
     for i in letzte_ideen:
