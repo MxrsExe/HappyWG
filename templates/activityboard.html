@@ -163,12 +163,17 @@
     #modalContent  { z-index: 1001 !important; }
 </style>
 
+<p class="text-muted">DEBUG activities={{ activities|length }}</p>
+
+
+
 
 
 
 <style>
     .activities-list {
         display: flex;
+        flex-wrap: wrap; 
         gap: 15px;
         align-items: flex-start;
         justify-content: center;
@@ -226,9 +231,6 @@
 
       }
 
-      .activity-card{
-        padding-bottom: 40px; /* Platz für Join schaffen */
-      }
 
       .activity-desc {
           white-space: pre-wrap; /* Zeilenumbrüche behalten */

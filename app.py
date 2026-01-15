@@ -232,10 +232,12 @@ def dashboard():
 
 
 
-    offene_putzaufgaben_count = CleaningTask.query.filter_by(assigned_to=user.user_id, status='offen').count()
+    offene_putzaufgaben_count = CleaningTask.query.filter_by(assigned_to=user.user_id, status='open').count()
     neue_ideen_count = Idea.query.filter_by(wg_id=wg.wg_id).count()
+    
     kommende_events = Activity.query.filter(Activity.wg_id==wg.wg_id, Activity.date >= datetime.now()).count()
-    einkauf_count = ShoppingItem.query.filter_by(wg_id=wg.wg_id, assigned_to=None).count()
+
+    einkauf_count = ShoppingItem.query.filter_by(wg_id=wg.wg_id, assigned_to=user.user_id).count()
 
     counting_boxes = {
         'putzaufgaben': max(offene_putzaufgaben_count, 0),
@@ -246,7 +248,7 @@ def dashboard():
     #Hinweis-Box
     wichtige_hinweise = []
 
-    putz_tasks = CleaningTask.query.filter_by(assigned_to=user.user_id, status="offen").all()
+    putz_tasks = CleaningTask.query.filter_by(assigned_to=user.user_id, status="open").all()
     if putz_tasks:
         wichtige_hinweise += [f"Denk noch an deine Putzaufgabe: {t.template.name}"for t in putz_tasks]
 
@@ -262,6 +264,7 @@ def dashboard():
 
     if not wichtige_hinweise:
         wichtige_hinweise = ["Momentan gitbt es keine offenen Aufgaben oder Hinweise!"]
+
 
     #Activity-Box
     letzte_aktivitaeten = []
@@ -291,22 +294,23 @@ def dashboard():
     wg_mitglieder = User.query.filter_by(wg_id=wg.wg_id).all()
 
     heute = datetime.now().strftime("%A, %d.%m.%Y")
-
+    
     return render_template("dashboard.html", active_page="dashboard", username=user.username, wg_name=wg.name, heute=heute, counting_boxes=counting_boxes, wichtige_hinweise=wichtige_hinweise, letzte_aktivitaeten=letzte_aktivitaeten, wg_mitglieder=wg_mitglieder)
 
 
 
 @app.route("/putzplan/", methods=["GET", "POST"])
 def putzplan():
+    user_id = int(session["user_id"])
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    current_user = User.query.get(session["user_id"])
-    if not current_user:
+    user = User.query.get(session["user_id"])
+    if not user:
         return redirect(url_for("login"))
 
     form = PutzplanForm()
-    all_users = User.query.filter_by(wg_id=current_user.wg_id).all()
+    all_users = User.query.filter_by(wg_id=user.wg_id).all()
 
     if request.method == "POST":
         print("POST angekommen")
@@ -317,7 +321,7 @@ def putzplan():
         if form.validate_on_submit():
             zustaendig_name = request.form.get("zustaendig", "").strip()
             assigned_user = User.query.filter_by(
-                wg_id=current_user.wg_id,
+                wg_id=user.wg_id,
                 username=zustaendig_name
             ).first()
 
@@ -325,7 +329,7 @@ def putzplan():
                 flash("WG-Mitglied existiert nicht", "error")
             else:
                 new_template = CleaningTemplate(
-                    wg_id=current_user.wg_id,
+                    wg_id=user.wg_id,
                     name=form.aufgabe.data,
                     description=f"KW {form.woche.data}: {form.von_datum.data} bis {form.bis_datum.data}",
                     frequency="weekly",
@@ -347,13 +351,13 @@ def putzplan():
                 return redirect(url_for("putzplan"))
 
     putzplan_eintraege = (CleaningTemplate.query
-                          .filter_by(wg_id=current_user.wg_id, is_active=True)
+                          .filter_by(wg_id=user.wg_id, is_active=True)
                           .order_by(CleaningTemplate.template_id.desc())
                           .all())
 
     tasks = (CleaningTask.query
              .join(CleaningTemplate)
-             .filter(CleaningTemplate.wg_id == current_user.wg_id)
+             .filter(CleaningTemplate.wg_id == user.wg_id)
              .all())
 
     total_tasks = len(tasks)
@@ -523,53 +527,50 @@ def post_comment(idea_id):
 
     return redirect(url_for("innovation_board"))
 
-@app.route("/activityboard/", methods=['GET', 'POST'])
+@app.route("/activityboard/", methods=["GET", "POST"])
 def activity_board():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
+    if "user_id" not in session:
+        return redirect(url_for("login"))
 
+    user = User.query.get(session["user_id"])
+    if not user or not user.wg_id:
+        return redirect(url_for("create_or_join_wg"))
+
+    wg_id = user.wg_id
     form = ActivityForm()
-    
-    current_user_id = int(session["user_id"])
-
-    all_users = User.query.all()
-    user = User.query.filter_by(user_id=current_user_id).first()
 
     if request.method == "POST":
-        print("Aktivität hinzufügen POST angekommen")
-        print("form.validate_on_submit():", form.validate_on_submit())
-        print("form.errors:", form.errors)
-
         if form.validate_on_submit():
-            flash("Aktivität erfolgreich hinzugefügt!", "success")
-
-            user = User.query.filter_by(user_id=current_user_id).first()  # To be replaced with current_user() or session user
             new_activity = Activity(
-                wg_id=user.wg_id,  # wg_id = user.wg_id
+                wg_id=wg_id,
                 created_by=user.user_id,
                 title=form.title.data,
                 description=form.description.data,
                 date=form.date.data,
                 updated_at=form.updated_at.data,
                 location=form.location.data,
-                
                 max_participants=form.max_participants.data,
                 created_at=db.func.now()
             )
             db.session.add(new_activity)
             db.session.commit()
-
             return redirect(url_for("activity_board"))
-        else:
-            flash("Fehler beim Hinzufügen der Aktivität. Bitte überprüfen Sie die Eingaben.", "error")
 
     activities = (Activity.query
-                  .filter_by(wg_id=user.wg_id)  # wg_id = user.wg_id
-                  .options(joinedload(Activity.creator), joinedload(Activity.participants))
-                  .order_by(Activity.created_at.desc())
-                  .all())
+        .filter_by(wg_id=wg_id)
+        .options(joinedload(Activity.creator), joinedload(Activity.participants))
+        .order_by(Activity.created_at.desc())
+        .all())
+    print("activities len:", len(activities))
+    print("first title:", activities[0].title if activities else None)
 
-    return render_template("activityboard.html", form=form, activities=activities, all_users=all_users, current_user_id=current_user_id)  #To be replaced with current_user().user_id
+    return render_template(
+        "activityboard.html",
+        form=form,
+        activities=activities,
+        current_user_id=user.user_id
+    )
+ 
 
 @app.route("/activity/<int:activity_id>/join_activity", methods=["POST"])
 def join_activity(activity_id):
@@ -607,7 +608,7 @@ def leave_activity(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    user_id = session.get("user_id")  #Temporary set to 1 for testing
+    user_id = int(session["user_id"])  #Temporary set to 1 for testing
     #if not user_id:
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
