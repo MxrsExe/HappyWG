@@ -268,25 +268,25 @@ def dashboard():
 
     erledigte_putzaufgaben = CleaningTask.query.filter_by(assigned_to=user.user_id, status="erledigt").order_by(CleaningTask.completed_at.desc()).limit(10).all()
     for t in erledigte_putzaufgaben:
-        letzte_aktivitaeten.append((t.completed_at, f"{t.user.username} hat {t.template.name} geputzt"))
+        letzte_aktivitaeten.append({"zeitpunkt": t.completed_at, "text": f"<strong>{t.user.username}</strong> hat {t.template.name} geputzt", "typ": "putz"})
 
-    neue_einkaufs_items = ShoppingItem.query.filter(ShoppingItem.wg_id == wg.wg_id,).order_by(ShoppingItem.item_id.desc()).limit(10).all()
+    neue_einkaufs_items = ShoppingItem.query.filter(ShoppingItem.wg_id == wg.wg_id).order_by(ShoppingItem.created_at.desc()).limit(10).all()
     for ein in neue_einkaufs_items:
-        letzte_aktivitaeten.append((ein.item_id, f"{ein.added_by_user.username} hat '{ein.name}' zur Einkaufsliste hinzugefügt"))
+        letzte_aktivitaeten.append({"zeitpunkt": ein.created_at, "text": f"<strong>{ein.added_by_user.username}</strong> hat '{ein.name}' zur Einkaufsliste hinzugefügt", "typ": "einkauf"})
 
     letzte_ideen = Idea.query.filter_by(wg_id=wg.wg_id).order_by(Idea.created_at.desc()).limit(10).all()
     for i in letzte_ideen:
-        letzte_aktivitaeten.append((i.created_at, f"{i.creator.username} hat eine Idee hinzugefügt: '{i.title}'"))
+        letzte_aktivitaeten.append({"zeitpunkt": i.created_at, "text": f"<strong>{i.creator.username}</strong> hat eine Idee hinzugefügt: '{i.title}'", "typ": "idee"})
 
     kommende_events_list = Activity.query.filter(Activity.wg_id == wg.wg_id, Activity.date >= datetime.now()).order_by(Activity.date.asc()).limit(5).all()
     for e in kommende_events_list:
-        letzte_aktivitaeten.append((e.created_at if hasattr(e,"created_at") else e.date, f"{e.creator.username} hat ein Event hinzugefügt: " f"'{e.title}' am {e.date.strftime('%d.%m.%Y')}"))
+        letzte_aktivitaeten.append({"zeitpunkt": e.created_at or e.date, "text": f"<strong>{e.creator.username}</strong> hat ein Event hinzugefügt: " f"'{e.title}' am {e.date.strftime('%d.%m.%Y')}", "typ": "event"})
     
     if not letzte_aktivitaeten:
-        letzte_aktivitaeten.append("Momentan gibt es keine Aktivitäten")
+        letzte_aktivitaeten.append({"zeitpunkt": None, "text": "Momentan gibt es keine Aktivitäten"})
 
-    #letzte_aktivitaeten.sort(key=lambda x: x[0] if x[0] else datetime.min, reverse=True)
-    #letzte_aktivitaeten = letzte_aktivitaeten[:10]
+    letzte_aktivitaeten.sort(key=lambda x: x.get("zeitpunkt") or datetime.min, reverse=True)
+    letzte_aktivitaeten = letzte_aktivitaeten[:10]
 
     wg_mitglieder = User.query.filter_by(wg_id=wg.wg_id).all()
 
