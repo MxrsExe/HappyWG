@@ -12,18 +12,14 @@
     <a class="nav-link" href="{{ url_for('einkaufsplan') }}">Einkauf</a>
 </nav>
 
-<h1>Putzplan</h1>
-<h5>Verwalte die Reinigungsaufgaben in deiner WG</h5>
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+  <h1 style="margin:0;">Putzplan</h1>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert-message {% if category == 'success' %}alert-success{% else %}alert-error{% endif %}" style="padding: 15px; margin-bottom: 20px; border-radius: 5px;">
-            {{ message }}
-        </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+  <label for="modalToggle" class="btn btn-lg btn-primary">
+    🧼Neue Aufgabe
+  </label>
+</div>
+<h5>Verwalte die Reinigungsaufgaben in deiner WG</h5>
 
 
 {% set remaining = 100 - progress %}
@@ -67,10 +63,6 @@
 <br>
 
 <input type="checkbox" id="modalToggle" style="display: none;">
-
-<label for="modalToggle" class="btn btn-lg btn-primary">
-    + Neuen Eintrag erstellen
-</label>
 
 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; z-index: 1;" id="modalBackdrop"></div>
 
