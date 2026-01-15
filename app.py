@@ -1,4 +1,4 @@
-from os import name
+from os import abort, name
 from random import random
 from sqlite3 import IntegrityError
 import string
@@ -392,10 +392,11 @@ def toggle_cleaning_task(task_id):
 
 @app.route("/putzplan/task/<int:template_id>/delete", methods=["POST"])
 def delete_cleaning_task(template_id):
-    #current_user_id = session.get("user_id")
-    #if idea.creator.user_id != current_user_id:
-     #   flash("Sie können nur Ihre eigenen Tasks löschen.", "error")
-        #abort(403)
+    user_id = session.get("user_id")
+    template = CleaningTemplate.query.get_or_404(template_id)
+    if template.creator.user_id != user_id:
+        flash("Sie können nur Ihre eigenen Tasks löschen.", "error")
+        abort(403)
     template = CleaningTemplate.query.get_or_404(template_id)
     
     db.session.delete(template)
@@ -414,12 +415,6 @@ def innovation_board():
         
     form = InnovationForm()
     user = User.query.filter_by(user_id=user_id).first()
-    #user_id = session.get("user_id")
-    #if not user_id:
-     #   flash("Bitte zuerst einloggen.", "error")
-      #  return redirect(url_for("login"))
-
-    #user = User.query.get(user_id)  
 
     all_users = User.query.all()
 
@@ -432,7 +427,6 @@ def innovation_board():
         if form.validate_on_submit():
                 flash("Innovation erfolgreich eingereicht!", "success")
                 
-                 #To be replaced with current_user() or session user
                 new_idea = Idea(
                     wg_id=user.wg_id,
                     created_by=user.user_id,
@@ -450,11 +444,11 @@ def innovation_board():
             flash("Fehler beim Einreichen der Innovation. Bitte überprüfen Sie die Eingaben.", "error")
 
     ideas = (Idea.query
-             .filter_by(wg_id=user.wg_id)   #wg_id = user.wg_id
+             .filter_by(wg_id=user.wg_id)   
              .options(joinedload(Idea.creator))
              .order_by(Idea.created_at.desc())
              .all())
-    #ideas = Idea.query.filter_by(wg_id=user.wg_id).order_by(Idea.created_at.desc()).all()
+    
     return render_template("innovationboard.html", form=form, all_users=all_users,ideas=ideas, comment_form=CommentForm())
 
 @app.route("/innovation_board/idea/<int:idea_id>/delete", methods=["POST"])
@@ -462,10 +456,10 @@ def delete_idea(idea_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    #current_user_id = session.get("user_id")
-    #if idea.creator.user_id != current_user_id:
-     #   flash("Sie können nur Ihre eigenen Ideen löschen.", "error")
-        #abort(403)
+    user_id = int(session["user_id"])
+    if idea.creator.user_id != user_id:
+        flash("Sie können nur Ihre eigenen Ideen löschen.", "error")
+        abort(403)
 
     idea = Idea.query.get_or_404(idea_id)
     db.session.delete(idea)
@@ -479,17 +473,13 @@ def toggle_like(idea_id):
     user_id = int(session["user_id"])  
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    #user_id = session.get("user_id")
-    #if not user_id:
-        #flash("Bitte zuerst einloggen.", "error")
-        #return redirect(url_for("login"))
 
     existing = Idea_Like.query.filter_by(idea_id=idea_id, user_id=user_id).first() #To be replaced with idea_id=idea_id, user_id=user_id
 
     if existing:
         db.session.delete(existing)   # unlike
     else:
-        db.session.add(Idea_Like(idea_id=idea_id, user_id=user_id))  # like #TODO: To be replaced with user_id=user_id
+        db.session.add(Idea_Like(idea_id=idea_id, user_id=user_id))  # like
 
     try:
         db.session.commit()
@@ -506,11 +496,6 @@ def post_comment(idea_id):
         return redirect(url_for('login'))
 
     form = CommentForm()
-    #user_id = session.get("user_id")               #TODO: get user_id from session
-    #if not user_id:
-        #flash("Bitte zuerst einloggen.", "error")
-        #return redirect(url_for("login"))
-
         
     if request.method == "POST":
         print("Kommentar POST angekommen")
@@ -523,7 +508,7 @@ def post_comment(idea_id):
             if content:
                 new_comment = Idea_Comment(
                     idea_id=idea_id,
-                    user_id=user_id,  #To be replaced with user_id=user_id 
+                    user_id=user_id,  
                     content=content,
                     created_at=db.func.now()
                 )
@@ -570,8 +555,6 @@ def activity_board():
         .options(joinedload(Activity.creator), joinedload(Activity.participants))
         .order_by(Activity.created_at.desc())
         .all())
-    print("activities len:", len(activities))
-    print("first title:", activities[0].title if activities else None)
 
     return render_template(
         "activityboard.html",
@@ -586,13 +569,11 @@ def join_activity(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    user_id = int(session["user_id"])  #Temporary set to 1 for testing
-    #if not user_id:
-        #flash("Bitte zuerst einloggen.", "error")
-        #return redirect(url_for("login"))
+    user_id = int(session["user_id"])  
+   
     user = User.query.get(user_id)  #To be replaced with user_id=user_id
     activity = Activity.query.get_or_404(activity_id)
-    #existing_participant = Activity_Participant.query.filter_by(activity_id=activity_id, user_id=user_id).first()
+
 
     if user in activity.participants:
         flash("Du nimmst bereits teil.", "error")
@@ -605,10 +586,6 @@ def join_activity(activity_id):
     activity.participants.append(user)
     db.session.commit()
     flash("Du bist beigetreten!", "success")    
-    #if not existing_participant:
-        #db.session.add(Activity_Participant(activity_id=activity_id, user_id=user_id))
-        #db.session.commit()
-        #flash("Erfolgreich teilgenommen!", "success")
 
     return redirect(url_for("activity_board"))
 
@@ -618,10 +595,8 @@ def leave_activity(activity_id):
         return redirect(url_for('login'))
 
     user_id = int(session["user_id"])  #Temporary set to 1 for testing
-    #if not user_id:
-        #flash("Bitte zuerst einloggen.", "error")
-        #return redirect(url_for("login"))
-    user = User.query.get(user_id)  #To be replaced with user_id=user_id
+ 
+    user = User.query.get(user_id)  
     activity = Activity.query.get_or_404(activity_id)
 
     if user not in activity.participants:
@@ -645,9 +620,10 @@ def delete_activity(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
         
-    #current_user_id = session.get("user_id")
-    #if activity.creator.user_id != current_user_id:
-     #   flash("Sie können nur Ihre eigenen Aktivitäten löschen.", "error")
+    current_user_id = session.get("user_id")
+    activity = Activity.query.get_or_404(activity_id)
+    if activity.creator.user_id != current_user_id:
+        flash("Sie können nur Ihre eigenen Aktivitäten löschen.", "error")
         #abort(403)
 
     activity = Activity.query.get_or_404(activity_id)
@@ -664,7 +640,6 @@ def einkaufsplan():
 
     form = EinkaufsplanForm()
 
-    # --- Fake current_user: Session -> sonst testuser ---
     user_id = int(session["user_id"])
     current_user = User.query.get(user_id) if user_id else None
     if not current_user:
@@ -715,9 +690,6 @@ def einkaufsplan():
     )
 
     return render_template("einkaufsplan.html", form=form, shopping_items=shopping_items)
-
-
-  #wg_id = user.wg_id  #Temporary set to 1 for testing
      
 
 @app.route("/einkaufsplan/item/<int:item_id>/delete", methods=["POST"])
