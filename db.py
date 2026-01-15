@@ -67,6 +67,7 @@ class ShoppingItem(db.Model):
     assigned_to = db.Column(db.Integer, db.ForeignKey('USER.user_id'), nullable=True)
     name = db.Column(db.String, nullable=False)
     quantity = db.Column(db.String)
+    created_at = db.Colum(db.DateTime, default=datetime.now)
     #Beziehungen
     wg = db.relationship('Wg', back_populates='shopping_items')
     added_by_user = db.relationship('User', foreign_keys=[added_by], back_populates='added_items')
