@@ -353,13 +353,13 @@ def putzplan():
             return redirect(url_for("putzplan"))
     
     putzplan_eintraege = (CleaningTemplate.query
-                          .filter_by(wg_id=1, is_active=True) #wg_id = user.wg_id
+                          .filter_by(wg_id=user.wg_id, is_active=True)
                           .order_by(CleaningTemplate.template_id.desc())
                           .all())
 
     tasks = (CleaningTask.query
          .join(CleaningTemplate)
-         .filter(CleaningTemplate.wg_id == 1)
+         .filter(CleaningTemplate.wg_id == user.wg_id)
          .all())
     
     total_tasks = len(tasks)
@@ -417,7 +417,7 @@ def innovation_board():
                 
                 user = User.query.filter_by(username="testuser").first() #To be replaced with current_user() or session user
                 new_idea = Idea(
-                    wg_id=1, #wg_id = user.wg_id
+                    wg_id=user.wg_id,
                     created_by=user.user_id,
                     title=form.title.data,
                     description=form.description.data,
@@ -433,7 +433,7 @@ def innovation_board():
             flash("Fehler beim Einreichen der Innovation. Bitte überprüfen Sie die Eingaben.", "error")
 
     ideas = (Idea.query
-             .filter_by(wg_id=1)   #wg_id = user.wg_id
+             .filter_by(wg_id=user.wg_id)   #wg_id = user.wg_id
              .options(joinedload(Idea.creator))
              .order_by(Idea.created_at.desc())
              .all())
@@ -458,6 +458,8 @@ def delete_idea(idea_id):
 
 @app.route("/ideas/<int:idea_id>/like", methods=["POST"])
 def toggle_like(idea_id):
+
+    user_id = int(session["user_id"])  
     if 'user_id' not in session:
         return redirect(url_for('login'))
     #user_id = session.get("user_id")
@@ -465,12 +467,12 @@ def toggle_like(idea_id):
         #flash("Bitte zuerst einloggen.", "error")
         #return redirect(url_for("login"))
 
-    existing = Idea_Like.query.filter_by(idea_id=idea_id, user_id=1).first() #To be replaced with idea_id=idea_id, user_id=user_id
+    existing = Idea_Like.query.filter_by(idea_id=idea_id, user_id=user_id).first() #To be replaced with idea_id=idea_id, user_id=user_id
 
     if existing:
         db.session.delete(existing)   # unlike
     else:
-        db.session.add(Idea_Like(idea_id=idea_id, user_id=1))  # like #TODO: To be replaced with user_id=user_id
+        db.session.add(Idea_Like(idea_id=idea_id, user_id=user_id))  # like #TODO: To be replaced with user_id=user_id
 
     try:
         db.session.commit()
@@ -481,6 +483,8 @@ def toggle_like(idea_id):
 
 @app.route("/ideas/<int:idea_id>/comment", methods=["POST"])
 def post_comment(idea_id):
+
+    user_id = int(session["user_id"])
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
@@ -502,7 +506,7 @@ def post_comment(idea_id):
             if content:
                 new_comment = Idea_Comment(
                     idea_id=idea_id,
-                    user_id=1,  #To be replaced with user_id=user_id 
+                    user_id=user_id,  #To be replaced with user_id=user_id 
                     content=content,
                     created_at=db.func.now()
                 )
@@ -536,7 +540,7 @@ def activity_board():
 
             user = User.query.filter_by(user_id=current_user_id).first()  # To be replaced with current_user() or session user
             new_activity = Activity(
-                wg_id=1,  # wg_id = user.wg_id
+                wg_id=user.wg_id,  # wg_id = user.wg_id
                 created_by=user.user_id,
                 title=form.title.data,
                 description=form.description.data,
@@ -649,14 +653,14 @@ def einkaufsplan():
     user_id = session.get("user_id")
     current_user = User.query.get(user_id) if user_id else None
     if not current_user:
-        current_user = User.query.filter_by(username="testuser").first()
+        current_user = User.query.filter_by(user_id=user_id).first()
 
     #Falls es den testuser noch nicht gibt -> abbrechen/Fehlermeldung
     if not current_user:
-        flash("Testuser fehlt. Bitte einmal anlegen (username='testuser', wg_id=1).", "error")
+        flash("User fehlt", "error")
         return render_template("einkaufsplan.html", form=form, shopping_items=[])
 
-    wg_id = current_user.wg_id or 1
+    wg_id = current_user.wg_id
 
     # POST: Item speichern 
     if request.method == "POST":
