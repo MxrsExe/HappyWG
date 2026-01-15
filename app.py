@@ -1,6 +1,7 @@
 from os import name
 from random import random
 from sqlite3 import IntegrityError
+import string
 from flask import Flask, flash, redirect, render_template,request, url_for,session, Response
 from datetime import timezone
 from flask_migrate import Migrate
@@ -521,7 +522,7 @@ def activity_board():
         return redirect(url_for('login'))
 
     form = ActivityForm()
-
+    
     current_user_id = int(session["user_id"])
 
     all_users = User.query.all()
@@ -751,7 +752,7 @@ def build_ics(uid, title, start_dt, end_dt, description="", location=""):
         ""
     ])
 
-@app.route("/activities/<int:activity_id>/ics")
+@app.route("/activities/<int:activity_id>/ics", methods=["POST"])
 def activity_ics(activity_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))

@@ -3,7 +3,17 @@
 {% block title %}Putzplan{% endblock %}
 
 {% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('dashboard') }}">Start</a>
+  <div class="navbar-nav">
+    <a class="nav-link" href="{{ url_for('putzplan') }}">Putzplan</a>
+    <a class="nav-link" href="{{ url_for('innovation_board') }}">InnovationBoard</a>
+    <a class="nav-link" href="{{ url_for('activity_board') }}">ActivityBoard</a>
+    <a class="nav-link" href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+</nav>
+
 <h1>Putzplan</h1>
+<h5>Verwalte die Reinigungsaufgaben in deiner WG</h5>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -16,49 +26,39 @@
 {% endwith %}
 
 
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="{{ url_for('dashboard') }}">Start</a>
-  <div class="navbar-nav">
-    <a class="nav-link" href="{{ url_for('putzplan') }}">Putzplan</a>
-    <a class="nav-link" href="{{ url_for('innovation_board') }}">InnovationBoard</a>
-    <a class="nav-link" href="{{ url_for('activity_board') }}">ActivityBoard</a>
-    <a class="nav-link" href="{{ url_for('einkaufsplan') }}">Einkauf</a>
-</nav>
-
-
 {% set remaining = 100 - progress %}
 
-<div class="progress-stacked" style="height: 18px;">
-
-  <!-- ERLEDIGT -->
-  <div class="progress"
-       role="progressbar"
-       aria-label="Erledigt"
-       aria-valuenow="{{ progress|int }}"
-       aria-valuemin="0"
-       aria-valuemax="100"
-       style="width: {{ progress|int }}%;">
-    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated">
-      {{ progress|int }}%
+<div class="position-relative" style="margin-top: 14px;">
+  <div class="progress-stacked" style="height: 18px;">
+    <!-- ERLEDIGT -->
+    <div class="progress"
+         role="progressbar"
+         aria-label="Erledigt"
+         aria-valuenow="{{ progress|int }}"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         style="width: {{ progress|int }}%;">
+      <div class="progress-bar bg-success progress-bar-striped progress-bar-animated">
+        {{ progress|int }}%
+      </div>
     </div>
-  </div>
 
-  <!-- OFFEN -->
-  <div class="progress"
-       role="progressbar"
-       aria-label="Offen"
-       aria-valuenow="{{ remaining|int }}"
-       aria-valuemin="0"
-       aria-valuemax="100"
-       style="width: {{ remaining|int }}%;">
-    <div class="progress-bar bg-secondary">
-      {{ remaining|int }}%
+    <!-- OFFEN -->
+    <div class="progress"
+         role="progressbar"
+         aria-label="Offen"
+         aria-valuenow="{{ remaining|int }}"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         style="width: {{ remaining|int }}%;">
+      <div class="progress-bar bg-secondary">
+        {{ remaining|int }}%
+      </div>
     </div>
-  </div>
 
   {% if progress == 100 %}
-    <div class="position-absolute top-5 start-50 translate-middle-x text-success fw-bold" style="padding-top: 2px;">
+    <div class="position-absolute start-50 translate-middle-x fw-bold text-success"
+         style="top: -20px; white-space: nowrap; font-size: 15px;">
       Alle Aufgaben erledigt! 🎉
     </div>
   {% endif %}
