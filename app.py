@@ -267,20 +267,26 @@ def dashboard():
     letzte_aktivitaeten = []
 
     erledigte_putzaufgaben = CleaningTask.query.filter_by(assigned_to=user.user_id, status="erledigt").order_by(CleaningTask.completed_at.desc()).limit(10).all()
-    letzte_aktivitaeten += [f"{t.user.username} hat {t.template.name} geputzt" for t in erledigte_putzaufgaben]
+    for t in erledigte_putzaufgaben:
+        letzte_aktivitaeten.append((t.completed_at, f"{t.user.username} hat {t.template.name} geputzt"))
 
     neue_einkaufs_items = ShoppingItem.query.filter(ShoppingItem.wg_id == wg.wg_id,).order_by(ShoppingItem.item_id.desc()).limit(10).all()
-    letzte_aktivitaeten += [f"{i.added_by_user.username} hat '{i.name}' zur Einkaufsliste hinzugefügt" for i in neue_einkaufs_items]
+    for ein in neue_einkaufs_items:
+        letzte_aktivitaeten.append((ein.item_id, f"{ein.added_by_user.username} hat '{ein.name}' zur Einkaufsliste hinzugefügt"))
 
     letzte_ideen = Idea.query.filter_by(wg_id=wg.wg_id).order_by(Idea.created_at.desc()).limit(10).all()
-    letzte_aktivitaeten += [f"{i.creator.username} hat eine Idee hinzugefügt: '{i.title}'" for i in letzte_ideen]
+    for i in letzte_ideen:
+        letzte_aktivitaeten.append((i.created_at, f"{i.creator.username} hat eine Idee hinzugefügt: '{i.title}'"))
 
     kommende_events_list = Activity.query.filter(Activity.wg_id == wg.wg_id, Activity.date >= datetime.now()).order_by(Activity.date.asc()).limit(5).all()
-    letzte_aktivitaeten += [f"{e.creator.username} hat ein Event hinzugefügt: '{e.title}' am {e.date.strftime('%d.%m.%Y')}" for e in kommende_events_list]
+    for e in kommende_events_list:
+        letzte_aktivitaeten.append((e.created_at if hasattr(e,"created_at") else e.date, f"{e.creator.username} hat ein Event hinzugefügt: " f"'{e.title}' am {e.date.strftime('%d.%m.%Y')}"))
     
     if not letzte_aktivitaeten:
         letzte_aktivitaeten.append("Momentan gibt es keine Aktivitäten")
 
+    #letzte_aktivitaeten.sort(key=lambda x: x[0] if x[0] else datetime.min, reverse=True)
+    #letzte_aktivitaeten = letzte_aktivitaeten[:10]
 
     wg_mitglieder = User.query.filter_by(wg_id=wg.wg_id).all()
 
