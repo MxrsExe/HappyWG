@@ -8,7 +8,6 @@ from flask_migrate import Migrate
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 import random
-#from flask_mail import Mail, Message
 from datetime import datetime
 from datetime import timezone
 
