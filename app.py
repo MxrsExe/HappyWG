@@ -378,7 +378,15 @@ def putzplan():
 @app.route("/putzplan/task/<int:task_id>/toggle", methods=["POST"])
 def toggle_cleaning_task(task_id):
     task = CleaningTask.query.get_or_404(task_id)
-    task.status = "completed" if request.form.get("done") == "on" else "open"
+
+    if task.status == "completed":
+        task.status = "open"
+        task.completed_at = None
+    else:
+        task.status = "completed"
+        task.completed_at = datetime.now()
+
+    #task.status = "completed" if request.form.get("done") == "on" else "open"
     db.session.commit()
     return redirect(url_for("putzplan"))
 
@@ -389,6 +397,7 @@ def delete_cleaning_task(template_id):
      #   flash("Sie können nur Ihre eigenen Tasks löschen.", "error")
         #abort(403)
     template = CleaningTemplate.query.get_or_404(template_id)
+    
     db.session.delete(template)
     db.session.commit()
     flash("Aufgabe erfolgreich gelöscht.", "success")
