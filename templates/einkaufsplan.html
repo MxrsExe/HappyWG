@@ -2,82 +2,102 @@
 
 {% block content %}
 
-<nav>
-  <a href="{{ url_for('dashboard') }}">Start</a>
-  <a href="{{ url_for('putzplan') }}">Putzplan</a>
-  <a href="{{ url_for('innovation_board') }}">InnovationBoard</a>
-  <a href="{{ url_for('activity_board') }}">ActivityBoard</a>
-  <a href="{{ url_for('einkaufsplan') }}">Einkauf</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ url_for('dashboard') }}">Start</a>
+  <div class="navbar-nav">
+    <a class="nav-link" href="{{ url_for('putzplan') }}">Putzplan</a>
+    <a class="nav-link" href="{{ url_for('innovation_board') }}">InnovationBoard</a>
+    <a class="nav-link" href="{{ url_for('activity_board') }}">ActivityBoard</a>
+    <a class="nav-link" href="{{ url_for('einkaufsplan') }}">Einkauf</a>
 </nav>
 
 <h1>Einkaufsplan</h1>
 
-<h2>Gemeinsame Einkaufsliste für die WG</h2>
+<h5>Gemeinsame Einkaufsliste für die WG</h5>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert-message {% if category == 'success' %}alert-success{% else %}alert-error{% endif %}" style="padding: 15px; margin-bottom: 20px; border-radius: 5px;" >
-            {{ message }}
+<br>
+
+<h5>Neuen Einkaufsartikel hinzufügen</h5>
+<form method="POST" action="{{ url_for('einkaufsplan') }}" class="mb-4">
+  {{ form.hidden_tag() }}
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <div class="row g-2 align-items-start">
+
+        <div class="col-12 col-md-6">
+          {{ form.item(class="form-control") }}
+          {% for error in form.item.errors %}
+            <div class="text-danger small mt-1">{{ error }}</div>
+          {% endfor %}
         </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
 
-<h2>Neuen Einkaufsartikel hinzufügen</h2>
-
-<form method = "POST" action="{{ url_for('einkaufsplan') }}" >
-    {{ form.hidden_tag() }}
-    <div class="item-forms">
-        {{ form.item(size=32) }}<br>
-        {% for error in form.item.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    
-        {{ form.quantity() }}<br>
-        {% for error in form.quantity.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-        <div class = "submit-btn">
-            {{ form.submit() }}
+        <div class="col-12 col-md-3">
+          {{ form.quantity(class="form-control") }}
+          {% for error in form.quantity.errors %}
+            <div class="text-danger small mt-1">{{ error }}</div>
+          {% endfor %}
         </div>
-    </div>  
+  
+        <div class="col-12 col-md-3 d-grid">
+          {{ form.submit(class="btn btn-primary") }}
+        </div>
+
+      </div>
+    </div>
+  </div>
 </form>
-<
-<div class="shopping-list">
+
+<div class="row g-3">
   {% for item in shopping_items %}
-    <div class="shopping-item-card">
-        <form method="POST" action="{{ url_for('delete_shopping_item', item_id=item.item_id) }}" class="delete-form">
-            <button type="submit" class="delete-btn"
-                
-                onclick="return confirm('Einkaufsartikel wirklich löschen?');">🗑️
-            </button>
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card shadow-sm h-100 position-relative">
+
+        <!-- Delete (oben rechts) -->
+        <form method="POST"
+              action="{{ url_for('delete_shopping_item', item_id=item.item_id) }}"
+              class="position-absolute top-0 end-0 p-2">
+          <button type="submit"
+                  class="btn btn-sm btn-outline-danger"
+                  onclick="return confirm('Einkaufsartikel wirklich löschen?');"
+                  title="Löschen">
+            🗑️
+          </button>
         </form>
 
-      <h3 class="mb-1">{{ item.name }}</h3>
-      <p class="item-quantity mb-2">Menge: {{ item.quantity }}</p>
+        <div class="card-body">
+          <h5 class="card-title mb-1 ">{{ item.name }}</h5>
 
-      <small class="text-muted">
-        Hinzugefügt von:
-        {% if item.added_by_user %}
-          {{ item.added_by_user.username }}
-        {% else %}
-          {{ item.added_by }}
-        {% endif %}
-      </small>
-        <br>
-      
-        {% if item.assigned_to_user %}
-        <small class = "assigned-to">{{ item.assigned_to_user.username }}</small>
-        
-        {% endif %}
+          <p class="card-text mb-2">
+            <span class="fw-semibold">Menge:</span> {{ item.quantity }}
+          </p>
 
+          <small class="text-muted d-block">
+            Hinzugefügt von:
+            {% if item.added_by_user %}
+              {{ item.added_by_user.username }}
+            {% else %}
+              {{ item.added_by }}
+            {% endif %}
+          </small>
+
+          {% if item.assigned_to_user %}
+            <span class="badge text-bg-secondary position-absolute bottom-0 end-0 m-2">
+              {{ item.assigned_to_user.username }}
+            </span>
+          {% endif %}
+        </div>
+
+      </div>
     </div>
   {% else %}
-    <p>Noch keine Einkäufe eingetragen.</p>
-
+    <div class="col-12">
+      <p class="text-muted mb-0">Noch keine Einkäufe eingetragen.</p>
+    </div>
   {% endfor %}
 </div>
+
+
 
 <p>Einträge geladen: {{ shopping_items|length }}</p>
 {% endblock %}
