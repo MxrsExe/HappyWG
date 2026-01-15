@@ -298,76 +298,78 @@ def dashboard():
 
 @app.route("/putzplan/", methods=["GET", "POST"])
 def putzplan():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    current_user = User.query.get(session["user_id"])
+    if not current_user:
+        return redirect(url_for("login"))
 
     form = PutzplanForm()
+    all_users = User.query.filter_by(wg_id=current_user.wg_id).all()
 
-    #user_id = session.get("user_id")
-    #if not user_id:
-     #   flash("Bitte zuerst einloggen.", "error")
-      #  return redirect(url_for("login"))
-
-    #user = User.query.get(user_id)  
-    #user = current_user()
-    #if not user:
-     #   flash("Bitte zuerst einloggen.", "error")
-        #   return redirect(url_for("login"))
-    
     if request.method == "POST":
         print("POST angekommen")
         print("form.validate_on_submit():", form.validate_on_submit())
         print("form.errors:", form.errors)
         print("zustaendig raw:", request.form.get("zustaendig"))
 
-    
-    all_users = User.query.all()
+        if form.validate_on_submit():
+            zustaendig_name = request.form.get("zustaendig", "").strip()
+            assigned_user = User.query.filter_by(
+                wg_id=current_user.wg_id,
+                username=zustaendig_name
+            ).first()
 
-    if form.validate_on_submit():
-        zustaendig_name = request.form.get("zustaendig", "").strip()
-        user = User.query.filter_by(username=zustaendig_name).first()
+            if not assigned_user:
+                flash("WG-Mitglied existiert nicht", "error")
+            else:
+                new_template = CleaningTemplate(
+                    wg_id=current_user.wg_id,
+                    name=form.aufgabe.data,
+                    description=f"KW {form.woche.data}: {form.von_datum.data} bis {form.bis_datum.data}",
+                    frequency="weekly",
+                    is_active=True
+                )
+                db.session.add(new_template)
+                db.session.flush()
 
-        if not user:
-            flash("WG-Mitglied existiert nicht", "error")
-        else:
-            new_template = CleaningTemplate(
-                wg_id=1, #wg_id = user.wg_id
-                name=form.aufgabe.data,
-                description=f"KW {form.woche.data}: {form.von_datum.data} bis {form.bis_datum.data}",
-                frequency="weekly",
-                is_active=True
-            )
-            db.session.add(new_template)
-            db.session.flush()  # template_id ist jetzt da
+                new_task = CleaningTask(
+                    template_id=new_template.template_id,
+                    assigned_to=assigned_user.user_id,
+                    status="open",
+                    notes="Zuständig"
+                )
+                db.session.add(new_task)
+                db.session.commit()
 
-            new_task = CleaningTask(
-                template_id=new_template.template_id,
-                assigned_to=user.user_id, 
-                status="open",
-                notes="Zuständig"
-            )
-            db.session.add(new_task)
+                flash("Eintrag erfolgreich erstellt!", "success")
+                return redirect(url_for("putzplan"))
 
-            db.session.commit()
-            flash("Eintrag erfolgreich erstellt!", "success")
-            return redirect(url_for("putzplan"))
-    
     putzplan_eintraege = (CleaningTemplate.query
-                          .filter_by(wg_id=user.wg_id, is_active=True)
+                          .filter_by(wg_id=current_user.wg_id, is_active=True)
                           .order_by(CleaningTemplate.template_id.desc())
                           .all())
 
     tasks = (CleaningTask.query
-         .join(CleaningTemplate)
-         .filter(CleaningTemplate.wg_id == user.wg_id)
-         .all())
-    
+             .join(CleaningTemplate)
+             .filter(CleaningTemplate.wg_id == current_user.wg_id)
+             .all())
+
     total_tasks = len(tasks)
     completed_tasks = sum(1 for t in tasks if t.status == "completed")
     progress = int((completed_tasks / total_tasks) * 100) if total_tasks else 0
 
-    return render_template("putzplan.html", form=form, all_users=all_users,putzplan=putzplan_eintraege,
-                           total_tasks=total_tasks, completed_tasks=completed_tasks, progress=progress)
+    return render_template(
+        "putzplan.html",
+        form=form,
+        all_users=all_users,
+        putzplan=putzplan_eintraege,
+        total_tasks=total_tasks,
+        completed_tasks=completed_tasks,
+        progress=progress
+    )
+
 
 @app.route("/putzplan/task/<int:task_id>/toggle", methods=["POST"])
 def toggle_cleaning_task(task_id):
@@ -392,11 +394,13 @@ def delete_cleaning_task(template_id):
 
 @app.route("/innovationboard/", methods=['GET', 'POST'])
 def innovation_board():
+
+    user_id = int(session["user_id"])
     if 'user_id' not in session:
         return redirect(url_for('login'))
         
     form = InnovationForm()
-    
+    user = User.query.filter_by(user_id=user_id).first()
     #user_id = session.get("user_id")
     #if not user_id:
      #   flash("Bitte zuerst einloggen.", "error")
@@ -415,7 +419,7 @@ def innovation_board():
         if form.validate_on_submit():
                 flash("Innovation erfolgreich eingereicht!", "success")
                 
-                user = User.query.filter_by(username="testuser").first() #To be replaced with current_user() or session user
+                 #To be replaced with current_user() or session user
                 new_idea = Idea(
                     wg_id=user.wg_id,
                     created_by=user.user_id,
@@ -529,6 +533,7 @@ def activity_board():
     current_user_id = int(session["user_id"])
 
     all_users = User.query.all()
+    user = User.query.filter_by(user_id=current_user_id).first()
 
     if request.method == "POST":
         print("Aktivität hinzufügen POST angekommen")
@@ -559,7 +564,7 @@ def activity_board():
             flash("Fehler beim Hinzufügen der Aktivität. Bitte überprüfen Sie die Eingaben.", "error")
 
     activities = (Activity.query
-                  .filter_by(wg_id=1)  # wg_id = user.wg_id
+                  .filter_by(wg_id=user.wg_id)  # wg_id = user.wg_id
                   .options(joinedload(Activity.creator), joinedload(Activity.participants))
                   .order_by(Activity.created_at.desc())
                   .all())
@@ -650,7 +655,7 @@ def einkaufsplan():
     form = EinkaufsplanForm()
 
     # --- Fake current_user: Session -> sonst testuser ---
-    user_id = session.get("user_id")
+    user_id = int(session["user_id"])
     current_user = User.query.get(user_id) if user_id else None
     if not current_user:
         current_user = User.query.filter_by(user_id=user_id).first()
