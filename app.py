@@ -258,21 +258,26 @@ def dashboard():
         'einkauf': max(einkauf_count, 0)
     }
     #Hinweis-Box
-    wichtige_hinweise = []
+    wichtige_hinweise = {
+        "putz": [],
+        "einkauf": [],
+        "events": []
+    }
 
     putz_tasks = CleaningTask.query.filter_by(assigned_to=user.user_id, status="open").all()
-    if putz_tasks:
-        wichtige_hinweise += [f"Denk noch an deine Putzaufgabe: {t.template.name}"for t in putz_tasks]
+    for t in putz_tasks:
+        wichtige_hinweise ["putz"].append(t.template.name)
 
-    offene_einkaufs_items = ShoppingItem.query.filter_by(wg_id=wg.wg_id, assigned_to=None).all()
-    if offene_einkaufs_items:
-        wichtige_hinweise += ["Folgende Einkaufsitems müssen noch besorgt werden:"]
-        for item in offene_einkaufs_items:
-            wichtige_hinweise.append(f"-{item.name}")
+    offene_einkaufs_items = ShoppingItem.query.filter(ShoppingItem.wg_id == wg.wg_id).all()
+    for item in offene_einkaufs_items:
+        wichtige_hinweise["einkauf"].append(item.name)
 
     kommende_events_list = Activity.query.filter(Activity.wg_id==wg.wg_id, Activity.date >= datetime.now()).order_by(Activity.date.asc()).limit(5).all()
-    if kommende_events_list:
-        wichtige_hinweise += [f"Kommendes Event: {e.title} am {e.date.strftime('%d.%m.%Y')}" for e in kommende_events_list] 
+    for e in kommende_events_list:
+        wichtige_hinweise["events"].append({
+            "title": e.title,
+            "date": e.date
+        })
 
     if not wichtige_hinweise:
         wichtige_hinweise = ["Momentan gitbt es keine offenen Aufgaben oder Hinweise!"]
