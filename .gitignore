@@ -8,4 +8,5 @@ venv/
 .DS_Store
 
 # SQLite-Datenbank
-happywg.sqlite
+instance/
+*.sqlite
