@@ -166,6 +166,11 @@ def create_or_join_wg():
     
     user = User.query.get(session['user_id'])
 
+    if not user:
+        session.clear()
+        return redirect(url_for("login"))
+
+
     return render_template("welcome.html", username=user.username)
 
 
@@ -211,6 +216,10 @@ def join_wg():
             return redirect(url_for('join_wg'))
 
         user = User.query.get(session['user_id'])
+        if not user:
+            session.clear()
+            return redirect(url_for("login"))
+
         user.wg_id = wg.wg_id
         db.session.commit()  
 
@@ -227,6 +236,9 @@ def dashboard():
     user = User.query.get(session['user_id'])
     if not user or not user.wg_id:
         return redirect(url_for('create_or_join_wg'))
+    if not user:
+        session.clear()
+        return redirect(url_for("login"))
 
     wg = Wg.query.get(user.wg_id)
 
@@ -301,12 +313,12 @@ def dashboard():
 
 @app.route("/putzplan/", methods=["GET", "POST"])
 def putzplan():
-    user_id = int(session["user_id"])
     if "user_id" not in session:
         return redirect(url_for("login"))
 
     user = User.query.get(session["user_id"])
     if not user:
+        session.clear()
         return redirect(url_for("login"))
 
     form = PutzplanForm()
