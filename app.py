@@ -11,6 +11,7 @@ from sqlalchemy.orm import joinedload
 import random
 from datetime import datetime
 from datetime import timezone
+from functools import wraps
 
 
 from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User, Wg
@@ -25,10 +26,6 @@ def generate_unique_code(length=6):
         if not Wg.query.filter_by(invite_code=code).first():
             return code
     
-def login_required():
-    if 'user_id' not in session:
-        return False
-    return True
 
 app = Flask(__name__)
 #session
@@ -60,12 +57,6 @@ def init_db():
         db.create_all()
         print("Database initialized!")
 
-@app.route("/__dbcheck")
-def __dbcheck():
-    uri = current_app.config["SQLALCHEMY_DATABASE_URI"]
-    tables = db.session.execute(text("SELECT name FROM sqlite_master WHERE type='table'")).all()
-    return {"uri": uri, "tables": [t[0] for t in tables]}
-
 @app.route('/', methods=['GET', 'POST'])
 
 def index():
@@ -81,10 +72,14 @@ def generate_unique_code(length=6):
         if not Wg.query.filter_by(invite_code=code).first():
             return code
     
-def login_required():
-    if 'user_id' not in session:
-        return False
-    return True
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash("Bitte zuerst einloggen", "danger")
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
     
  #login-Funktion   
 @app.route("/login/", methods=['GET', 'POST'])
@@ -153,9 +148,8 @@ def register():
 
 
 @app.route("/welcome/", methods=['GET', 'POST'])
+@login_required
 def create_or_join_wg():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
     
     user = User.query.get(session['user_id'])
 
@@ -166,11 +160,9 @@ def create_or_join_wg():
 
     return render_template("welcome.html", username=user.username)
 
-
 @app.route("/welcome/create_wg/", methods=['GET', 'POST'])
+@login_required
 def create_wg():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
 
     if request.method == 'POST':
         wg_name = request.form.get("wg_name").strip()
@@ -191,10 +183,10 @@ def create_wg():
     
     return render_template("create_wg.html")
 
+
 @app.route("/welcome/join_wg/", methods=['GET', 'POST'])
+@login_required
 def join_wg():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
 
     if request.method == 'POST':
         invite_code = request.form.get('invite_code', '').strip().upper()
@@ -221,10 +213,10 @@ def join_wg():
 
     return render_template("join_wg.html")
 
+
 @app.route("/dashboard/", methods=['GET'])
+@login_required
 def dashboard():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
 
     user = User.query.get(session['user_id'])
     if not user or not user.wg_id:
@@ -310,33 +302,38 @@ def dashboard():
 
 
 @app.route("/putzplan/", methods=["GET", "POST"])
+@login_required
 def putzplan():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-
+    
+    #aktuellen User laden
     user = User.query.get(session["user_id"])
+
+    #Wenn kein User -> weiterleiten (sollte nicht passieren)
     if not user:
         session.clear()
         return redirect(url_for("login"))
 
-    form = PutzplanForm()
+    form = PutzplanForm() 
+    #Alle WG-Mitglieder laden für das Dropdown im Formular (Zuständigkeit auswählen im Modal)
     all_users = User.query.filter_by(wg_id=user.wg_id).all()
 
+    #POST: Neue Putzplan-Aufgabe erstellen
     if request.method == "POST":
-        print("POST angekommen")
-        print("form.validate_on_submit():", form.validate_on_submit())
-        print("form.errors:", form.errors)
-        print("zustaendig raw:", request.form.get("zustaendig"))
-
         if form.validate_on_submit():
-            zustaendig_name = request.form.get("zustaendig", "").strip()
+            zustaendig_name = request.form.get("zustaendig", "").strip() #Name des zuständigen WG-Mitglieds aus dem Formular holen
+
+            #Zuständigen User aus der DB laden
             assigned_user = User.query.filter_by(
                 wg_id=user.wg_id,
                 username=zustaendig_name
             ).first()
 
+            #Fehlermeldung, falls der User nicht existiert (sollte nicht passieren, da aus Dropdown gewählt wird)
             if not assigned_user:
                 flash("WG-Mitglied existiert nicht", "error")
+                return redirect(url_for("putzplan"))
+            #Neue Vorlage und Task erstellen, falls noch nicht vorhanden 
+        
             else:
                 new_template = CleaningTemplate(
                     wg_id=user.wg_id,
@@ -346,14 +343,17 @@ def putzplan():
                     is_active=True
                 )
                 db.session.add(new_template)
-                db.session.flush()
+                #flush() = vorübergehendes Speichern, aber noch kein Commit
+                db.session.flush() #Damit new_template.template_id verfügbar ist, bevor commit() aufgerufen wird (für Task)
 
+                #Neuen Task erstellen mithilfe von der soeben erstellten Vorlage
                 new_task = CleaningTask(
                     template_id=new_template.template_id,
                     assigned_to=assigned_user.user_id,
                     status="open",
                     notes="Zuständig"
                 )
+                #Commiten der Änderungen in der DB
                 db.session.add(new_task)
                 db.session.commit()
 
@@ -361,17 +361,20 @@ def putzplan():
                 return redirect(url_for("putzplan"))
 
     putzplan_eintraege = (CleaningTemplate.query
-                          .filter_by(wg_id=user.wg_id, is_active=True)
-                          .order_by(CleaningTemplate.template_id.desc())
-                          .all())
+                          .filter_by(wg_id=user.wg_id, is_active=True)  #Filtern nach wg_id und is_active = True, damit nur aktive Einträge direkt angezeigt werden (standard)
+                          .order_by(CleaningTemplate.template_id.desc()) #Sortieren nach template_id absteigend
+                          .all()) #Alle Einträge der WG holen
 
     tasks = (CleaningTask.query
-             .join(CleaningTemplate)
-             .filter(CleaningTemplate.wg_id == user.wg_id)
-             .all())
-
+             .join(CleaningTemplate) # Join mit CleaningTemplate für wg_id
+             .filter(CleaningTemplate.wg_id == user.wg_id)  # Filtern nach wg_id
+             .all())    #Alle Tasks holen
+    
+    #Berechnung des Fortschritts
     total_tasks = len(tasks)
+    #Anzahl der abgeschlossenen Tasks berechnen
     completed_tasks = sum(1 for t in tasks if t.status == "completed")
+    #Fortschritt in Prozent berechnen, wenn keine gibt, dann 0% und Progressbar bleibt leer
     progress = int((completed_tasks / total_tasks) * 100) if total_tasks else 0
 
     return render_template(
@@ -386,9 +389,12 @@ def putzplan():
 
 
 @app.route("/putzplan/task/<int:task_id>/toggle", methods=["POST"])
+@login_required
 def toggle_cleaning_task(task_id):
+    #task_id aus der URL holen
     task = CleaningTask.query.get_or_404(task_id)
 
+    #Status umschalten
     if task.status == "completed":
         task.status = "open"
         task.completed_at = None
@@ -396,7 +402,7 @@ def toggle_cleaning_task(task_id):
         task.status = "completed"
         task.completed_at = datetime.now()
 
-    #task.status = "completed" if request.form.get("done") == "on" else "open"
+    #Speichern in der DB
     db.session.commit()
     return redirect(url_for("putzplan"))
 
@@ -406,7 +412,7 @@ def delete_cleaning_task(template_id):
     template = CleaningTemplate.query.get_or_404(template_id)
     if template.creator.user_id != user_id:
         flash("Sie können nur Ihre eigenen Tasks löschen.", "error")
-        abort(403)
+        return redirect(url_for("putzplan"))
     template = CleaningTemplate.query.get_or_404(template_id)
     
     db.session.delete(template)
@@ -417,21 +423,18 @@ def delete_cleaning_task(template_id):
 
 
 @app.route("/innovationboard/", methods=['GET', 'POST'])
+@login_required
 def innovation_board():
-    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     user_id = int(session["user_id"])
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-
     
     form = InnovationForm()
     #aktuellen User laden
     user = User.query.filter_by(user_id=user_id).first()
 
     all_users = User.query.all()
-
+    #POST: Neue Idee erstellen
     if request.method == 'POST':
-
+        #Wenn das Formular valide ist, erstelle neue Idee (Instanz), Abrufen der Formulardaten
         if form.validate_on_submit():
                 flash("Innovation erfolgreich eingereicht!", "success")
                 
@@ -444,13 +447,14 @@ def innovation_board():
                     created_at=db.func.now()
                 
                 )
+                #Hinzufügen und Speichern in der DB
                 db.session.add(new_idea)
                 db.session.commit()
 
                 return redirect(url_for("innovation_board"))
         else:
             flash("Fehler beim Einreichen der Innovation. Bitte überprüfen Sie die Eingaben.", "error")
-
+    #Ideen anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, joinedload(...) für weniger Queries und richtiges Laden der Relationen
     ideas = (Idea.query
              .filter_by(wg_id=user.wg_id)   
              .options(joinedload(Idea.creator))
@@ -461,10 +465,8 @@ def innovation_board():
 
 #post route, da das Formular data ändert (löschen)
 @app.route("/innovation_board/idea/<int:idea_id>/delete", methods=["POST"])
+@login_required
 def delete_idea(idea_id):
-    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
 
     #aktuellen User laden und konkrete Idee laden, prüfen ob der User der Ersteller der Idee ist, wenn nicht -> 403 und Flashmeldung
     #Bezug auf creator: Beziehung in Idea Model
@@ -482,6 +484,7 @@ def delete_idea(idea_id):
 
 #post route, da das Formular data ändert (aktualisiert)
 @app.route("/ideas/<int:idea_id>/like", methods=["POST"])
+@login_required
 def toggle_like(idea_id):
 
     #User_id holen und Guard-Klausel: Sicherstellen, dass der User eingeloggt ist
@@ -507,12 +510,10 @@ def toggle_like(idea_id):
 
 #Post route, da das Formular data ändert (neuer Kommentar erstellen)
 @app.route("/ideas/<int:idea_id>/comment", methods=["POST"])
+@login_required
 def post_comment(idea_id):
-
-    #User_id holen und Guard-Klausel: Sicherstellen, dass der User eingeloggt ist
+   
     user_id = int(session["user_id"])
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
 
     #Formular initialisieren
     form = CommentForm()
@@ -543,10 +544,8 @@ def post_comment(idea_id):
 
 #Get und Post route, da das Formular data abruft und ändert (neue Aktivität erstellen) 
 @app.route("/activityboard/", methods=["GET", "POST"])
+@login_required
 def activity_board():
-    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
-    if "user_id" not in session:
-        return redirect(url_for("login"))
 
     #aktuellen User laden
     user = User.query.get(session["user_id"])
@@ -595,10 +594,8 @@ def activity_board():
  
 #post route, da das Formular data ändert (aktualisiert)
 @app.route("/activity/<int:activity_id>/join_activity", methods=["POST"])
+@login_required
 def join_activity(activity_id):
-    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
 
     #aktuelle user_id holen und User und Aktivität laden
     user_id = int(session["user_id"])  
@@ -625,6 +622,7 @@ def join_activity(activity_id):
 
 #post route, da das Formular data ändert (aktualisiert) 
 @app.route("/activity/<int:activity_id>/leave_activity", methods=["POST"])
+@login_required
 def leave_activity(activity_id):
     #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     if 'user_id' not in session:
@@ -656,10 +654,8 @@ def leave_activity(activity_id):
     return redirect(url_for("activity_board"))
 
 @app.route("/activity/<int:activity_id>/delete_activity", methods=["POST"])
+@login_required
 def delete_activity(activity_id):
-    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
     
     #aktuellen User laden und konkrete Aktivität laden
     current_user_id = int(session["user_id"])
@@ -677,10 +673,8 @@ def delete_activity(activity_id):
 
 
 @app.route("/einkaufsplan/", methods=["GET", "POST"])
+@login_required
 def einkaufsplan():
-    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
     
     #Formular initialisieren aus forms.py
     form = EinkaufsplanForm()
@@ -745,6 +739,7 @@ def einkaufsplan():
      
 # Delete Einkaufs Item
 @app.route("/einkaufsplan/item/<int:item_id>/delete", methods=["POST"])
+@login_required
 def delete_shopping_item(item_id):
     #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     if 'user_id' not in session:
@@ -803,6 +798,7 @@ def build_ics(uid, title, start_dt, end_dt, description="", location=""):
 
 # App route für ICS Export für Activities
 @app.route("/activities/<int:activity_id>/ics", methods=["POST"])
+@login_required
 def activity_ics(activity_id):
 
     # Sicherstellen, dass der User eingeloggt ist (Guard Klausel, sollte nicht passieren.)
