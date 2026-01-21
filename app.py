@@ -2,7 +2,8 @@ from os import abort, name
 from random import random
 from sqlite3 import IntegrityError
 import string
-from flask import Flask, current_app, flash, redirect, render_template,request, url_for,session, Response
+from tempfile import template
+from flask import Flask, current_app, flash, jsonify, redirect, render_template,request, url_for,session, Response
 from datetime import timezone
 from flask_migrate import Migrate
 from sqlalchemy import func, text
@@ -825,6 +826,83 @@ def activity_ics(activity_id):
         mimetype="text/calendar",
         headers={"Content-Disposition": f'attachment; filename="activity-{activity_id}.ics"'}
     )
+
+#wg Daten als JSON exportieren
+@app.route("/export/wg.json", methods=["GET"])
+def export_wg_json():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user = User.query.get(session['user_id'])
+    wg = Wg.query.get(user.wg_id)
+    members = User.query.filter_by(wg_id=wg.wg_id).all()
+    # Daten für JSON Export
+    data = {
+        "user": {
+            "user_id": user.user_id,
+            "username": user.username,
+            "email": user.email,
+            "role": user.role
+        },
+        "members": [
+            {
+                "user_id": member.user_id,
+                "username": member.username,
+                "email": member.email,
+                "role": member.role
+            }
+            for member in members
+        ],
+        "wg": {
+            "wg_id": wg.wg_id,
+            "name": wg.name,
+            "invite_code": wg.invite_code
+        },
+        "activities": [
+            {
+                "activity_id": activity.activity_id,
+                "title": activity.title,
+                "description": activity.description,
+                "date": activity.date,
+                "location": activity.location,
+                "max_participants": activity.max_participants
+            }
+            for activity in wg.activities
+        ],
+        "ideas": [
+            {
+                "idea_id": idea.idea_id,
+                "title": idea.title,
+                "description": idea.description,
+                "status": idea.status,
+                "color": idea.color
+            }
+            for idea in wg.ideas
+        ],
+        "shopping_items": [
+            {
+                "item_id": item.item_id,
+                "name": item.name,
+                "quantity": item.quantity
+            }
+            for item in wg.shopping_items
+        ],
+        "cleaning_tasks": [
+            {
+                "task_id": task.task_id,
+                "template_name": task.template.name,
+                "assigned_to": task.assigned_to,
+                "status": task.status
+                
+            }
+            for template in wg.cleaning_templates
+            for task in template.tasks
+        ],
+
+        "exported_at": datetime.now().isoformat()
+    }
+
+    return jsonify(data)
 
 #run the app
 if __name__ == "__main__":
