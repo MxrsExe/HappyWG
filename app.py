@@ -410,16 +410,21 @@ def toggle_cleaning_task(task_id):
 def delete_cleaning_task(template_id):
     user_id = session.get("user_id")
     template = CleaningTemplate.query.get_or_404(template_id)
-    if template.creator.user_id != user_id:
-        flash("Sie können nur Ihre eigenen Tasks löschen.", "error")
+    
+    #Task
+    task = template.tasks[0] if template.tasks else None
+    if not task:
+        flash("Kein Task gefunden.", "error")
         return redirect(url_for("putzplan"))
-    template = CleaningTemplate.query.get_or_404(template_id)
+
+    if task.assigned_to != user_id:
+        flash("Nur die zuständige Person kann diese Aufgabe löschen.", "error")
+        return redirect(url_for("putzplan"))
     
     db.session.delete(template)
     db.session.commit()
     flash("Aufgabe erfolgreich gelöscht.", "success")
     return redirect(url_for("putzplan"))
-
 
 
 @app.route("/innovationboard/", methods=['GET', 'POST'])
