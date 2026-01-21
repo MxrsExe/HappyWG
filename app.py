@@ -2,10 +2,10 @@ from os import abort, name
 from random import random
 from sqlite3 import IntegrityError
 import string
-from flask import Flask, flash, redirect, render_template,request, url_for,session, Response
+from flask import Flask, current_app, flash, redirect, render_template,request, url_for,session, Response
 from datetime import timezone
 from flask_migrate import Migrate
-from sqlalchemy import func
+from sqlalchemy import func, text
 from sqlalchemy.orm import joinedload
 import random
 from datetime import datetime
@@ -59,19 +59,11 @@ def init_db():
         db.create_all()
         print("Database initialized!")
 
-@app.cli.command()
-def create_test_user():
-    """Create initial users."""
-    with app.app_context():
-        existing_user = User.query.filter_by(username='testuser').first()
-        if existing_user:
-            print("Test user already exists.")
-            return
-    test_user = User(username='testuser', password_hash='hashedpassword',
-                     email='testuser@example.com', role='member')
-    db.session.add(test_user)
-    db.session.commit()
-    print("Test user created.")
+@app.route("/__dbcheck")
+def __dbcheck():
+    uri = current_app.config["SQLALCHEMY_DATABASE_URI"]
+    tables = db.session.execute(text("SELECT name FROM sqlite_master WHERE type='table'")).all()
+    return {"uri": uri, "tables": [t[0] for t in tables]}
 
 @app.route('/', methods=['GET', 'POST'])
 
@@ -436,10 +428,6 @@ def innovation_board():
     all_users = User.query.all()
 
     if request.method == 'POST':
-        print("Innovation eingereicht")
-        print("form.validate_on_submit():", form.validate_on_submit())
-        print("form.errors:", form.errors)
-
 
         if form.validate_on_submit():
                 flash("Innovation erfolgreich eingereicht!", "success")
@@ -468,60 +456,71 @@ def innovation_board():
     
     return render_template("innovationboard.html", form=form, all_users=all_users,ideas=ideas, comment_form=CommentForm())
 
+#post route, da das Formular data ändert (löschen)
 @app.route("/innovation_board/idea/<int:idea_id>/delete", methods=["POST"])
 def delete_idea(idea_id):
+    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    #aktuellen User laden und konkrete Idee laden, prüfen ob der User der Ersteller der Idee ist, wenn nicht -> 403 und Flashmeldung
+    #Bezug auf creator: Beziehung in Idea Model
+    idea = Idea.query.get_or_404(idea_id)
     user_id = int(session["user_id"])
     if idea.creator.user_id != user_id:
         flash("Sie können nur Ihre eigenen Ideen löschen.", "error")
         abort(403)
 
-    idea = Idea.query.get_or_404(idea_id)
-    db.session.delete(idea)
+    #Idee löschen
+    db.session.delete(idea) 
     db.session.commit()
     flash("Idee erfolgreich gelöscht.", "success")
     return redirect(url_for("innovation_board"))
 
+#post route, da das Formular data ändert (aktualisiert)
 @app.route("/ideas/<int:idea_id>/like", methods=["POST"])
 def toggle_like(idea_id):
 
+    #User_id holen und Guard-Klausel: Sicherstellen, dass der User eingeloggt ist
     user_id = int(session["user_id"])  
     if 'user_id' not in session:
         return redirect(url_for('login'))
+    #Überprüfen, ob der User die Idee bereits geliked hat
+    existing = Idea_Like.query.filter_by(idea_id=idea_id, user_id=user_id).first() #first() gibt None zurück, wenn kein Eintrag gefunden wurde
 
-    existing = Idea_Like.query.filter_by(idea_id=idea_id, user_id=user_id).first() #To be replaced with idea_id=idea_id, user_id=user_id
-
+    #Wenn ja, Like entfernen, sonst Like hinzufügen
     if existing:
         db.session.delete(existing)   # unlike
     else:
         db.session.add(Idea_Like(idea_id=idea_id, user_id=user_id))  # like
-
+    #Commit changes to the database
     try:
         db.session.commit()
+    #IntegrityError abfangen (z.B. bei doppeltem Like, sollte nicht passieren durch obige Logik)
     except IntegrityError:
         db.session.rollback()
 
     return redirect(url_for("innovation_board"))
 
+#Post route, da das Formular data ändert (neuer Kommentar erstellen)
 @app.route("/ideas/<int:idea_id>/comment", methods=["POST"])
 def post_comment(idea_id):
 
+    #User_id holen und Guard-Klausel: Sicherstellen, dass der User eingeloggt ist
     user_id = int(session["user_id"])
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    #Formular initialisieren
     form = CommentForm()
-        
+    #POST: Kommentar speichern    
     if request.method == "POST":
-        print("Kommentar POST angekommen")
-        print("form.validate_on_submit():", form.validate_on_submit())
-        print("form.errors:", form.errors)
-
+        #Wenn das Formular valide ist, erstelle neuen Kommentar (Instanz), Abrufen der Formulardaten
         if form.validate_on_submit():
+            #content aus dem Formular holen (was in dem Feld steht, aus html name="content")
             content = (request.form.get("content") or "").strip()
 
+            #Nur speichern, wenn content in der Kommentar-Box nicht leer ist
             if content:
                 new_comment = Idea_Comment(
                     idea_id=idea_id,
@@ -529,6 +528,7 @@ def post_comment(idea_id):
                     content=content,
                     created_at=db.func.now()
                 )
+                #Kommentar in die Datenbank speichern
                 db.session.add(new_comment)
                 db.session.commit()
                 flash("Kommentar hinzugefügt.", "success")
@@ -538,19 +538,26 @@ def post_comment(idea_id):
 
     return redirect(url_for("innovation_board"))
 
+#Get und Post route, da das Formular data abruft und ändert (neue Aktivität erstellen) 
 @app.route("/activityboard/", methods=["GET", "POST"])
 def activity_board():
+    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     if "user_id" not in session:
         return redirect(url_for("login"))
 
+    #aktuellen User laden
     user = User.query.get(session["user_id"])
+    #Wenn kein User oder keine WG -> weiterleiten (sollte nicht passieren)
     if not user or not user.wg_id:
         return redirect(url_for("create_or_join_wg"))
 
+    # aktuelle WG ID vom User für new_activity
     wg_id = user.wg_id
     form = ActivityForm()
 
+    #POST: Neue Aktivität erstellen
     if request.method == "POST":
+        #Wenn das Formular valide ist, erstelle neue Aktivität (Instanz), Abrufen der Formulardaten
         if form.validate_on_submit():
             new_activity = Activity(
                 wg_id=wg_id,
@@ -563,16 +570,19 @@ def activity_board():
                 max_participants=form.max_participants.data,
                 created_at=db.func.now()
             )
+            #Hinzufügen und Speichern in der DB
             db.session.add(new_activity)
             db.session.commit()
             return redirect(url_for("activity_board"))
-
+    #Aktivitäten anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, joinedload(...) für weniger Queries und richtiges Laden der
+    #Relationen
     activities = (Activity.query
         .filter_by(wg_id=wg_id)
         .options(joinedload(Activity.creator), joinedload(Activity.participants))
         .order_by(Activity.created_at.desc())
         .all())
 
+    #Rendern der Seite mit Formular und Aktivitäten
     return render_template(
         "activityboard.html",
         form=form,
@@ -580,46 +590,56 @@ def activity_board():
         current_user_id=user.user_id
     )
  
-
+#post route, da das Formular data ändert (aktualisiert)
 @app.route("/activity/<int:activity_id>/join_activity", methods=["POST"])
 def join_activity(activity_id):
+    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    #aktuelle user_id holen und User und Aktivität laden
     user_id = int(session["user_id"])  
    
-    user = User.query.get(user_id)  #To be replaced with user_id=user_id
+    user = User.query.get(user_id)  
     activity = Activity.query.get_or_404(activity_id)
 
-
+    # Prüfen, ob der User bereits Teilnehmer ist, damit er/sie nicht doppelt beitreten kann
     if user in activity.participants:
         flash("Du nimmst bereits teil.", "error")
         return redirect(url_for("activity_board"))
 
+    # Prüfen, ob die maximale Teilnehmerzahl erreicht ist, len(activity.participants) gibt die aktuelle Anzahl der Teilnehmer zurück
     if activity.max_participants and len(activity.participants) >= activity.max_participants:
         flash("Die Aktivität ist bereits voll.", "error")
         return redirect(url_for("activity_board"))
 
+    # User zur Teilnehmerliste hinzufügen
     activity.participants.append(user)
     db.session.commit()
     flash("Du bist beigetreten!", "success")    
 
     return redirect(url_for("activity_board"))
 
+#post route, da das Formular data ändert (aktualisiert) 
 @app.route("/activity/<int:activity_id>/leave_activity", methods=["POST"])
 def leave_activity(activity_id):
+    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     if 'user_id' not in session:
         return redirect(url_for('login'))
-
-    user_id = int(session["user_id"])  #Temporary set to 1 for testing
- 
+    
+    #aktuelle user_id holen
+    user_id = int(session["user_id"])  
+    
+    #User aus user_id und Aktivität laden
     user = User.query.get(user_id)  
     activity = Activity.query.get_or_404(activity_id)
 
+    # Prüfen, ob der User tatsächlich Teilnehmer ist
     if user not in activity.participants:
         flash("Du nimmst nicht teil.", "error")
         return redirect(url_for("activity_board"))
 
+    # User aus der Teilnehmerliste entfernen
     activity.participants.remove(user)
     db.session.commit()
     flash("Du hast die Aktivität verlassen.", "success")    
@@ -634,15 +654,19 @@ def leave_activity(activity_id):
 
 @app.route("/activity/<int:activity_id>/delete_activity", methods=["POST"])
 def delete_activity(activity_id):
+    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     if 'user_id' not in session:
         return redirect(url_for('login'))
-        
-    current_user_id = session.get("user_id")
+    
+    #aktuellen User laden und konkrete Aktivität laden
+    current_user_id = int(session["user_id"])
     activity = Activity.query.get_or_404(activity_id)
+    # Prüfen, ob der aktuelle User der Ersteller der Aktivität ist, creator ist die Beziehung in Activity Model
     if activity.creator.user_id != current_user_id:
         flash("Sie können nur Ihre eigenen Aktivitäten löschen.", "error")
-        #abort(403)
+        abort(403)
 
+    # Aktivität löschen
     activity = Activity.query.get_or_404(activity_id)
     db.session.delete(activity)
     db.session.commit()
@@ -652,50 +676,58 @@ def delete_activity(activity_id):
 
 @app.route("/einkaufsplan/", methods=["GET", "POST"])
 def einkaufsplan():
+    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     if 'user_id' not in session:
         return redirect(url_for('login'))
-
+    
+    #Formular initialisieren aus forms.py
     form = EinkaufsplanForm()
 
+    #Aktuellen User laden
     user_id = int(session["user_id"])
     current_user = User.query.get(user_id) if user_id else None
+    #Fallback: User aus der DB laden
     if not current_user:
         current_user = User.query.filter_by(user_id=user_id).first()
 
-    #Falls es den testuser noch nicht gibt -> abbrechen/Fehlermeldung
+    #Falls es den user noch nicht gibt -> abbrechen/Fehlermeldung (sollte nicht passieren)
     if not current_user:
         flash("User fehlt", "error")
         return render_template("einkaufsplan.html", form=form, shopping_items=[])
-
-    wg_id = current_user.wg_id
+    
+    #  aktuelle WG ID für new_item
+    wg_id = current_user.wg_id 
 
     # POST: Item speichern 
     if request.method == "POST":
-        print("Einkaufsplan POST angekommen")
-        print("form.validate_on_submit():", form.validate_on_submit())
-        print("form.errors:", form.errors)
 
         if form.validate_on_submit():
             # random zuständig aus der WG (fallback: current_user)
-            u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first()
+            u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first() #random() ist aus sqlalchemy, nicht random modul
+
+            #Random WG-Member wird ein Produkt zugewiesen, falls kein User in der WG ist, wird der aktuelle User zugewiesen
             assigned_to = u.user_id if u else current_user.user_id
 
+            #Neues Einkaufs-Item erstellen (Instanz)
             new_item = ShoppingItem(
                 wg_id=wg_id,
                 added_by=current_user.user_id,
+                #name, quantity aus Formular
                 name=form.item.data,
                 quantity=form.quantity.data,
                 assigned_to=assigned_to
             )
+            #Hinzufügen und Speichern in der DB
             db.session.add(new_item)
             db.session.commit()
 
+            #Flashmeldung und Weiterleitung
             flash("Artikel erfolgreich hinzugefügt!", "success")
             return redirect(url_for("einkaufsplan"))
         else:
             flash("Fehler beim Hinzufügen. Bitte Eingaben prüfen.", "error")
 
-    # --- GET (oder POST mit Fehlern): Items anzeigen ---
+    #Items anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, .options(joinedload(...)) für weniger Queries
     shopping_items = (ShoppingItem.query
         .filter_by(wg_id=wg_id)
         .options(
@@ -706,15 +738,19 @@ def einkaufsplan():
         .all()
     )
 
+    #Rendern der Seite mit Formular und Items
     return render_template("einkaufsplan.html", form=form, shopping_items=shopping_items)
      
-
+# Delete Einkaufs Item
 @app.route("/einkaufsplan/item/<int:item_id>/delete", methods=["POST"])
 def delete_shopping_item(item_id):
+    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    # Laden des Items
     item = ShoppingItem.query.get_or_404(item_id)
+    #aus der DB löschen und commiten
     db.session.delete(item)
     db.session.commit()
     flash("Artikel erfolgreich gelöscht.", "success")
@@ -722,11 +758,13 @@ def delete_shopping_item(item_id):
 
 from urllib.parse import urlencode
 
+# Google Calendar URL erstellen
 def google_calendar_url(title, start_dt, end_dt, details="", location=""):
     #In UTC umwandeln
-    fmt = "%Y%m%dT%H%M%S"
-    dates = f"{start_dt.strftime(fmt)}/{end_dt.strftime(fmt)}"
+    fmt = "%Y%m%dT%H%M%S" #ICS Format
+    dates = f"{start_dt.strftime(fmt)}/{end_dt.strftime(fmt)}" #Start/Ende
 
+    #Parameter für die URL, was soll sie enthalten
     params = {
         "action": "TEMPLATE",
         "text": title,
@@ -736,12 +774,13 @@ def google_calendar_url(title, start_dt, end_dt, details="", location=""):
     }
     return "https://calendar.google.com/calendar/render?" + urlencode(params)
 
-
+# Datum/Zeit in ICS Format umwandeln
 def dt_to_ics(dt):
     # am besten UTC
     dt_utc = dt.replace(tzinfo=timezone.utc)
     return dt_utc.strftime("%Y%m%dT%H%M%SZ")
 
+# ICS-Datei erstellen
 def build_ics(uid, title, start_dt, end_dt, description="", location=""):
     return "\r\n".join([
         "BEGIN:VCALENDAR",
@@ -759,13 +798,19 @@ def build_ics(uid, title, start_dt, end_dt, description="", location=""):
         ""
     ])
 
+
+# App route für ICS Export für Activities
 @app.route("/activities/<int:activity_id>/ics", methods=["POST"])
 def activity_ics(activity_id):
+
+    # Sicherstellen, dass der User eingeloggt ist (Guard Klausel, sollte nicht passieren.)
     if 'user_id' not in session:
         return redirect(url_for('login'))
-        
+    
+    # Aktivität laden
     activity = Activity.query.get_or_404(activity_id)
 
+    # ICS erstellen (instanzieren)
     ics = build_ics(
         uid=f"activity-{activity.activity_id}@wgplanner",
         title=activity.title,
@@ -774,14 +819,14 @@ def activity_ics(activity_id):
         description=activity.description or "",
         location=activity.location or "",
     )
-
+    # ICS als Download zurückgeben
     return Response(
         ics,
         mimetype="text/calendar",
         headers={"Content-Disposition": f'attachment; filename="activity-{activity_id}.ics"'}
     )
 
-
+#run the app
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()  # erstellt alle Tabellen in der Datenbank
