@@ -1,9 +1,9 @@
-from os import abort, name
+from os import name
 from random import random
 from sqlite3 import IntegrityError
 import string
 from tempfile import template
-from flask import Flask, current_app, flash, jsonify, redirect, render_template,request, url_for,session, Response
+from flask import Flask, current_app, flash, jsonify, redirect, render_template,request, url_for,session, Response, abort
 from datetime import timezone
 from flask_migrate import Migrate
 from sqlalchemy import func, text
@@ -418,12 +418,14 @@ def delete_cleaning_task(template_id):
 
 @app.route("/innovationboard/", methods=['GET', 'POST'])
 def innovation_board():
-
+    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
     user_id = int(session["user_id"])
     if 'user_id' not in session:
         return redirect(url_for('login'))
-        
+
+    
     form = InnovationForm()
+    #aktuellen User laden
     user = User.query.filter_by(user_id=user_id).first()
 
     all_users = User.query.all()
@@ -468,10 +470,10 @@ def delete_idea(idea_id):
     #Bezug auf creator: Beziehung in Idea Model
     idea = Idea.query.get_or_404(idea_id)
     user_id = int(session["user_id"])
-    if idea.creator.user_id != user_id:
+    if idea.created_by != user_id:
         flash("Sie können nur Ihre eigenen Ideen löschen.", "error")
-        abort(403)
-
+        return redirect(url_for("innovation_board"))
+    
     #Idee löschen
     db.session.delete(idea) 
     db.session.commit()
@@ -663,12 +665,11 @@ def delete_activity(activity_id):
     current_user_id = int(session["user_id"])
     activity = Activity.query.get_or_404(activity_id)
     # Prüfen, ob der aktuelle User der Ersteller der Aktivität ist, creator ist die Beziehung in Activity Model
-    if activity.creator.user_id != current_user_id:
+    if activity.created_by != current_user_id:
         flash("Sie können nur Ihre eigenen Aktivitäten löschen.", "error")
-        abort(403)
-
+        
+        return redirect(url_for("activity_board"))
     # Aktivität löschen
-    activity = Activity.query.get_or_404(activity_id)
     db.session.delete(activity)
     db.session.commit()
     flash("Aktivität erfolgreich gelöscht.", "success")
