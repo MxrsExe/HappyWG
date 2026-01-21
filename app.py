@@ -339,7 +339,7 @@ def putzplan():
                     wg_id=user.wg_id,
                     name=form.aufgabe.data,
                     description=f"KW {form.woche.data}: {form.von_datum.data} bis {form.bis_datum.data}",
-                    frequency="weekly",
+                    frequency="weekly", #nicht implementiert
                     is_active=True
                 )
                 db.session.add(new_template)
