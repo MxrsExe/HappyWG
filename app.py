@@ -463,7 +463,7 @@ def innovation_board():
     #Ideen anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, joinedload(...) für weniger Queries und richtiges Laden der Relationen
     ideas = (Idea.query
              .filter_by(wg_id=user.wg_id)   
-             .options(joinedload(Idea.creator))
+             .options(joinedload(Idea.creator)) 
              .order_by(Idea.created_at.desc())
              .all())
     
