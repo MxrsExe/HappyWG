@@ -494,8 +494,6 @@ def toggle_like(idea_id):
 
     #User_id holen und Guard-Klausel: Sicherstellen, dass der User eingeloggt ist
     user_id = int(session["user_id"])  
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
     #Überprüfen, ob der User die Idee bereits geliked hat
     existing = Idea_Like.query.filter_by(idea_id=idea_id, user_id=user_id).first() #first() gibt None zurück, wenn kein Eintrag gefunden wurde
 
