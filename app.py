@@ -71,10 +71,11 @@ def generate_unique_code(length=6):
 
         if not Wg.query.filter_by(invite_code=code).first():
             return code
-    
+
+ #bevor eine route ausgeführt wird, prüfen ob der User eingeloggt ist!   
 def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
+    @wraps(f)                                   #f ist die Funktion die geschützt werden soll
+    def decorated_function(*args, **kwargs):    #neue Funktion läuft statt der alten
         if 'user_id' not in session:
             flash("Bitte zuerst einloggen", "danger")
             return redirect(url_for('login'))
@@ -84,12 +85,11 @@ def login_required(f):
  #login-Funktion   
 @app.route("/login/", methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    form = LoginForm()              #Username + Passwort
 
+    #Nach Login submit wird der Name geprüft, ob in DB vorhanden
     if form.validate_on_submit():
-        user = User.query.filter_by(
-            username=form.username.data
-        ).first()
+        user = User.query.filter_by(username=form.username.data).first()
 
         if not user:
             flash("Benutzername existiert nicht", "danger")
@@ -230,6 +230,7 @@ def dashboard():
 
 
     offene_putzaufgaben_count = CleaningTask.query.filter_by(assigned_to=user.user_id, status='open').count()
+    
     neue_ideen_count = Idea.query.filter_by(wg_id=wg.wg_id).count()
     
     kommende_events = Activity.query.filter(Activity.wg_id==wg.wg_id, Activity.date >= datetime.now()).count()
@@ -290,7 +291,7 @@ def dashboard():
     if not letzte_aktivitaeten:
         letzte_aktivitaeten.append({"zeitpunkt": None, "text": "Momentan gibt es keine Aktivitäten"})
 
-    letzte_aktivitaeten.sort(key=lambda x: x.get("zeitpunkt") or datetime.min, reverse=True)
+    letzte_aktivitaeten.sort(key=lambda x: x.get("zeitpunkt") or datetime.min, reverse=True) #Quelle: ChatGPT
     letzte_aktivitaeten = letzte_aktivitaeten[:10]
 
     wg_mitglieder = User.query.filter_by(wg_id=wg.wg_id).all()
