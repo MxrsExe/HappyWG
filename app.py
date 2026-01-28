@@ -334,13 +334,14 @@ def putzplan():
                 flash("WG-Mitglied existiert nicht", "error")
                 return redirect(url_for("putzplan"))
             #Neue Vorlage und Task erstellen, falls noch nicht vorhanden 
-        
+
             else:
+                kw = form.von_datum.data.isocalendar().week  #Kalenderwoche aus dem von_datum-Feld holen
                 new_template = CleaningTemplate(
                     wg_id=user.wg_id,
                     name=form.aufgabe.data,
-                    description=f"KW {form.woche.data}: {form.von_datum.data} bis {form.bis_datum.data}",
-                    frequency="weekly", #nicht implementiert
+                    description=f"KW {kw}: {form.von_datum.data.strftime('%d.%m.%Y')} bis {form.bis_datum.data.strftime('%d.%m.%Y')}",
+                    frequency = "weekly",
                     is_active=True
                 )
                 db.session.add(new_template)
