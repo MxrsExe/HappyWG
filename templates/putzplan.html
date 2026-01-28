@@ -145,16 +145,21 @@
             {% if task %}
               <form method="POST" action="{{ url_for('toggle_cleaning_task', task_id=task.task_id) }}" class="m-0">
                 <div class="form-check">
-                  <input class="form-check-input"
+                  <input class="form-check-input task-check"
                          type="checkbox"
                          id="task{{ task.task_id }}"
                          name="done"
-                         onchange="this.form.submit()"
+                         value="1"
                          {% if is_done %}checked{% endif %}>
-                  <label class="form-check-label fw-semibold {% if is_done %}text-decoration-line-through{% endif %}"
+
+                  <label class="form-check-label fw-semibold task-label {% if is_done %}text-decoration-line-through{% endif %}"
                          for="task{{ task.task_id }}">
                     {{ eintrag.name }}
                   </label>
+                  <!--Ok Button, um die Checkbox-Eingabe zu speichern-->
+                  <button type="submit" class="btn btn-sm btn-outline-primary" title="Speichern" aria-label="Speichern">
+                    bestätigen
+                  </button>
                 </div>
               </form>
             {% else %}
@@ -173,8 +178,10 @@
               <form method="POST" action="{{ url_for('delete_cleaning_task', template_id=eintrag.template_id) }}" class="m-0">
                 <button type="submit"
                         class="btn btn-sm btn-outline-danger"
-                        onclick="return confirm('Aufgabe wirklich löschen?');">
-                  🗑️
+                        title="Löschen"
+                        aria-label="Aufgabe löschen"
+                        value="delete_cleaning_task">
+                      🗑️
                 </button>
               </form>
             {% endif %}
@@ -192,7 +199,13 @@
 
 </div>
 
-
+<style>
+  
+  .task-check:checked + .task-label {
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+</style>
 
 {%endblock %}
 
