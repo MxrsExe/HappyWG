@@ -77,54 +77,18 @@
         
         <form method="POST"
               action="{% if is_joined %}{{ url_for('leave_activity', activity_id=activity.activity_id) }}{% else %}{{ url_for('join_activity', activity_id=activity.activity_id) }}{% endif %}"
-              class="m-0 action-form">
-
-          {% set confirm_join_id  = (request.args.get('confirm_join')  | int) %}
-          {% set confirm_leave_id = (request.args.get('confirm_leave') | int) %}
-
-          {# Ist der User schon drin? #}
-          {% set is_joined = current_user_id and (
-            activity.participants
-            | selectattr('user_id', 'equalto', current_user_id)
-            | list | length > 0
-          ) %}
-
+              class="m-0 action-form">     
+        
           <div class="action-area">
-            {# ====== FALL A: User ist bereits beigetreten -> LEAVE flow ====== #}
-            {% if is_joined %}
+            <form method="POST"
+                  action="{% if is_joined %}{{ url_for('leave_activity', activity_id=activity.activity_id) }}{% else %}{{ url_for('join_activity', activity_id=activity.activity_id) }}{% endif %}"
+                  class="m-0 d-inline">
 
-              {% if confirm_leave_id == activity.activity_id %}
-                <div class="d-flex gap-2 justify-content-end">
-                  <form method="POST" action="{{ url_for('leave_activity', activity_id=activity.activity_id) }}" class="m-0">
-                    <button type="submit" class="btn btn-sm btn-danger">Ja, verlassen</button>
-                  </form>
-                  <a class="btn btn-sm btn-secondary" href="{{ url_for('activity_board') }}">Abbrechen</a>
-                </div>
-              {% else %}
-                <a class="btn btn-sm action-btn action-leave"
-                  href="{{ url_for('activity_board', confirm_leave=activity.activity_id) }}">
-                  𝗟𝖾𝖺𝗏𝖾 ✘
-                </a>
-              {% endif %}
-
-            {# ====== FALL B: User ist NICHT beigetreten -> JOIN flow ====== #}
-            {% else %}
-
-              {% if confirm_join_id == activity.activity_id %}
-                <div class="d-flex gap-2 justify-content-end">
-                  <form method="POST" action="{{ url_for('join_activity', activity_id=activity.activity_id) }}" class="m-0">
-                    <button type="submit" class="btn btn-sm btn-primary">Ja, beitreten</button>
-                  </form>
-                  <a class="btn btn-sm btn-secondary" href="{{ url_for('activity_board') }}">Abbrechen</a>
-                </div>
-              {% else %}
-                <a class="btn btn-sm action-btn action-join"
-                  href="{{ url_for('activity_board', confirm_join=activity.activity_id) }}">
-                  𝖩𝗈𝗂𝗇 ➥
-                </a>
-              {% endif %}
-
-            {% endif %}
+              <button type="submit"
+                      class="btn btn-sm action-btn {% if is_joined %}action-leave{% else %}action-join{% endif %}">
+                {% if is_joined %}𝗟𝖾𝖺𝗏𝖾 ✘{% else %}𝖩𝗈𝗂𝗇 ➥{% endif %}
+              </button>
+            </form>
           </div>
 
         </form>
