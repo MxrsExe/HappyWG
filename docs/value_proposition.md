@@ -30,22 +30,22 @@ In diesem Fall hat der Customer keinen Account, weshalb er/sie auf "Jetzt regist
 
 
 ## Putzplan
-[PutzplanGeneral](assets/images/putzplan/putzplan_general.png)
+![PutzplanGeneral](assets/images/putzplan/putzplan_general.png)
 
 Wie man im Putzplan sieht, sieht man nichts. Nur die Überschrift und die Navigationsleiste. Das liegt daran, dass weder der User, noch jemand anderes in der WG eine Aufgabe angelegt hat. Der User erstellt eine Aufgabe, indem er/sie auf den blauen Button oben rechts "🧼Neue Aufgabe" klickt.
 
-[PutzplanModal](assets/images/putzplan/putzplan_modal.png)
+![PutzplanModal](assets/images/putzplan/putzplan_modal.png)
 
 Beim Klicken des Buttons bekommt der User ein Modal mit den einzelnen Daten angezeigt, die er/sie bestimmen kann. Dazu gehören: Von wann bis wann, welche Aufgabe und wer dafür zuständig ist. Achtung: Es können NUR WG-Mitglieder der selben WG Aufgaben bekommen (siehe). Im Privaten einigen sich die WG-Mitglieder selber, wer wann welche Aufgabe übernimmt.
 
 Der User kann nun die Felder ausfüllen. Dabei wählt der User die von und bis-Daten per Kalenderansicht aus, benennt die Aufgabe, erteilt die Zuständigkeit und klickt auf den Button "Erstellen". 
 
-[PutzplanVonDate](assets/images/putzplan/von_datum.png)
-[PutzplanBisDate](assets/images/putzplan/bis_datum.png)
+![PutzplanVonDate](assets/images/putzplan/von_datum.png)
+![PutzplanBisDate](assets/images/putzplan/bis_datum.png)
 
 So kann beispielsweise ein ausgefülltes Modal aussehen für eine Aufgabe:
 
-[PutzplanModalFilled](assets/images/putzplan/putzplan_modal_filled.png)
+![PutzplanModalFilled](assets/images/putzplan/putzplan_modal_filled.png)
 
 
 
