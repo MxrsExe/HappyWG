@@ -52,7 +52,7 @@ Wenn die Aufgabe erstellt wurde, wird sie so als Card angezeigt. Der User sieht 
 ![PutzplanCard](assets/images/putzplan/task_completed.png)
 ![PutzplanCardCompleted](assets/images/putzplan/task_completed_progressbar.png)
 
-# InnovationBoard
+## InnovationBoard
 
 Das Prinzip ist das gleiche wie im Putzplan. Man sieht ein leeres InnovationBoard, in dem man mit dem blauen Button oben rechts ("✨Neue Idee") Ideen für die WG erstellen kann.
 
@@ -70,6 +70,47 @@ Der User klickt auf Erstellen und bekommt seine Card mit der gewünschten Akzent
 
 ![InnoCardNormal](assets/images/innoboard/inno_card.png)
 ![InnoCardCommentscetion](assets/images/innoboard/innocard_commentsection.png)
+
+## ActivityBoard
+
+Wie auch bei den vorherigen Seiten, ist die Seite leer. Der User wird eine Aktivität mithilfe des Buttons ("+ Neue Aktivität") oben rechts erstellen.
+
+![ActivityEmpty](assets/images/activityboard/activity_empty.png)
+
+Der User bekommt nun das Modal angezeigt, wo er die Daten eintragen kann. Dazu gehören: Ein Feld für den Titel der Aktivität, Beschreibung, zwei Felder für Daten mit spezifischer Uhrzeit, Ort und maximalen Teilnehmern (optional).
+
+![ActivityModal](assets/images/activityboard/activity_modal)
+
+Wie auch beim Putzplan, kann hier der User per Kalenderansicht bestimmen, wann die Aktivität stattfinden soll. Zusätzlich kommt noch die Tageszeit hinzu, die er/sie spezifizieren kann.
+
+![ActivityModalDateFrom](assets/images/activityboard/activity_modal_date_from.png)
+![ActivityModalDateTo](assets/images/activityboard/activity_modal_date_to.png)
+
+So kann ein beispielhaft ausgefülltes Modal aussehen (mit maximalen Teilnehmern)
+
+![ActivityModalFilled](assets/images/activityboard/activity_modal_filled.png)
+
+Der User klickt nun auf den Button "Aktivität hinzufügen" und bekommt eine Activity-Card angezeigt mit der Beschreibung und den angegebenen Daten. Oben rechts auf der Card gibt es wie gewohnt den Löschen-Button (wie bei den anderen aus Demonstrationsgründen nicht genutzt), sowie den 📅 Kalender-Export-Button (.ics), über den die Aktivität als ICS-Datei heruntergeladen und in Google/Apple/Outlook importiert werden kann. Unten rechts befindet sich der "Join" bzw. "Leave"-Button. Der User klickt auf ihn tritt der Aktivität bei. Wenn der User doch keine Lust auf diese Aktivität hat, kann er/sie immer verlassen, der Button ändert sich dementsprechend.
+
+![ActivityCard](assets/images/activityboard/activity_card.png)
+
+Der User tritt über den Join-Button einer Aktivität bei.
+
+![ActivityJoined](assets/images/activityboard/activity_joined.png)
+
+Der User will diese Aktivität als Kalender-Export haben. Dafür klickt er/sie auf den entsprechenden Button 📅 und bekommt eine .ics-Datei als Download.
+
+![ActivityCalendarDownload](assets/images/activityboard/activity_ics_download.png)
+
+Aus Demonstrationszwecken wird hier der Prozess des Imports übersprungen und Microsoft Outlook benutzt.
+Die Aktivität mit all ihren Daten wird nun im Kalender angezeigt:
+
+![ActivityInCalendar](assets/images/activityboard/activity_in_calendar.png)
+
+Der User verlässt nun die Aktivität:
+
+![ActivityLeft](assets/images/activityboard/activity_left.png)
+
 
 
 
