@@ -71,6 +71,8 @@ Der User klickt auf Erstellen und bekommt seine Card mit der gewünschten Akzent
 ![InnoCardNormal](assets/images/innoboard/inno_card.png)
 ![InnoCardCommentscetion](assets/images/innoboard/innocard_commentsection.png)
 
+Anschließend wechselt der User auf das ActivityBoard.
+
 ## ActivityBoard
 
 Wie auch bei den vorherigen Seiten, ist die Seite leer. Der User wird eine Aktivität mithilfe des Buttons ("+ Neue Aktivität") oben rechts erstellen.
@@ -111,6 +113,22 @@ Der User verlässt nun die Aktivität:
 
 ![ActivityLeft](assets/images/activityboard/activity_left.png)
 
+Im Folgenden will der User Produkte zum Einkaufen anlegen. Dazu wechselt er/sie auf die Einkaufsliste.
+
+# Einkaufsliste
+
+![EinkaufslisteEmpty](assets/images/einkaufsliste/einkaufsplan_empty.png)
+
+Der Einkaufsplan ist sehr simpel. Der User gibt die Bezeichnung des Produkts ins Eingabefeld "Artikel hinzufügen..." ein und gibt die Menge an.
+Um das Produkt hinzuzufügen, klickt der User auf den blauen "+" Button daneben.
+
+So kann eine Produkteingabe beispielsweise aussehen:
+![EinkaufItem](assets/images/einkaufsliste/sample_item_einkauf.png)
+
+Und so kann ein beispielhaftes Produkt aussehen:
+![EinkaufsItemActual](assets/images/einkaufsliste/)
+
+Der User sieht, wer zuständig ist für dieses Produkt. Diese Funktion ist dazu intendiert, dass man z.B. eine gemeinsame Feier plant und die Produkte für diese Feier zusammen kauft, daher wird der zuständige User zufällig aus der WG ausgewählt. Sollte ein User zu viele Produkte zum Einkaufen haben und sich beschweren, kann man entweder das Produkt neu anlegen oder sich darauf einigen, dass es doch jemand anderes besorgt.
 
 
 
