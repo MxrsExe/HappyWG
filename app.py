@@ -153,11 +153,6 @@ def create_or_join_wg():
     
     user = User.query.get(session['user_id'])
 
-    if not user:
-        session.clear()
-        return redirect(url_for("login"))
-
-
     return render_template("welcome.html", username=user.username)
 
 @app.route("/welcome/create_wg/", methods=['GET', 'POST'])
@@ -172,8 +167,10 @@ def create_wg():
             return redirect(url_for("create_wg"))
 
         invite_code = generate_unique_code()
+        
 
         new_wg = Wg(name=wg_name, invite_code=invite_code)
+        
 
         db.session.add(new_wg)
         db.session.commit()
@@ -196,15 +193,9 @@ def join_wg():
             return redirect(url_for('join_wg'))
 
         wg = Wg.query.filter_by(invite_code=invite_code).first()
-        if not wg:
-            flash("Ungültiger Einladungscode.", "danger")
-            return redirect(url_for('join_wg'))
 
         user = User.query.get(session['user_id'])
-        if not user:
-            session.clear()
-            return redirect(url_for("login"))
-
+    
         user.wg_id = wg.wg_id
         db.session.commit()  
 
@@ -219,14 +210,8 @@ def join_wg():
 def dashboard():
 
     user = User.query.get(session['user_id'])
-    if not user or not user.wg_id:
-        return redirect(url_for('create_or_join_wg'))
-    if not user:
-        session.clear()
-        return redirect(url_for("login"))
 
     wg = Wg.query.get(user.wg_id)
-
 
 
     offene_putzaufgaben_count = CleaningTask.query.filter_by(assigned_to=user.user_id, status='open').count()
@@ -254,7 +239,7 @@ def dashboard():
     for t in putz_tasks:
         wichtige_hinweise ["putz"].append(t.template.name)
 
-    offene_einkaufs_items = ShoppingItem.query.filter(ShoppingItem.wg_id == wg.wg_id).all()
+    offene_einkaufs_items = ShoppingItem.query.filter_by(wg_id=wg.wg_id, assigned_to=user.user_id).all()
     for item in offene_einkaufs_items:
         wichtige_hinweise["einkauf"].append(item.name)
 
@@ -266,7 +251,7 @@ def dashboard():
         })
 
     if not wichtige_hinweise:
-        wichtige_hinweise = ["Momentan gitbt es keine offenen Aufgaben oder Hinweise!"]
+        wichtige_hinweise = ["Momentan gibt es keine offenen Aufgaben oder Hinweise!"]
 
 
     #Activity-Box
@@ -554,9 +539,6 @@ def activity_board():
 
     #aktuellen User laden
     user = User.query.get(session["user_id"])
-    #Wenn kein User oder keine WG -> weiterleiten (sollte nicht passieren)
-    if not user or not user.wg_id:
-        return redirect(url_for("create_or_join_wg"))
 
     # aktuelle WG ID vom User für new_activity
     wg_id = user.wg_id
@@ -629,10 +611,7 @@ def join_activity(activity_id):
 @app.route("/activity/<int:activity_id>/leave_activity", methods=["POST"])
 @login_required
 def leave_activity(activity_id):
-    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    
+
     #aktuelle user_id holen
     user_id = int(session["user_id"])  
     
@@ -687,14 +666,6 @@ def einkaufsplan():
     #Aktuellen User laden
     user_id = int(session["user_id"])
     current_user = User.query.get(user_id) if user_id else None
-    #Fallback: User aus der DB laden
-    if not current_user:
-        current_user = User.query.filter_by(user_id=user_id).first()
-
-    #Falls es den user noch nicht gibt -> abbrechen/Fehlermeldung (sollte nicht passieren)
-    if not current_user:
-        flash("User fehlt", "error")
-        return render_template("einkaufsplan.html", form=form, shopping_items=[])
     
     #  aktuelle WG ID für new_item
     wg_id = current_user.wg_id 
@@ -746,9 +717,6 @@ def einkaufsplan():
 @app.route("/einkaufsplan/item/<int:item_id>/delete", methods=["POST"])
 @login_required
 def delete_shopping_item(item_id):
-    #Guard Klausel: Sicherstellen, dass der User eingeloggt ist (sollte nicht passieren.)
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
 
     # Laden des Items
     item = ShoppingItem.query.get_or_404(item_id)
