@@ -94,7 +94,7 @@ Wie auch bei den vorherigen Seiten, ist die Seite leer. Der User wird eine Aktiv
 
 Der User bekommt nun das Modal angezeigt, wo er die Daten eintragen kann. Dazu gehören: Ein Feld für den Titel der Aktivität, Beschreibung, zwei Felder für Daten mit spezifischer Uhrzeit, Ort und maximalen Teilnehmern (optional).
 
-![ActivityModal](assets/images/activityboard/activity_modal)
+![ActivityModal](assets/images/activityboard/activity_modal.png)
 
 Wie auch beim Putzplan, kann hier der User per Kalenderansicht bestimmen, wann die Aktivität stattfinden soll. Zusätzlich kommt noch die Tageszeit hinzu, die er/sie spezifizieren kann.
 
