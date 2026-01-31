@@ -147,7 +147,40 @@ Anschließend geht der User zurück auf das Dashboard und sieht die Anzahl der o
 ![dashboard](assets/images/dashboard/dashboard_filled.png)
 ![WgMember](assets/images/dashboard/wg_member.png)
 
+## Kooperation in der Wohngemeinschaft
 
+Da ein integraler Bestandteil des WG-Lebens das Zusammenleben der WG-Mitgliedern ist, haben wir das Programm so gestaltet, dass es mehrere Mitglieder in einer WG geben kann, die zur selben Zeit verschiedene Sachen machen können. Aus Demonstrationsgründen werden im Folgenden nur die wichtigsten Features des Kollaborations-Features gezeigt.
 
+Ein anderes Mitglied der WG erstellt sich einen Account und will der bisherigen Beispiel-WG beitreten:
+![JoinWG](assets/images/wg_creation_or_join/invitation_code_eingabe.png)
+
+Das zweite Mitglied landet auf dem Dashboard und sieht die bisherigen Informationen und letzte Begebenheiten der WG.
+![2ndUserDashboard](assets/images/dashboard/2nd_user_dashboard.png)
+
+Anschließend möchte das 2. Mitglied eine **Putzaufgabe** im **Putzplan** erstellen, es kann, wie bereits erwähnt, nur WG-Mitglieder dieser WG zum zuständig sein auswählen:
+![2ndUserPutzplan](assets/images/putzplan/2nd_user_add_task.png)
+
+Weiteres WG-Mitglied erstellt neue Putzaufgabe und sieht, wieviele Tasks noch offen sind.
+![2ndUserTask](assets/images/putzplan/collab_putzplan.png)
+
+Das zweite WG-Mitglied will eine Putzaufgabe von einem weiteren WG-Mitglied löschen, was nicht möglich ist. Das geschieht ebensfalls bei dem InnovationBoard (Ideen) und ActivityBoard (Aktivitäten), dies wird aber aus Simplizitätsgründen übersprungen, da dies eine repetitive Funktion darstellt.
+![2ndUserDeleteTask](assets/images/putzplan/danger_msg_putzplan.png)
+
+Im **InnovationBoard** kann das 2. WG-Mitglied jetzt den Vorschlag von Mars liken und kommentieren (Klick auf "Kommentare", Dropdown), und selber einen Vorschlag posten (übersprungen, da selber Erstellprozess):
+![InnoLikeAndComment](assets/images/innoboard/comment_like.png)
+![InnoCommented](assets/images/innoboard/commented_inno.png)
+![InnoFromOtherMember](assets/images/innoboard/)
+
+Im **ActivityBoard** tritt das Mitglied einer Aktivität bei:
+![activityJoined](assets/images/activityboard/ActivityJoined.png)
+...und kann sie wieder verlassen:
+![activityLeft](assets/images/activityboard/activity_left.png)
+
+Im **Einkaufsplan** kann das weitere WG-Mitglied neue Produkte hinzufügen:
+![ShoppingItemPlus](assets/images/einkaufsliste/newShoppingItem.png)
+
+Am Ende kehrt das weitere WG-Mitglied auf das Dashboard zurück und sieht die aktualisierten Informationen (individuelle Aufgaben und letzte Aktivitäten)
+![dashboardFilled2](assets/images/dashboard/dashboard2ndMember.png)
+![WGMembers](assets/images/dashboard/wg_members_refreshed.png)
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}

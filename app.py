@@ -316,7 +316,7 @@ def putzplan():
 
             #Fehlermeldung, falls der User nicht existiert (sollte nicht passieren, da aus Dropdown gewählt wird)
             if not assigned_user:
-                flash("WG-Mitglied existiert nicht", "error")
+                flash("WG-Mitglied existiert nicht", "danger")
                 return redirect(url_for("putzplan"))
             #Neue Vorlage und Task erstellen, falls noch nicht vorhanden 
 
@@ -401,11 +401,11 @@ def delete_cleaning_task(template_id):
     #Task
     task = template.tasks[0] if template.tasks else None
     if not task:
-        flash("Kein Task gefunden.", "error")
+        flash("Kein Task gefunden.", "danger")
         return redirect(url_for("putzplan"))
 
     if task.assigned_to != user_id:
-        flash("Nur die zuständige Person kann diese Aufgabe löschen.", "error")
+        flash("Nur die zuständige Person kann diese Aufgabe löschen.", "danger")
         return redirect(url_for("putzplan"))
     
     db.session.delete(template)
@@ -445,7 +445,7 @@ def innovation_board():
 
                 return redirect(url_for("innovation_board"))
         else:
-            flash("Fehler beim Einreichen der Innovation. Bitte überprüfen Sie die Eingaben.", "error")
+            flash("Fehler beim Einreichen der Innovation. Bitte überprüfen Sie die Eingaben.", "danger")
     #Ideen anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, joinedload(...) für weniger Queries und richtiges Laden der Relationen
     ideas = (Idea.query
              .filter_by(wg_id=user.wg_id)   
@@ -465,7 +465,7 @@ def delete_idea(idea_id):
     idea = Idea.query.get_or_404(idea_id)
     user_id = int(session["user_id"])
     if idea.created_by != user_id:
-        flash("Sie können nur Ihre eigenen Ideen löschen.", "error")
+        flash("Sie können nur Ihre eigenen Ideen löschen.", "danger")
         return redirect(url_for("innovation_board"))
     
     #Idee löschen
@@ -527,7 +527,7 @@ def post_comment(idea_id):
                 db.session.commit()
                 flash("Kommentar hinzugefügt.", "success")
             else:
-                flash("Kommentar darf nicht leer sein.", "error")
+                flash("Kommentar darf nicht leer sein.", "danger")
         
 
     return redirect(url_for("innovation_board"))
@@ -592,12 +592,12 @@ def join_activity(activity_id):
 
     # Prüfen, ob der User bereits Teilnehmer ist, damit er/sie nicht doppelt beitreten kann
     if user in activity.participants:
-        flash("Du nimmst bereits teil.", "error")
+        flash("Du nimmst bereits teil.", "danger")
         return redirect(url_for("activity_board"))
 
     # Prüfen, ob die maximale Teilnehmerzahl erreicht ist, len(activity.participants) gibt die aktuelle Anzahl der Teilnehmer zurück
     if activity.max_participants and len(activity.participants) >= activity.max_participants:
-        flash("Die Aktivität ist bereits voll.", "error")
+        flash("Die Aktivität ist bereits voll.", "danger")
         return redirect(url_for("activity_board"))
 
     # User zur Teilnehmerliste hinzufügen
@@ -621,7 +621,7 @@ def leave_activity(activity_id):
 
     # Prüfen, ob der User tatsächlich Teilnehmer ist
     if user not in activity.participants:
-        flash("Du nimmst nicht teil.", "error")
+        flash("Du nimmst nicht teil.", "danger")
         return redirect(url_for("activity_board"))
 
     # User aus der Teilnehmerliste entfernen
@@ -646,7 +646,7 @@ def delete_activity(activity_id):
     activity = Activity.query.get_or_404(activity_id)
     # Prüfen, ob der aktuelle User der Ersteller der Aktivität ist, creator ist die Beziehung in Activity Model
     if activity.created_by != current_user_id:
-        flash("Sie können nur Ihre eigenen Aktivitäten löschen.", "error")
+        flash("Sie können nur Ihre eigenen Aktivitäten löschen.", "danger")
         
         return redirect(url_for("activity_board"))
     # Aktivität löschen
@@ -697,7 +697,7 @@ def einkaufsplan():
             flash("Artikel erfolgreich hinzugefügt!", "success")
             return redirect(url_for("einkaufsplan"))
         else:
-            flash("Fehler beim Hinzufügen. Bitte Eingaben prüfen.", "error")
+            flash("Fehler beim Hinzufügen. Bitte Eingaben prüfen.", "danger")
 
     #Items anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, .options(joinedload(...)) für weniger Queries
     shopping_items = (ShoppingItem.query
@@ -773,10 +773,6 @@ def build_ics(uid, title, start_dt, end_dt, description="", location=""):
 @app.route("/activities/<int:activity_id>/ics", methods=["POST"])
 @login_required
 def activity_ics(activity_id):
-
-    # Sicherstellen, dass der User eingeloggt ist (Guard Klausel, sollte nicht passieren.)
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
     
     # Aktivität laden
     activity = Activity.query.get_or_404(activity_id)
