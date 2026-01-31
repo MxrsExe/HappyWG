@@ -128,7 +128,7 @@ Der User verlässt nun die Aktivität:
 
 Im Folgenden will der User Produkte zum Einkaufen anlegen. Dazu wechselt er/sie auf die Einkaufsliste.
 
-# Einkaufsliste
+## Einkaufsliste
 
 ![EinkaufslisteEmpty](assets/images/einkaufsliste/einkaufsplan_empty.png)
 
