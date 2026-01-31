@@ -143,7 +143,7 @@ Und so kann ein beispielhaftes Produkt aussehen:
 
 Der User sieht, wer zuständig ist für dieses Produkt. Diese Funktion ist dazu intendiert, dass man z.B. eine gemeinsame Feier plant und die Produkte für diese Feier zusammen kauft, daher wird der zuständige User zufällig aus der WG ausgewählt. Sollte ein User zu viele Produkte zum Einkaufen haben und sich beschweren, kann man entweder das Produkt neu anlegen oder sich darauf einigen, dass es doch jemand anderes besorgt.
 
-Anschließend geht der User zurück auf das Dashboard und sieht die Anzahl der offenen Putzaufgaben (bei denen der spezifische User zuständig ist), neuen Ideen, bevorstehenden Aktivitäten und Einkaufsartikeln, die noch einzukaufen sind vom User. Außerdem noch letzte Aktivitäten der WG allgemein, Hinweise (z.B. diverse Erinnerungen) und die WG-Mitglieder unten.
+Anschließend geht der User zurück auf das Dashboard und sieht die allgemeine Übersicht: die Anzahl der offenen Putzaufgaben (bei denen der spezifische User zuständig ist), neuen Ideen, bevorstehenden Aktivitäten und Einkaufsartikeln, die vom User noch einzukaufen sind, letzte Aktivitäten der WG allgemein, Hinweise (z.B. diverse Erinnerungen) und die WG-Mitglieder unten.
 ![dashboard](assets/images/dashboard/dashboard_filled.png)
 ![WgMember](assets/images/dashboard/wg_member.png)
 
@@ -179,8 +179,9 @@ Im **ActivityBoard** tritt das Mitglied einer Aktivität bei:
 Im **Einkaufsplan** kann das weitere WG-Mitglied neue Produkte hinzufügen:
 ![ShoppingItemPlus](assets/images/einkaufsliste/newShoppingItem.png)
 
-Am Ende kehrt das weitere WG-Mitglied auf das **Dashboard** zurück und sieht die **aktualisierten Informationen** (individuelle Aufgaben und letzte Aktivitäten)
+Am Ende kehrt das weitere WG-Mitglied auf das **Dashboard** zurück und sieht die Übersicht mit den **aktualisierten Informationen** (individuelle Aufgaben und letzte Aktivitäten)
 ![dashboardFilled2](assets/images/dashboard/dashboard2ndMember.png)
 ![WGMembers](assets/images/dashboard/wg_members_refreshed.png)
+
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
