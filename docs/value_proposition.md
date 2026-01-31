@@ -169,7 +169,7 @@ Das zweite WG-Mitglied will eine Putzaufgabe von einem weiteren WG-Mitglied lös
 Im **InnovationBoard** kann das 2. WG-Mitglied jetzt den Vorschlag von Mars liken und kommentieren (Klick auf "Kommentare", Dropdown), und selber einen Vorschlag posten (übersprungen, da selber Erstellprozess):
 ![InnoLikeAndComment](assets/images/innoboard/comment_like.png)
 ![InnoCommented](assets/images/innoboard/commented_inno.png)
-![InnoFromOtherMember](assets/images/innoboard/)
+![InnoFromOtherMember](assets/images/innoboard/inno_from_second_user.png)
 
 Im **ActivityBoard** tritt das Mitglied einer Aktivität bei:
 ![activityJoined](assets/images/activityboard/ActivityJoined.png)
