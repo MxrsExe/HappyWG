@@ -175,6 +175,8 @@ Im **ActivityBoard** tritt das Mitglied einer Aktivität bei:
 ![activityJoined](assets/images/activityboard/ActivityJoined.png)
 ...und kann sie wieder verlassen:
 ![activityLeft](assets/images/activityboard/activityLeft.png)
+Es kann auch eine neue Aktivität erstellen:
+![activityCreateNew](assets/images/activityboard/activity_new.png)
 
 Im **Einkaufsplan** kann das weitere WG-Mitglied neue Produkte hinzufügen:
 ![ShoppingItemPlus](assets/images/einkaufsliste/newShoppingItem.png)
