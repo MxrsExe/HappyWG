@@ -26,8 +26,21 @@ Unser Ziel ist, den Alltag in der WG spürbar zu erleichtern, Konflikte reduzier
 
 Der Customer landet erstmal auf der Login Page, wo er/sie auswählen kann, ob man sich anmelden (Account vorhanden) oder registrieren möchte.
 In diesem Fall hat der Customer keinen Account, weshalb er/sie auf "Jetzt registrieren" klickt, um sich einen Account zu erstellen.
+![Login](assets/images/login_register/login.png)
+![Register](assets/images/login_register/register.png)
 
+Nach dem Registrieren folgt die Anmeldung(aus Demonstrationszwecken übersprungen) und die Auswahl, ob man einer WG beitreten möchte oder eine erstellen will.
+In diesem Fall wird der Customer eine WG erstellen.
+![CreateWG](assets/images/wg_creation_or_join/wg_create_or_join.png)
 
+Bei der Erstellung der Wohngemeinschaft bekommt der Customer einen Einladungscode bzw. einen "digitalen Schlüssel" zur WG, den er ins unterliegende Feld eingibt.
+
+![WGKey](assets/images/wg_creation_or_join/wg_key.png)
+
+Danach landet der User auf dem Dashboard, welches leer ist und im Verlauf noch mit Informationen gefüllt werden wird.
+![dashboardEmpty](assets/images/dashboard/dashboard_empty.png)
+
+Der User möchte einen Putzplan anlegen. Dazu wählt er/sie in der Navigationsleiste auf dem Dashboard den "Putzplan"-Button.
 
 ## Putzplan
 ![PutzplanGeneral](assets/images/putzplan/putzplan_general.png)
@@ -129,6 +142,10 @@ Und so kann ein beispielhaftes Produkt aussehen:
 ![EinkaufsItemActual](assets/images/einkaufsliste/)
 
 Der User sieht, wer zuständig ist für dieses Produkt. Diese Funktion ist dazu intendiert, dass man z.B. eine gemeinsame Feier plant und die Produkte für diese Feier zusammen kauft, daher wird der zuständige User zufällig aus der WG ausgewählt. Sollte ein User zu viele Produkte zum Einkaufen haben und sich beschweren, kann man entweder das Produkt neu anlegen oder sich darauf einigen, dass es doch jemand anderes besorgt.
+
+Anschließend geht der User zurück auf das Dashboard und sieht die Anzahl der offenen Putzaufgaben (bei denen der spezifische User zuständig ist), neuen Ideen, bevorstehenden Aktivitäten und Einkaufsartikeln, die noch einzukaufen sind vom User. Außerdem noch letzte Aktivitäten der WG allgemein, Hinweise (z.B. diverse Erinnerungen) und die WG-Mitglieder unten.
+![dashboard](assets/images/dashboard/dashboard_filled.png)
+![WgMember](assets/images/dashboard/wg_member.png)
 
 
 
