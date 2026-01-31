@@ -139,7 +139,7 @@ So kann eine Produkteingabe beispielsweise aussehen:
 ![EinkaufItem](assets/images/einkaufsliste/sample_item_einkauf.png)
 
 Und so kann ein beispielhaftes Produkt aussehen:
-![EinkaufsItemActual](assets/images/einkaufsliste/)
+![EinkaufsItemActual](assets/images/einkaufsliste/sample_item_actual.png)
 
 Der User sieht, wer zuständig ist für dieses Produkt. Diese Funktion ist dazu intendiert, dass man z.B. eine gemeinsame Feier plant und die Produkte für diese Feier zusammen kauft, daher wird der zuständige User zufällig aus der WG ausgewählt. Sollte ein User zu viele Produkte zum Einkaufen haben und sich beschweren, kann man entweder das Produkt neu anlegen oder sich darauf einigen, dass es doch jemand anderes besorgt.
 
