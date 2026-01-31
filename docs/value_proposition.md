@@ -179,7 +179,7 @@ Im **ActivityBoard** tritt das Mitglied einer Aktivität bei:
 Im **Einkaufsplan** kann das weitere WG-Mitglied neue Produkte hinzufügen:
 ![ShoppingItemPlus](assets/images/einkaufsliste/newShoppingItem.png)
 
-Am Ende kehrt das weitere WG-Mitglied auf das Dashboard zurück und sieht die aktualisierten Informationen (individuelle Aufgaben und letzte Aktivitäten)
+Am Ende kehrt das weitere WG-Mitglied auf das **Dashboard** zurück und sieht die **aktualisierten Informationen** (individuelle Aufgaben und letzte Aktivitäten)
 ![dashboardFilled2](assets/images/dashboard/dashboard2ndMember.png)
 ![WGMembers](assets/images/dashboard/wg_members_refreshed.png)
 {: .fs-2 }
