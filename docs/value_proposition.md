@@ -174,7 +174,7 @@ Im **InnovationBoard** kann das 2. WG-Mitglied jetzt den Vorschlag von Mars like
 Im **ActivityBoard** tritt das Mitglied einer Aktivität bei:
 ![activityJoined](assets/images/activityboard/ActivityJoined.png)
 ...und kann sie wieder verlassen:
-![activityLeft](assets/images/activityboard/activity_left.png)
+![activityLeft](assets/images/activityboard/activityLeft.png)
 
 Im **Einkaufsplan** kann das weitere WG-Mitglied neue Produkte hinzufügen:
 ![ShoppingItemPlus](assets/images/einkaufsliste/newShoppingItem.png)
