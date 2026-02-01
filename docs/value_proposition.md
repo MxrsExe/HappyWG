@@ -20,8 +20,9 @@ Unser Ziel ist, den Alltag in der WG spürbar zu erleichtern, Konflikte reduzier
 
 **Als Gruppe**: Großes Ambitionslevel, regelmäßige Arbeit am Projekt, keine Prokrastion, Großteil vor Weihnachten fertig haben?
 
+<a id=customer-journey></a>
 
-# <a id = customer-journey>Customer Journey</a>
+# Customer Journey
 
 
 ## Login bzw. Registrierung
