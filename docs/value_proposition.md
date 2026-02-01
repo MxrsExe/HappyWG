@@ -60,7 +60,7 @@ So kann beispielsweise ein ausgefülltes Modal aussehen für eine Aufgabe:
 
 ![PutzplanModalFilled](assets/images/putzplan/putzplan_modal_filled.png)
 
-Wenn die Aufgabe erstellt wurde, wird sie so als Card angezeigt. Der User sieht den Zuständigen, die Bezeichnung der Aufgabe und die Kalenderwoche bzw. das Datum, wann wer zuständig ist. Außerdem noch einen Löschen-Button mit einem Mülltonne-Emoji oben rechts in der Card und einen bestätigen-Button, um wirklich die Aufgabe nach dem Checken der Checkbox als erledigt zu markieren (nötig aus HTML-Persistenz-Gründen). Bei Erledigung aller Aufgaben (aus Demonstrationsgründen hier nur eine) wird die Progressbar grün und der User wird benachrichtigt, dass alle Aufgaben erfüllt wurden. Ein anderes Mitglied kann Aufgaben hinzufügen, löschen aber kann es nur seine eigenen (siehe).
+Wenn die Aufgabe erstellt wurde, wird sie so als Card angezeigt. Der User sieht den Zuständigen, die Bezeichnung der Aufgabe und die Kalenderwoche bzw. das Datum, wann wer zuständig ist. Außerdem noch einen Löschen-Button mit einem Mülltonne-Emoji oben rechts in der Card und einen bestätigen-Button, um wirklich die Aufgabe nach dem Checken der Checkbox als erledigt zu markieren (nötig aus HTML-Persistenz-Gründen). Bei Erledigung aller Aufgaben (aus Demonstrationsgründen hier nur eine) wird die Progressbar grün und der User wird benachrichtigt, dass alle Aufgaben erfüllt wurden. Ein anderes Mitglied kann Aufgaben hinzufügen, löschen aber kann es nur seine eigenen Aufgaben ([Putzaufgabe löschen (anderes WG-Mitglied)](#delete-task-other-member)).
 
 ![PutzplanCard](assets/images/putzplan/task_completed.png)
 ![PutzplanCardCompleted](assets/images/putzplan/task_completed_progressbar.png)
@@ -164,6 +164,7 @@ Anschließend möchte das 2. Mitglied eine **Putzaufgabe** im **Putzplan** erste
 Weiteres WG-Mitglied erstellt neue Putzaufgabe und sieht, wieviele Tasks noch offen sind.
 ![2ndUserTask](assets/images/putzplan/collab_putzplan.png)
 
+<a id="delete-task-other-member"></a>
 Das zweite WG-Mitglied will eine Putzaufgabe von einem weiteren WG-Mitglied löschen, was nicht möglich ist. Das geschieht ebensfalls bei dem InnovationBoard (Ideen) und ActivityBoard (Aktivitäten), dies wird aber aus Simplizitätsgründen übersprungen, da dies eine repetitive Funktion darstellt.
 ![2ndUserDeleteTask](assets/images/putzplan/danger_msg_putzplan.png)
 
