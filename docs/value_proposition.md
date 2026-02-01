@@ -21,7 +21,7 @@ Unser Ziel ist, den Alltag in der WG spürbar zu erleichtern, Konflikte reduzier
 **Als Gruppe**: Großes Ambitionslevel, regelmäßige Arbeit am Projekt, keine Prokrastion, Großteil vor Weihnachten fertig haben?
 
 # Customer Journey
-
+<a id=customer-journey></a>
 ## Login bzw. Registrierung
 
 Der Customer landet erstmal auf der Login Page, wo er/sie auswählen kann, ob man sich anmelden (Account vorhanden) oder registrieren möchte.
