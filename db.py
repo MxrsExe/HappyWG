@@ -27,7 +27,6 @@ class User(db.Model):
     username = db.Column(db.String, nullable=False, unique=True)
     password_hash = db.Column(db.String, nullable=False, unique=True)
     email = db.Column(db.String, nullable=False, unique=True)
-    role = db.Column(db.String, nullable=False)
     wg_id = db.Column(db.Integer, db.ForeignKey('WG.wg_id'), nullable=True)
     #Beziehungen
     wg = db.relationship('Wg', back_populates='users')
@@ -81,7 +80,7 @@ class CleaningTemplate(db.Model):
     description = db.Column(db.String)
     frequency = db.Column(db.String, nullable=False)
     is_active = db.Column(db.Boolean, default=True)
-    position = db.Column(db.Integer)
+    
     #Beziehungen
     wg = db.relationship('Wg', back_populates='cleaning_templates')
     tasks = db.relationship('CleaningTask', back_populates='template', cascade='all, delete-orphan')

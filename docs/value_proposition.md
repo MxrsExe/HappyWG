@@ -60,7 +60,9 @@ So kann beispielsweise ein ausgefülltes Modal aussehen für eine Aufgabe:
 
 ![PutzplanModalFilled](assets/images/putzplan/putzplan_modal_filled.png)
 
-Wenn die Aufgabe erstellt wurde, wird sie so als Card angezeigt. Der User sieht den Zuständigen, die Bezeichnung der Aufgabe und die Kalenderwoche bzw. das Datum, wann wer zuständig ist. Außerdem noch einen Löschen-Button mit einem Mülltonne-Emoji oben rechts in der Card und einen bestätigen-Button, um wirklich die Aufgabe nach dem Checken der Checkbox als erledigt zu markieren (nötig aus HTML-Persistenz-Gründen). Bei Erledigung aller Aufgaben (aus Demonstrationsgründen hier nur eine) wird die Progressbar grün und der User wird benachrichtigt, dass alle Aufgaben erfüllt wurden. Ein anderes Mitglied kann Aufgaben hinzufügen, löschen aber kann es nur seine eigenen Aufgaben (siehe [Putzaufgabe löschen (anderes WG-Mitglied)](#delete-task-other-member)).
+Wenn die Aufgabe erstellt wurde, wird sie so als Card angezeigt. Der User sieht den Zuständigen, die Bezeichnung der Aufgabe und die Kalenderwoche bzw. das Datum, wann wer zuständig ist. Außerdem noch einen Löschen-Button mit einem Mülltonne-Emoji oben rechts in der Card und einen bestätigen-Button, um wirklich die Aufgabe nach dem Checken der Checkbox als erledigt zu markieren (nötig aus HTML-Persistenz-Gründen). 
+
+Bei Erledigung aller Aufgaben (aus Demonstrationsgründen hier nur eine) wird die Progressbar grün und der User wird benachrichtigt, dass alle Aufgaben erfüllt wurden. Ein anderes Mitglied kann Aufgaben hinzufügen, löschen aber kann es nur seine eigenen Aufgaben (siehe [Putzaufgabe löschen (anderes WG-Mitglied)](#delete-task-other-member)).
 
 ![PutzplanCard](assets/images/putzplan/task_completed.png)
 ![PutzplanCardCompleted](assets/images/putzplan/task_completed_progressbar.png)
@@ -101,7 +103,7 @@ Wie auch beim Putzplan, kann hier der User per Kalenderansicht bestimmen, wann d
 ![ActivityModalDateFrom](assets/images/activityboard/activity_modal_date_from.png)
 ![ActivityModalDateTo](assets/images/activityboard/activity_modal_date_to.png)
 
-So kann ein beispielhaft ausgefülltes Modal aussehen (mit maximalen Teilnehmern)
+So kann ein beispielhaft ausgefülltes Modal aussehen (mit maximalen Teilnehmern):
 
 ![ActivityModalFilled](assets/images/activityboard/activity_modal_filled.png)
 
