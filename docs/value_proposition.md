@@ -49,7 +49,7 @@ Wie man im Putzplan sieht, sieht man nichts. Nur die Überschrift und die Naviga
 
 ![PutzplanModal](assets/images/putzplan/putzplan_modal.png)
 
-Beim Klicken des Buttons bekommt der User ein Modal mit den einzelnen Daten angezeigt, die er/sie bestimmen kann. Dazu gehören: Von wann bis wann, welche Aufgabe und wer dafür zuständig ist. Achtung: Es können NUR WG-Mitglieder der selben WG Aufgaben bekommen (siehe). Im Privaten einigen sich die WG-Mitglieder selber, wer wann welche Aufgabe übernimmt.
+Beim Klicken des Buttons bekommt der User ein Modal mit den einzelnen Daten angezeigt, die er/sie bestimmen kann. Dazu gehören: Von wann bis wann, welche Aufgabe und wer dafür zuständig ist. Achtung: Es können NUR WG-Mitglieder der selben WG Aufgaben bekommen (siehe [WG-Scope](#wg-scope)). Im Privaten einigen sich die WG-Mitglieder selber, wer wann welche Aufgabe übernimmt.
 
 Der User kann nun die Felder ausfüllen. Dabei wählt der User die von und bis-Daten per Kalenderansicht aus, benennt die Aufgabe, erteilt die Zuständigkeit und klickt auf den Button "Erstellen". 
 
@@ -157,6 +157,7 @@ Ein anderes Mitglied der WG erstellt sich einen Account und will der bisherigen 
 Das zweite Mitglied landet auf dem Dashboard und sieht die bisherigen Informationen und letzte Begebenheiten der WG.
 ![2ndUserDashboard](assets/images/dashboard/2nd_user_dashboard.png)
 
+<a id="wg-scope"></a>
 Anschließend möchte das 2. Mitglied eine **Putzaufgabe** im **Putzplan** erstellen, es kann, wie bereits erwähnt, nur WG-Mitglieder dieser WG zum zuständig sein auswählen:
 ![2ndUserPutzplan](assets/images/putzplan/2nd_user_add_task.png)
 
