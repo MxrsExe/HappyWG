@@ -14,7 +14,7 @@ Ziel ist ein leichtgewichtiger "WG-Hub", der ohne komplexes Frontend auskommt un
 
 Aus **Entwicklerperspektive** fokussiert sich die Web-App auf **simple und robuste server-side Flows**.
 
-Für die visuelle Orientierung empfehlen wir die [Customer Journey](value_proposition.md#customer-journey).
+Für die visuelle Orientierung empfehlen wir die [Customer Journey](value_proposition.html#customer-journey).
 
 ### Was die Web-App macht
 - **Login und Registrierung:** Account anlegen und sich mit diesem einloggen.
