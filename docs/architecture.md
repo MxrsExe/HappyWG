@@ -25,3 +25,5 @@ Für die visuelle Orientierung empfehlen wir die [Customer Journey]({{ site.base
 - **Activityboard:** Events erstellen, beitreten/abmelden, maximale Teilnehmeranzahl prüfen, **.ics Export** fürs Kalender-Importieren.
 - **Einkaufsliste:** Items hinzufügen, optional zuständig zuweisen, transparent für die gesamte WG.
 
+{: .fs-2 }
+Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
