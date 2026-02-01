@@ -14,14 +14,14 @@ Ziel ist ein leichtgewichtiger "WG-Hub", der ohne komplexes Frontend auskommt un
 
 Aus **Entwicklerperspektive** fokussiert sich die Web-App auf **simple und robuste server-side Flows**.
 
-Für die visuelle Orientierung empfehlen wir die [Customer Journey](#customer-journey).
+Für die visuelle Orientierung empfehlen wir die [Customer Journey](#value-proposition.md#customer-journey).
 
 ### Was die Web-App macht
-- **Login und Registrierung** Account anlegen und sich mit diesem einloggen.
-- **WG-Onboarding:** WG erstellen oder per **Invite-Code** beitreten.
+- **Login und Registrierung:** Account anlegen und sich mit diesem einloggen.
+- **WG-Onboarding:** WG erstellen oder per zufallsgeneriertem **Invite-Code** beitreten.
 - **Dashboard**: Überblick über letzte Aktivitäten innerhalb der WG, persönliche ToDos bzw. Erinnerungen, Anzahl offener Putzaufgaben, anstehende Aktivitäten, (neue) Ideen von WG-Mitgliedern und 
-- **Putzplan:** Putzaufgaben anlegen, einem WG-Mitglied zuweisen, Status (*open/completed*) togglen und Fortschritt anzeigen.
-- **Innovationboard:** Ideen posten, kommentieren, liken (leichtes Collaboration-Feature).
-- - **Activityboard:** Events erstellen, beitreten/abmelden, maximale Teilnehmeranzahl prüfen, **.ics Export** fürs Kalender-Importieren.
+- **Putzplan:** Putzaufgaben anlegen, einem WG-Mitglied zuweisen, Status (*open/completed*) togglen bzw. durchstreichen und bestätigen und Fortschritt anzeigen.
+- **Innovationboard:** Ideen posten, kommentieren, liken (leichtes Collaboration-Feature). 
+- **Activityboard:** Events erstellen, beitreten/abmelden, maximale Teilnehmeranzahl prüfen, **.ics Export** fürs Kalender-Importieren.
 - **Einkaufsliste:** Items hinzufügen, optional zuständig zuweisen, transparent für die gesamte WG.
 
