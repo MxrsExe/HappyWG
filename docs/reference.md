@@ -56,7 +56,7 @@ Stellt sicher, dass nur eingeloggt Nutzer auf bestimmte Seiten zugreifen können
 **Sample output:** Erfolgreicher Login -> Weiterleitung zur Willkommensseite. 
 Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
-### <code>**logout()**</code>
+## <code>logout()</code>
 
 **Route:** /logout/
 
