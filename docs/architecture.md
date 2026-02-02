@@ -49,6 +49,9 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 
 ## Codemap
 
+**High-Level Codemap-Visualisierung**
+![ComponentDiagram](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-122120.png)
+
 **`app.py`** (Routes / Controllers)
 
 - Authorisierung & Session Flow: `login`, `register`, `logout`, Wrapper `login_required`
@@ -87,6 +90,52 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
   
 **`assets/`**
 - Dokumentationsbilder und Data Model
+
+
+## Cross-Cutting Concerns
+
+### "Multi-tenancy" / Datenisolation (wg_id als Scope für alle Queries)
+Wie bereits erwähnt, ist diese App dazu gedacht, dass es mehrere WGs ("tenants") geben darf. Alle Domain-Objekte müssen **einer** WG zugeordnet werden. Über die `wg_id` muss also der Zugriff durch `user.wg_id` begrenzt werden. Dies verhindert Cross-WG Datenlecks und stellt eine **[(kritische Designentscheidung)]({{ site.baseurl }}/design_decisions.html)** dar.
+
+Praktische Regel:
+-**Jede** CRUD-Operation muss sich zwangsläufig prüfen, ob das Objekt Teil der spezifischen WG ist.
+- Sollte ein Objekt indirekt zu einem anderen Objekt gehören (Bsp. `CleaningTask -> CleaningTemplate -> wg_id`), sollte man einen Join- oder Relationship-Check ausführen.
+
+![MultiTenancy](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-134844.png)
+
+### Autorisierungsmodell (wer darf was ändern?)
+
+Verschiedene Features haben unterschiedliche Ownership-Regeln:
+- **Activities:** In der Regel darf nur created_by (Ersteller) eine Aktivität löschen.
+- **Putzplan:** Nur die **zuständige Person** (`assigned_to`) darf Aufgaben löschen/abschließen (abhängig von der gewählten Policy)
+- **Ideen:** Nur der Ersteller darf Ideen löschen; alle WG-Mitglieder dürfen liken & kommentieren.
+
+Diese Regeln beeinflussen sowohl die Backend-Prüfungen in den Routes als auch welche UI-Buttons/Controls angezeigt werden.
+
+### SSR + POST-Aktionen
+
+Um Komplexität gering zu halten und die UX vorhersehbar zu machen:
+- Die meisten Interaktionen laufen über einfache Formulare (`POST`) mit anschließendem Redirect zurück zur Listenansicht (PRG).
+- **Bestätigungsflows** werden umgesetzt durch entweder
+  - einen zweiten "Confirm"-Schritt
+  - CSS-only Modals (z.B. Checkbox/Label Pattern)
+  - WTForms submit
+  
+### Performance: Laden von Relationships
+Listen-Seiten zeigen häufig verknüpfte Daten an (z.B. Einkaufsitems inkl zuständigem User).
+Da das N+1 Query-Problem vermieden werden soll, werden die Beziehungen "eager" geladen mit `joinedLoad()`.
+
+### Flash-Messages Kategorien (Bootstrap-Mapping)
+Bootstrap erwartet Kategorien wie `success`, `danger`, `warning`, `info`.
+Wenn im Code Kategorien wie `error` verwendet werden, sollten sie im Template auf `danger` gemappt werden, damit die Alerts korrekt rot angezeigt werden.
+
+### Kalender-Export (.ics)
+Activities können als `.ics` exportiert werden.
+Diese ICS-Route erstellt serverseitig ein gültiges iCalendar Format und liefert es als Download aus, sodass der User es in gängige Kalender (z.B. Outlook/Google/Apple) importieren kann.
+
+### CSRF-Schutz (Formulare)
+Alle `POST`-Forms müssen das CSRF-Token haben (in diesem Fall `{{ form.hidden_tag() }}`)
+
 
 
 

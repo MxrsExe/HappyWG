@@ -373,6 +373,11 @@ def putzplan():
 def toggle_cleaning_task(task_id):
     #task_id aus der URL holen
     task = CleaningTask.query.get_or_404(task_id)
+    user = User.query.get(session['user_id'])
+
+    #Sicherstellen, dass der Task zur WG des Users gehört
+    if task.template.wg_id != user.wg_id:
+        abort(404)
 
     #Status umschalten
     if task.status == "completed":
@@ -390,6 +395,9 @@ def toggle_cleaning_task(task_id):
 def delete_cleaning_task(template_id):
     user_id = session.get("user_id")
     template = CleaningTemplate.query.get_or_404(template_id)
+    user = User.query.get(user_id)
+    if template.wg_id != user.wg_id:
+        abort(404)
     
     #Task
     task = template.tasks[0] if template.tasks else None
@@ -457,6 +465,11 @@ def delete_idea(idea_id):
     #Bezug auf creator: Beziehung in Idea Model
     idea = Idea.query.get_or_404(idea_id)
     user_id = int(session["user_id"])
+    user = User.query.get(user_id)
+
+    if idea.wg_id != user.wg_id:
+        abort(404)
+
     if idea.created_by != user_id:
         flash("Sie können nur Ihre eigenen Ideen löschen.", "danger")
         return redirect(url_for("innovation_board"))
@@ -476,7 +489,10 @@ def toggle_like(idea_id):
     user_id = int(session["user_id"])  
     #Überprüfen, ob der User die Idee bereits geliked hat
     existing = Idea_Like.query.filter_by(idea_id=idea_id, user_id=user_id).first() #first() gibt None zurück, wenn kein Eintrag gefunden wurde
-
+    user = User.query.get(user_id)
+    idea = Idea.query.get_or_404(idea_id)
+    if idea.wg_id != user.wg_id:
+        abort(404)
     #Wenn ja, Like entfernen, sonst Like hinzufügen
     if existing:
         db.session.delete(existing)   # unlike
@@ -497,7 +513,10 @@ def toggle_like(idea_id):
 def post_comment(idea_id):
    
     user_id = int(session["user_id"])
-
+    user = User.query.get(user_id)
+    idea = Idea.query.get_or_404(idea_id)
+    if idea.wg_id != user.wg_id:
+        abort(404)
     #Formular initialisieren
     form = CommentForm()
     #POST: Kommentar speichern    
@@ -583,6 +602,10 @@ def join_activity(activity_id):
     user = User.query.get(user_id)  
     activity = Activity.query.get_or_404(activity_id)
 
+    # Sicherstellen, dass die Aktivität zur WG des Users gehört
+    if activity.wg_id != user.wg_id:
+        abort(404)
+
     # Prüfen, ob der User bereits Teilnehmer ist, damit er/sie nicht doppelt beitreten kann
     if user in activity.participants:
         flash("Du nimmst bereits teil.", "danger")
@@ -612,6 +635,9 @@ def leave_activity(activity_id):
     user = User.query.get(user_id)  
     activity = Activity.query.get_or_404(activity_id)
 
+    if activity.wg_id != user.wg_id:
+        abort(404)
+
     # Prüfen, ob der User tatsächlich Teilnehmer ist
     if user not in activity.participants:
         flash("Du nimmst nicht teil.", "danger")
@@ -621,12 +647,6 @@ def leave_activity(activity_id):
     activity.participants.remove(user)
     db.session.commit()
     flash("Du hast die Aktivität verlassen.", "success")    
-    #existing_participant = Activity_Participant.query.filter_by(activity_id=activity_id, user_id=user_id).first()
-
-    #if existing_participant:
-        #db.session.delete(existing_participant)
-        #db.session.commit()
-        #flash("Erfolgreich ausgetreten!", "success")
 
     return redirect(url_for("activity_board"))
 
@@ -713,6 +733,11 @@ def delete_shopping_item(item_id):
 
     # Laden des Items
     item = ShoppingItem.query.get_or_404(item_id)
+    user = User.query.get(session['user_id'])
+
+    if item.wg_id != user.wg_id:
+        abort(404)
+
     #aus der DB löschen und commiten
     db.session.delete(item)
     db.session.commit()
