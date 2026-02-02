@@ -9,6 +9,13 @@ nav_order: 3
 
 Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Webanwendung HappyWG.
 
+<details open markdown="block">
+{: .text-delta }
+<summary>Inhaltsverzeichnis</summary>
++ ToC
+{: toc }
+</details>
+
 ## Interne Hilfsfunktionen
 
 ### `curren_user()`
