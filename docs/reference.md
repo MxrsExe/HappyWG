@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Referance
+title: Reference
 parent: Technical Docs
 nav_order: 3
 ---
