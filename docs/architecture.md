@@ -70,24 +70,23 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
   - `/einkaufsplan/` - Erstellen, auflisten und löschen von Einkaufsprodukten
     - `/einkaufsplan/item/<int:item_id>/delete` - Einkaufsprodukt löschen
 
-**`db.py`** (Models & Persistenz, siehe [DataModel]({{ site.baseurl }}/data_model.html))
+**Models & Persistenz: `db.py`** (siehe [DataModel]({{ site.baseurl }}/data_model.html))
 - `Wg`, `User`
 - Putzplan: `CleaningTemplate`, `Cleaning_Task`
 - InnovationBoard: `Idea`, `Idea_Comment`, `Idea_Like`
 - ActivityBoard: `Activity` + `ACTIVITY_PARTICIPANTS` (n zu m)
 - Einkaufsliste: `ShoppingItem`
 - 
-**`docs/forms.py` (WTForms)**
+**WTForms: `docs/forms.py`**
 - Forms and Eingabevalidierung:
   `LoginForm`, `RegisterForm`, `PutzplanForm`, `EinkaufsplanForm`, `ActivityForm`, `InnovationForm`, `CommentForm`
 
-**`templates/` (views)**
+**Views: `templates/`**
 - Jinja2 Templates für alle Seiten (Login, Registrierung, Dashboard, Boards, Modals etc.)
 - Geteiltes Layout besitzt Flash Messages und Content-Blocks aus `base.html`.
   
 **`assets/`**
 - Dokumentationsbilder und Data Model
-
 
 
 
