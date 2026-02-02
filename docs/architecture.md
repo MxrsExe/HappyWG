@@ -33,7 +33,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
   Models bilden Tabellen/Beziehungen ab, Queries werden als Python-Objekte formuliert.
 - **ORM-Instanzierung & Persistenz:** Anschließend zu **SQLAlchemy ORM:** beispielhafte Erstellung der Objekt-Instanzen durch `new_activity = Activity(...)`, dann `db.session.commit()`.
 - **Performance/Eager Loading:** Beispielsweise `.options(joinedload(Activity.creator), joinedload(Activity.participants))` → vermeidet N+1 Queries im Template (alle Daten werden mittels einer einzigen Query geladen).
-- **Multi-Tenancy (WG-Scoping) über `wg_id` [(kritische Designentscheidung)]({{ site.baseurl }}/design_decisions.html):**  
+- **Multi-Tenancy (WG-Scoping) über `wg_id` [kritische Designentscheidung]({{ site.baseurl }}/design_decisions.html):**  
   Alle relevanten Datenobjekte hängen an einer WG; **jede** Query/Änderung wird auf `current_user.wg_id` begrenzt → verhindert Cross-WG Datenzugriffe.
 - **Session-basierte Authentifizierung:** 
   Nach Login wird `session["user_id"]` gesetzt; ein `login_required` Decorator schützt Routes.
@@ -127,14 +127,17 @@ Da das N+1 Query-Problem vermieden werden soll, werden die Beziehungen "eager" g
 
 ### Flash-Messages Kategorien (Bootstrap-Mapping)
 Bootstrap erwartet Kategorien wie `success`, `danger`, `warning`, `info`.
-Wenn im Code Kategorien wie `error` verwendet werden, sollten sie im Template auf `danger` gemappt werden, damit die Alerts korrekt rot angezeigt werden.
+Wenn im Code Kategorien wie `error` verwendet werden, sollten sie im Template auf `danger` gemappt werden, damit die Alerts korrekt rot/grün oder eine andere Farbe angezeigt werden.
+
+![FlashMsgRed](assets/images/architecture/danger_flash.png)
 
 ### Kalender-Export (.ics)
 Activities können als `.ics` exportiert werden.
 Diese ICS-Route erstellt serverseitig ein gültiges iCalendar Format und liefert es als Download aus, sodass der User es in gängige Kalender (z.B. Outlook/Google/Apple) importieren kann.
 
 ### CSRF-Schutz (Formulare)
-Alle `POST`-Forms müssen das CSRF-Token haben (in diesem Fall `{{ form.hidden_tag() }}`)
+Alle `POST`-Forms müssen das CSRF-Token haben (in diesem Fall `form.hidden_tag()` [im jinja2-Template]).
+![hiddentag](assets/images/architecture/hiddentag.png)
 
 
 
