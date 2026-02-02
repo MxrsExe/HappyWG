@@ -70,7 +70,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
   - `/einkaufsplan/` - Erstellen, auflisten und löschen von Einkaufsprodukten
     - `/einkaufsplan/item/<int:item_id>/delete` - Einkaufsprodukt löschen
 
-**`db.py`** (Models & Persistenz, siehe [DataModel]({{ site.baseurl }}/data_model.md))
+**`db.py`** (Models & Persistenz, siehe [DataModel]({{ site.baseurl }}/data_model.html))
 - `Wg`, `User`
 - Putzplan: `CleaningTemplate`, `Cleaning_Task`
 - InnovationBoard: `Idea`, `Idea_Comment`, `Idea_Like`
