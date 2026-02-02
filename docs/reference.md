@@ -7,11 +7,11 @@ nav_order: 3
 
 # Reference Documentation
 
-Diese Seite sammeld die wichtigsten internen Funktionen und Routen der Flask-Webanwendung HappyWG.
+Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Webanwendung HappyWG.
 
 ## Interne Hilfsfunktionen
 
-### curren_user()
+### current_user()
 
 **Route:** keine (interne Funktion)
 
@@ -56,7 +56,7 @@ Stellt sicher, dass nur eingeloggt Nutzer auf bestimmte Seiten zugreifen können
 **Sample output:** Erfolgreicher Login -> Weiterleitung zur Willkommensseite. 
 Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
-### logout()
+### <code>logout()</code>
 
 **Route:** /logout/
 

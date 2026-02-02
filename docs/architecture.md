@@ -119,7 +119,6 @@ Um Komplexität gering zu halten und die UX vorhersehbar zu machen:
 - **Bestätigungsflows** werden umgesetzt durch entweder
   - einen zweiten "Confirm"-Schritt
   - CSS-only Modals (z.B. Checkbox/Label Pattern)
-  - WTForms submit
   
 ### Performance: Laden von Relationships
 Listen-Seiten zeigen häufig verknüpfte Daten an (z.B. Einkaufsitems inkl zuständigem User).
@@ -137,6 +136,7 @@ Diese ICS-Route erstellt serverseitig ein gültiges iCalendar Format und liefert
 
 ### CSRF-Schutz (Formulare)
 Alle `POST`-Forms müssen das CSRF-Token haben (in diesem Fall `form.hidden_tag()` [im jinja2-Template]).
+
 ![hiddentag](assets/images/architecture/hiddentag.png)
 
 
