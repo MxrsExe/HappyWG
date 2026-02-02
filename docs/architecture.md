@@ -76,7 +76,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - InnovationBoard: `Idea`, `Idea_Comment`, `Idea_Like`
 - ActivityBoard: `Activity` + `ACTIVITY_PARTICIPANTS` (n zu m)
 - Einkaufsliste: `ShoppingItem`
-- 
+
 **WTForms: `docs/forms.py`**
 - Forms and Eingabevalidierung:
   `LoginForm`, `RegisterForm`, `PutzplanForm`, `EinkaufsplanForm`, `ActivityForm`, `InnovationForm`, `CommentForm`
