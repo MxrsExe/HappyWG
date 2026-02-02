@@ -83,7 +83,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 
 **`templates/` (views)**
 - Jinja2 Templates für alle Seiten (Login, Registrierung, Dashboard, Boards, Modals etc.)
-- Shared layout includes flash messages and content blocks aus `base.html`
+- Geteiltes Layout besitzt Flash Messages und Content-Blocks aus `base.html`.
   
 **`assets/`**
 - Dokumentationsbilder und Data Model
