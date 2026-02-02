@@ -33,17 +33,61 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
   Models bilden Tabellen/Beziehungen ab, Queries werden als Python-Objekte formuliert.
 - **ORM-Instanzierung & Persistenz:** Anschließend zu **SQLAlchemy ORM:** beispielhafte Erstellung der Objekt-Instanzen durch `new_activity = Activity(...)`, dann `db.session.commit()`.
 - **Performance/Eager Loading:** Beispielsweise `.options(joinedload(Activity.creator), joinedload(Activity.participants))` → vermeidet N+1 Queries im Template (alle Daten werden mittels einer einzigen Query geladen).
+- **Multi-Tenancy (WG-Scoping) über `wg_id` [(kritische Designentscheidung)]({{ site.baseurl }}/design_decisions.html):**  
+  Alle relevanten Datenobjekte hängen an einer WG; **jede** Query/Änderung wird auf `current_user.wg_id` begrenzt → verhindert Cross-WG Datenzugriffe.
 - **Session-basierte Authentifizierung:** 
   Nach Login wird `session["user_id"]` gesetzt; ein `login_required` Decorator schützt Routes.
 - **Validation über WTForms:** `form.validate_on_submit()` → Jegliche Eingaben werden serverseitig geprüft.
-- **Multi-Tenancy (WG-Scoping) über `wg_id` [(kritische Designentscheidung)]({{ site.baseurl }}/design_decisions.html):**  
-  Alle relevanten Datenobjekte hängen an einer WG; **jede** Query/Änderung wird auf `current_user.wg_id` begrenzt → verhindert Cross-WG Datenzugriffe.
+- **Kalender-Export:** Activities lassen sich als **.ics** herunterladen (serverseitig generiert, `text/calendar`) und in gängige Kalender importieren.
+- **Design:** Für das Design auf den Webseiten wird größtenteils Bootstrap (Klassen) genutzt. Im ActivityBoard gibt es zusätzlich custom CSS. 
 
 ### High-Level Visualisierung des allgemeinen Flows mit externen Akteuren:
 ![SimpleFlow](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-094043.png)
 
 ### Visualisierung der Architektur
 ![AppArchitectureVisual](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-101303.png)
+
+## Codemap
+
+**`app.py`** (Routes / Controllers)
+
+- Authorisierung & Session Flow: `login`, `register`, `logout`, Wrapper `login_required`
+- WG Flow - WG erstellen: `create_or_join_wg`, `create_wg`, `generate_unique_code` & beitreten: `join_wg`
+- Feature Routes:
+  - `/dashboard/` - Zähler & Aggregationen
+  - `/putzplan/` - Putzaufgabe erstellen + Aufgaben auflisten + Fortschritt
+  - `/putzplan/task/<id>/toggle` - Aufgaben markieren bzw. durchstreichen, um sie als fertig oder offen zum markieren.
+    - `/putzplan/task/<int:template_id>/delete` - Aufgabe löschen
+  - `/innovationboard/` - create ideas, like, comment, delete
+    - `/innovation_board/idea/<int:idea_id>/delete` - Idee löschen
+    - `/ideas/<int:idea_id>/like` - Idee liken
+    - `/ideas/<int:idea_id>/comment` - Idee kommentieren
+  - `/activityboard/` - Aktivitäten erstellen, listen, (beitreten/verlassen, löschen)
+    - `/activity/<int:activity_id>/join_activity`- Aktivität beitreten
+    - `/activity/<int:activity_id>/leave_activity` - Aktivität verlassen
+    - `/activity/<int:activity_id>/delete_activity` - Aktivität löschen
+    - `/activities/<int:activity_id>/ics` - Aktivitäten als Kalender (`.ics`) exportieren.
+  - `/einkaufsplan/` - Erstellen, auflisten und löschen von Einkaufsprodukten
+    - `/einkaufsplan/item/<int:item_id>/delete` - Einkaufsprodukt löschen
+
+**`db.py`** (Models & Persistenz, siehe [DataModel]({{ site.baseurl }}/data_model.md))
+- `Wg`, `User`
+- Putzplan: `CleaningTemplate`, `Cleaning_Task`
+- InnovationBoard: `Idea`, `Idea_Comment`, `Idea_Like`
+- ActivityBoard: `Activity` + `ACTIVITY_PARTICIPANTS` (n zu m)
+- Einkaufsliste: `ShoppingItem`
+- 
+**`docs/forms.py` (WTForms)**
+- Forms and Eingabevalidierung:
+  `LoginForm`, `RegisterForm`, `PutzplanForm`, `EinkaufsplanForm`, `ActivityForm`, `InnovationForm`, `CommentForm`
+
+**`templates/` (views)**
+- Jinja2 Templates für alle Seiten (Login, Registrierung, Dashboard, Boards, Modals etc.)
+- Shared layout includes flash messages and content blocks aus `base.html`
+  
+**`assets/`**
+- Dokumentationsbilder und Data Model
+
 
 
 

@@ -18,13 +18,6 @@ from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Ide
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm, RegisterForm, LoginForm
-
-def generate_unique_code(length=6):
-    while True:
-        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
-
-        if not Wg.query.filter_by(invite_code=code).first():
-            return code
     
 
 app = Flask(__name__)
@@ -773,9 +766,11 @@ def build_ics(uid, title, start_dt, end_dt, description="", location=""):
 @app.route("/activities/<int:activity_id>/ics", methods=["POST"])
 @login_required
 def activity_ics(activity_id):
-    
+    user = User.query.get(session['user_id'])
     # Aktivität laden
     activity = Activity.query.get_or_404(activity_id)
+    if activity.wg_id != user.wg_id:
+        abort(404)
 
     # ICS erstellen (instanzieren)
     ics = build_ics(
