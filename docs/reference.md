@@ -18,7 +18,7 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 
 ## Interne Hilfsfunktionen
 
-### `curren_user()`
+### `current_user()`
 
 **Route:** keine (interne Funktion)
 

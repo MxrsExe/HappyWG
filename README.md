@@ -8,6 +8,7 @@
 5. App starten
 
 Wie man Flask Migrate benutzt (zum Tabellen ändern, droppen etc.)
+(Für weitere Informationen über Flask Migrate: https://flask-migrate.readthedocs.io/en/latest/)
 
 Sollte das Terminal sowas werfen:
 
