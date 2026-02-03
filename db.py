@@ -25,9 +25,10 @@ class User(db.Model):
     __tablename__ = 'USER'
     user_id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
     username = db.Column(db.String, nullable=False, unique=True)
-    password_hash = db.Column(db.String, nullable=False, unique=True)
+    password_hash = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     wg_id = db.Column(db.Integer, db.ForeignKey('WG.wg_id'), nullable=True)
+    role = db.Column(db.String, nullable=False, default='member')  #roles implemented: member (further implementation of others roles possible)
     #Beziehungen
     wg = db.relationship('Wg', back_populates='users')
     cleaning_tasks = db.relationship('CleaningTask', back_populates='assigned_user')
@@ -51,10 +52,11 @@ class Wg(db.Model):
     name = db.Column(db.String, nullable=False, unique=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     invite_code = db.Column(db.String(6), nullable=True)
+
+    #Beziehungen
     shopping_items = db.relationship('ShoppingItem', back_populates='wg', cascade='all, delete-orphan')
     users = db.relationship('User', back_populates='wg')
     cleaning_templates = db.relationship('CleaningTemplate', back_populates='wg', cascade='all, delete-orphan')
-    #Beziehungen
     activities = db.relationship('Activity', back_populates='wg', cascade='all,delete-orphan')
     ideas = db.relationship('Idea', back_populates='wg', cascade='all, delete-orphan')
 
@@ -108,15 +110,14 @@ class Activity(db.Model):
     location = db.Column(db.String)
     max_participants = db.Column(db.Integer, nullable=True)
     
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    date_to = db.Column(db.DateTime, nullable=False)  #new time variable as to not use migrate too much
+    #Beziehungen
     participants = db.relationship(
         "User",
         secondary=activity_participants,
         back_populates="joined_activities"
     )  #participants 
-    
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, nullable=False)  #new time varivable as to not migrate
-    #Beziehungen
     wg = db.relationship('Wg', back_populates='activities')
     creator = db.relationship('User', back_populates='activities_created')
     
@@ -160,35 +161,3 @@ class Idea_Like(db.Model):
     user = db.relationship('User', back_populates='idea_likes')
     
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def db_connection():
-#     if 'db_con' not in g:
-#         g.db_con = sqlite3.connect(current_app.config['DATABASE'])
-#     return db_con
-
-# def db_close(db_con):
-#     db_con = g.pop('db_con', None)
-#     if db_con is not None:
-#         db_con.close()
-
-# sql_query = "SELECT * FROM list ORDER BY name;"
-
-# db_con = db_connection()
-# lists = db_con.execute(sql_query)
-# db_close(db_con)

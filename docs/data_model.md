@@ -7,9 +7,72 @@ nav_order: 2
 
 # Data Model
 
-## Unser Data Model, Stand 11.12.2025
+## Das Data Model von Happy WG, Stand 03.02.2025
 <img src="assets/images/data_model.png" alt="Data Model" width="1500" height= "1500">
 
+### Entities (Tabellen) und wichtigste Spalten
+
+*_nicht (direkt) implementiert, aber geeignet für evtl. weitere App-Erweiterungen_
+
+`WG`
+- **PK:** `wg_id`
+- **Spalten:** `name` (unique), invite_code (String(6)), created_at 
+- **Rollen:** Scope für fast alle Daten & Kollaboration
+
+`User`
+**PK:** `user_id`
+**Spalten:** FK: Wg → `wg_id`(nullable),`username` (unique), `email` (unique), `password_hash`, `role` (default: member; für Erweiterungen geeignet)
+**Rolle:** Nutzerkonto; gehört optional zu einer WG (am Anfang keiner, deswegen nullable), wird nach "Join" gesetzt.
+
+#### Putzplan
+`CLEANING_TEMPLATE`
+- **PK:** `template_id`
+- **FK:** `wg_id` → `WG.wg_id`
+- **Spalten:** `name`, `description`, `frequency`*, `is_active`
+**Rolle:** Für weitere Erweiterungen gedacht; Template abspeichern und wiederverwenden (_aus Zeitgründen & Projektkomplexität nicht implementiert_)
+
+`CLEANING_TASK`
+- **PK:** `task_id`
+- **FKs:** `template_id` → `CLEANING_TEMPLATE.template_id`, `assigned_to` → `USER.user_id`
+- **Spalten:** `status`, `completed_at`* & `notes`*
+- **Rolle:** Beinhaltet die Aufgabe zum durchstreichen.
+
+#### InnovationBoard
+`IDEA`
+- **PK:** `idea_id`
+- **FKs:** `wg_id` 
+- **Spalten:** `title`, `description`, `color`, `created_at`, `updated_at`* & `status`*
+- **Rolle:** WG-Mitglieder können eine Idee erstellen, beinhaltet alle wichtigen Infos zu dieser Idee.
+
+`IDEA_COMMENT`
+- **PK:** `comment_id`
+- **FKs:** `idea_id` → `IDEA.idea_id`, `user_id` → `USER.user_id`
+- **Spalten:** `content`, `created_at`
+- **Rolle:** Gehört einer Idee, der User kann diese Idee kommentieren.
+
+`IDEA_LIKE`
+- **PK:** `like_id`
+- **FKs:** `idea_id` → `IDEA.idea_id`, `user_id` → `USER.user_id`
+- **Rolle:** Die Idee hat einen Like-Button, welchen die User klicken können. Ein Like von diesem User wird dieser Idee hinzugefügt.
+
+#### ActivityBoard
+
+`ACTIVITY`
+- **PK:** `activity_id`
+- **FKs:** `wg_id` → `Wg.wg_id`, `created_by` → `USER.user_id`
+- **Spalten:** `title`, `description`, `date`, `location`, `max_participants`, `created_at`, `updated_at`*
+- **Rolle:** User können Aktivitäten hinzufügen, die alle Informationen über diese Aktivität enthalten.
+
+`ACTIVITY_PARTICIPANTS` (Assoziationstabelle)
+- **Composite PK:** (`activity_id`, `user_id`)
+- **FKs:** `activity_id` → `ACTIVITY.activity_id`, `user_id` → `USER.user_id`
+- **Rolle:** Many-to-Many: Teilnehmer einer Activity
+  
+`ShoppingItem`
+- **PK:** `item_id` → `WG.wg_id`, `created_by` → `USER.user_id`
+- **FKs**: wg_id → WG.wg_id, added_by → USER.user_id, assigned_to → USER.user_id
+- **Spalten:** `name`, `quantity`, `created_at`
+- **Rolle:** User können Einkaufsitems anlegen mit der zuständigen Person, Menge & Name
 
 
 {: .fs-2 }

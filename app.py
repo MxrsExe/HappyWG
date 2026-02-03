@@ -24,15 +24,12 @@ app = Flask(__name__)
 #session
 app.secret_key = "super-secret-key"
 
-app = Flask(__name__)
 app.config['SECRET_KEY'] = 'HappyWG_Project_SecretKey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
 
 db.init_app(app)
 migrate = Migrate(app, db)   #brauch man um neue Spalten zu erstellten Tabellen hinzuzufügen
 
-#session["user_id"] = user.user_id
-#session["wg_id"] = user.wg_id  
 
 def current_user():
     uid = session.get("user_id")
@@ -566,7 +563,7 @@ def activity_board():
                 title=form.title.data,
                 description=form.description.data,
                 date=form.date.data,
-                updated_at=form.updated_at.data,
+                date_to=form.date_to.data,
                 location=form.location.data,
                 max_participants=form.max_participants.data,
                 created_at=db.func.now()

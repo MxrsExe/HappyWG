@@ -32,7 +32,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - **SQLAlchemy ORM** als Datenzugriffsschicht:  
   Models bilden Tabellen/Beziehungen ab, Queries werden als Python-Objekte formuliert.
 - **ORM-Instanzierung & Persistenz:** Anschließend zu **SQLAlchemy ORM:** beispielhafte Erstellung der Objekt-Instanzen durch `new_activity = Activity(...)`, dann `db.session.commit()`.
-- **Performance/Eager Loading:** Beispielsweise `.options(joinedload(Activity.creator), joinedload(Activity.participants))` → vermeidet N+1 Queries im Template (alle Daten werden mittels einer einzigen Query geladen).
+- **Performance/Eager Loading:** Beispielsweise `.options(joinedload(Activity.creator), joinedload(Activity.participants))` → vermeidet [N+1](https://www.stefan-goebel.com/2018/was-ist-das-n1-query-problem/) Queries im Template (alle Daten werden mittels einer einzigen Query geladen).
 - **Multi-Tenancy (WG-Scoping) über `wg_id` [kritische Designentscheidung]({{ site.baseurl }}/design_decisions.html):**  
   Alle relevanten Datenobjekte hängen an einer WG; **jede** Query/Änderung wird auf `current_user.wg_id` begrenzt → verhindert Cross-WG Datenzugriffe.
 - **Session-basierte Authentifizierung:** 
@@ -47,12 +47,21 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 ### Visualisierung der Architektur
 ![AppArchitectureVisual](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-101303.png)
 
+### Tech-Stack:
+- **Backend:** Python, Flask
+- **Templating:** Jinja2
+- **DB/ORM:** SQLite (dev) + SQLAlchemy (später leicht auf Postgres/MySQL migrierbar)
+- **Migrations:** Flask-Migrate (Alembic)
+- **Forms/Validation:** Flask-WTF / WTForms
+- **UI:** Bootstrap (CSS), minimale/no-JS Interaktionen (POST + Redirect)
+- **Kalenderexport:** iCalendar (.ics)
+
 ## Codemap
 
 **High-Level Codemap-Visualisierung**
 ![ComponentDiagram](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-122120.png)
 
-**`app.py`** (Routes / Controllers)
+**(Routes / Controllers)`app.py`** 
 
 - Authorisierung & Session Flow: `login`, `register`, `logout`, Wrapper `login_required`
 - WG Flow - WG erstellen: `create_or_join_wg`, `create_wg`, `generate_unique_code` & beitreten: `join_wg`
@@ -85,7 +94,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
   `LoginForm`, `RegisterForm`, `PutzplanForm`, `EinkaufsplanForm`, `ActivityForm`, `InnovationForm`, `CommentForm`
 
 **Views: `templates/`**
-- Jinja2 Templates für alle Seiten (Login, Registrierung, Dashboard, Boards, Modals etc.)
+- UI: Jinja2 Templates für alle Seiten (Login, Registrierung, Dashboard, Boards, Modals etc.)
 - Geteiltes Layout besitzt Flash Messages und Content-Blocks aus `base.html`.
   
 **`assets/`**
