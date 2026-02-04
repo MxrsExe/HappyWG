@@ -111,7 +111,7 @@ class Activity(db.Model):
     max_participants = db.Column(db.Integer, nullable=True)
     
     created_at = db.Column(db.DateTime, server_default=db.func.now())
-    date_to = db.Column(db.DateTime, nullable=False)  #new time variable as to not use migrate too much
+    date_to = db.Column(db.DateTime, nullable=False)  
     #Beziehungen
     participants = db.relationship(
         "User",
