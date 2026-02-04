@@ -562,7 +562,7 @@ def activity_board():
                 title=form.title.data,
                 description=form.description.data,
                 date=form.date.data,
-                date_to=form.updated_at.data,
+                date_to=form.date_to.data,
                 location=form.location.data,
                 max_participants=form.max_participants.data,
                 created_at=db.func.now()

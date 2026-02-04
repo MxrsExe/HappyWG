@@ -3,7 +3,7 @@
 import sqlite3
 import sys
 
-#Quelle: VS-Code Autocomplete, Java-Wissen & https://www.geeksforgeeks.org/python/how-to-use-sys-argv-in-python/ (insb. sys.argv[]) 
+#Quellen: VS-Code Autocomplete, Java-Wissen & https://www.geeksforgeeks.org/python/how-to-use-sys-argv-in-python/ (insb. sys.argv[]) 
 # & Inspiration aus https://hwrberlin.github.io/fswd/fswd-intro.html#34-populate-the-database-with-a-sample-data-set
 db_path = sys.argv[1]
 sql_path = sys.argv[2]
@@ -25,4 +25,4 @@ except Exception as e:
 finally:
     db_con.close()
 
-#python run_sql.py instance\happywg.sqlite sql\[Dateiname]
+#Im Terminal: python run_sql.py instance\happywg.sqlite sql\[Dateiname]
