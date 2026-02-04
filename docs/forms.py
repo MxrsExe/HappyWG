@@ -73,7 +73,7 @@ class ActivityForm(FlaskForm):
     title = StringField('Titel', validators=[InputRequired(), Length(min=1, max=100)], render_kw={"placeholder": "Titel der Aktivität"})
     description = TextAreaField("Beschreibung", validators=[DataRequired(), Length(min=1, max=300)], render_kw={"placeholder": "Beschreibe deine Aktivität..."})
     date = DateTimeLocalField("Uhrzeit",format="%Y-%m-%dT%H:%M", validators=[DataRequired()], render_kw={"placeholder": "Wähle Datum und Uhrzeit"})
-    updated_at = DateTimeLocalField("Uhrzeit",format="%Y-%m-%dT%H:%M", validators=[DataRequired()], render_kw={"placeholder": "Wähle Datum und Uhrzeit"})
+    date_to = DateTimeLocalField("Uhrzeit",format="%Y-%m-%dT%H:%M", validators=[DataRequired()], render_kw={"placeholder": "Wähle Datum und Uhrzeit"})
     location = StringField('Ort', validators=[InputRequired(), Length(min=1, max=100)], render_kw={"placeholder": "Ort der Aktivität"})
     max_participants = IntegerField('Maximale Teilnehmerzahl', validators=[Optional(), NumberRange(min=1)], render_kw={"placeholder": "z.B. 10"})
     submit = SubmitField('Aktivität hinzufügen')
