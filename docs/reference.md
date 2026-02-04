@@ -16,19 +16,23 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 {: toc }
 </details>
 
+---
+
 ## Interne Hilfsfunktionen
+
+---
 
 ### `current_user()`
 
 **Route:** keine (interne Funktion)
-
----
 
 **Methods:** -
 
 **Purpose:** Ermittelt den aktuell eingeloggten Benutzer anhand der user_id aus der Session. Wird verwendet, um im Backend auf den aktuellen User zuzugreifen, ohne den Session-Code zu wiederholen.
 
 **Sample output:** User-Objekt oder None, falls kein Nutzer eingeloggt ist.
+
+---
 
 ### `generate_unique_code(length=6)`
 
@@ -39,6 +43,8 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 **Purpose:** Generiert einen zufälligen Einladungscode für eine WG. Stellt sicher, dass der Code eindeutig ist, indem überprüft wird, ob er bereits in der Datenbank existiert.
 
 **Sample output:** String (z.B. A9F3KQ)
+
+---
 
 ### `login_required(f)`
 
@@ -51,7 +57,11 @@ Stellt sicher, dass nur eingeloggt Nutzer auf bestimmte Seiten zugreifen können
 
 **Sample output:** Weiterleitung zu Login-Seite oder Ausführung der geschützten Route.
 
+---
+
 ## Routen
+
+---
 
 ### `login()`
 
@@ -65,6 +75,8 @@ Stellt sicher, dass nur eingeloggt Nutzer auf bestimmte Seiten zugreifen können
 **Sample output:** Erfolgreicher Login -> Weiterleitung zur Willkommensseite. 
 Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
+---
+
 ### `logout()`
 
 **Route:** `/logout/`
@@ -74,6 +86,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Meldet den Benutzer ab indem die aktuelle Session gelöscht wird.
 
 **Sample output:** Weiterleitung zur Login-Seite.
+
+---
 
 ### `register()`
 
@@ -85,6 +99,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** Weiterleitung zur Willkommensseite mit Erfolgsmeldung.
 
+---
+
 ### `create_or_join_wg()`
 
 **Route:** `/welcome/`
@@ -94,6 +110,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Willkommensseite nach dem Login. Zeigt Option zum Erstellen oder Beitreten einer WG an. Zugriff nur für eingeloggt Nutzer erlaubt.
 
 **Sample output:** Gerendertes Welcome-Template.
+
+---
 
 ### `create_wg()`
 
@@ -105,6 +123,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** Erfolgsmeldung mit Einladungscode und Weiterleitung zur Join-Seite.
 
+---
+
 ### `join_wg()`
 
 **Route:** `/welcome/join_wg/`
@@ -113,7 +133,9 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Purpose:** Ermöglicht einem Nutzer, einer bestehenden WG über einen Einladungscode beizutreten. Der Nutzer wird mit der WG in der Datenbank verknüpft.
 
-**Sample output:** Weiterleitung zum Dashboard der WG nach erfolgreichem Beitritt
+**Sample output:** Weiterleitung zum Dashboard der WG nach erfolgreichem Beitritt.
+
+---
 
 ### `dashboard()`
 
@@ -125,6 +147,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** Gerendertes Dashboard mit personalisierten WG-Daten.
 
+---
+
 ### `putzplan()`
 
 **Route:** `/putzplan/`
@@ -134,6 +158,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Zeigt den Putzplan der WG an und erlaubt das Erstellen neuer Putzaufgaben. Bei einem POST-Request wird eine neue Putzaufgabe inklusive Vorlage (Cleaning-Template) und zugehörigem Task (CleaningTask) erstellt.
 
 **Sample output:** 
+
+---
 
 ### `toggle_cleaning_task(task_id)`
 
@@ -145,6 +171,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+---
+
 ### `delete_cleaning_task(template_id)`
 
 **Route:** `/putzplan/task/<int:template_id>/delete`
@@ -154,6 +182,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Löscht eine Putzaufgabe inklusive ihrer Vorlage. Nur der zuständige Benutzer darf die Aufgabe löschen.
 
 **Sample output:** 
+
+---
 
 ### `innovation_board()`
 
@@ -165,6 +195,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+---
+
 ### `delete_idea(idea_id)`
 
 **Route:** `/innovation_board/idea/<int:idea_id>/delete`
@@ -174,6 +206,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Löscht eine Idee. Nur der Ersteller der Idee darf diese löschen.
 
 **Sample output:** 
+
+---
 
 ### `post_comment(idea_id)`
 
@@ -185,6 +219,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+---
+
 ### `activity_board()`
 
 **Route:** `/activityboard/`
@@ -194,6 +230,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Zeigt alle Aktivitäten der WG an und ermöglicht das Erstellen neuer Aktivitäten (Events). Aktivitäten enthalten Datum, Ort und maximale Teilnahmerzahl.
 
 **Sample output:** 
+
+---
 
 ### `join_activity(activity_id)`
 
@@ -205,6 +243,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+---
+
 ### `delete_activity(activity_id)`
 
 **Route:** `/activity/<int:activity_id>/delete_activity`
@@ -214,6 +254,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Löscht eine Aktivität. Nur der Ersteller der Aktivität darf diese löschen.
 
 **Sample output:** 
+
+---
 
 ### `einkaufsplan()`
 
@@ -225,6 +267,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+---
+
 ### `delete_shopping_item(item_id)`
 
 **Route:** `/einkaufsplan/item/<int:item_id>/delete`
@@ -235,7 +279,11 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+---
+
 ## Export & Kalender
+
+---
 
 ### `activity_ics(activity_id)`
 
@@ -247,6 +295,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+---
+
 ### `export_wg_json()`
 
 **Route:** `/export/wg.json`
@@ -257,13 +307,19 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+---
+
 ## Hilfsfunktionen (ohne Route)
+
+---
 
 ### `google_calendar_url(...)`
 
 **Purpose:** Erstellt eine Google-Calendar-URL für eine Aktivität mit Titel, Datum, Beschreibung und Ort.
 
 **Sample output:** 
+
+---
 
 ### `build_ics(...)`
 
