@@ -62,7 +62,7 @@
           </small>
         </div>
       
-      <small class="text-muted" style = "margin-bottom: 10px;">📅 {{ activity.date.strftime('%d.%m.%Y %H:%M') }} bis {{ activity.updated_at.strftime('%d.%m.%Y %H:%M') }}</small>
+      <small class="text-muted" style = "margin-bottom: 10px;">📅 {{ activity.date.strftime('%d.%m.%Y %H:%M') }} bis {{ activity.date_to.strftime('%d.%m.%Y %H:%M') }}</small>
       {% if activity.location %}
         <br>
         <small class="text-muted" style = "margin-bottom: 10px;">📍{{ activity.location }}</small>

@@ -11,16 +11,18 @@ sql_path = sys.argv[2]
 with open (sql_path, 'r') as f:
     sql_script = f.read()
 
-conn = sqlite3.connect(db_path)
-cursor = conn.cursor()
+db_con = sqlite3.connect(db_path)
+cursor = db_con.cursor()
 try:
     cursor.executescript(sql_script)
-    conn.commit()
-    conn.close()
+    db_con.commit()
+    db_con.close()
 
 except Exception as e:
     print(f"Fehler beim Ausführen des SQL-Skripts: {e}")
-    conn.rollback()
+    db_con.rollback()
     
 finally:
-    conn.close()
+    db_con.close()
+
+#python run_sql.py instance\happywg.sqlite sql\[Dateiname]
