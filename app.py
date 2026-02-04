@@ -5,7 +5,6 @@ import string
 from tempfile import template
 from flask import Flask, current_app, flash, jsonify, redirect, render_template,request, url_for,session, Response, abort
 from datetime import timezone
-from flask_migrate import Migrate
 from sqlalchemy import func, text
 from sqlalchemy.orm import joinedload
 import random
@@ -28,7 +27,7 @@ app.config['SECRET_KEY'] = 'HappyWG_Project_SecretKey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
 
 db.init_app(app)
-migrate = Migrate(app, db)   #brauch man um neue Spalten zu erstellten Tabellen hinzuzufügen
+
 
 
 def current_user():
