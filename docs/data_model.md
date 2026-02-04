@@ -20,16 +20,16 @@ nav_order: 2
 - **Rollen:** Scope für fast alle Daten & Kollaboration
 
 `User`
-- **PK:** `user_id`
-- **Spalten:** FK: Wg → `wg_id`(nullable),`username` (unique), `email` (unique), `password_hash`, `role` (default: member; für Erweiterungen geeignet)
-- **Rolle:** Nutzerkonto; gehört optional zu einer WG (am Anfang keiner, deswegen nullable), wird nach "Join" gesetzt.
+**PK:** `user_id`
+**Spalten:** FK: Wg → `wg_id`(nullable),`username` (unique), `email` (unique), `password_hash`, `role` (default: member; für Erweiterungen geeignet)
+**Rolle:** Nutzerkonto; gehört optional zu einer WG (am Anfang keiner, deswegen nullable), wird nach "Join" gesetzt.
 
-#### **Putzplan**
+#### Putzplan
 `CLEANING_TEMPLATE`
 - **PK:** `template_id`
 - **FK:** `wg_id` → `WG.wg_id`
 - **Spalten:** `name`, `description`, `frequency`*, `is_active`
-**Rolle:** Für weitere Erweiterungen gedacht; Template abspeichern und wiederverwenden (_aus Zeitgründen & Projektkomplexität nicht implementiert_).
+**Rolle:** Für weitere Erweiterungen gedacht; Template abspeichern und wiederverwenden (_aus Zeitgründen & Projektkomplexität nicht implementiert_)
 
 `CLEANING_TASK`
 - **PK:** `task_id`
@@ -66,13 +66,13 @@ nav_order: 2
 `ACTIVITY_PARTICIPANTS` (Assoziationstabelle)
 - **Composite PK:** (`activity_id`, `user_id`)
 - **FKs:** `activity_id` → `ACTIVITY.activity_id`, `user_id` → `USER.user_id`
-- **Rolle:** Many-to-Many: Teilnehmer einer Activity.
+- **Rolle:** Many-to-Many: Teilnehmer einer Activity
   
 `ShoppingItem`
 - **PK:** `item_id` → `WG.wg_id`, `created_by` → `USER.user_id`
 - **FKs**: wg_id → WG.wg_id, added_by → USER.user_id, assigned_to → USER.user_id
 - **Spalten:** `name`, `quantity`, `created_at`
-- **Rolle:** User können Einkaufsitems anlegen mit der zuständigen Person, Menge & Name.
+- **Rolle:** User können Einkaufsitems anlegen mit der zuständigen Person, Menge & Name
 
 
 {: .fs-2 }

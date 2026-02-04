@@ -22,9 +22,13 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 
 ## Interne Hilfsfunktionen
 
+<<<<<<< HEAD
 ---
 
 ### `current_user()`
+=======
+### `curren_user()`
+>>>>>>> parent of 79a3bb8 (edit readme.md)
 
 **Route:** keine (interne Funktion)
 

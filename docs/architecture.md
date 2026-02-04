@@ -53,7 +53,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - **DB/ORM:** SQLite (dev) + SQLAlchemy (später leicht auf Postgres/MySQL migrierbar)
 - **Migrations:** Flask-Migrate (Alembic)
 - **Forms/Validation:** Flask-WTF / WTForms
-- **UI:** Bootstrap (CSS), no-JS Interaktionen (POST + Redirect)
+- **UI:** Bootstrap (CSS), minimale/no-JS Interaktionen (POST + Redirect)
 - **Kalenderexport:** iCalendar (.ics)
 
 ## Codemap
@@ -61,7 +61,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 **High-Level Codemap-Visualisierung**
 ![ComponentDiagram](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-122120.png)
 
-**Routes / Controllers: `app.py`** 
+**(Routes / Controllers)`app.py`** 
 
 - Authorisierung & Session Flow: `login`, `register`, `logout`, Wrapper `login_required`
 - WG Flow - WG erstellen: `create_or_join_wg`, `create_wg`, `generate_unique_code` & beitreten: `join_wg`
