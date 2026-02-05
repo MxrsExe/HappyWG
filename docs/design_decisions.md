@@ -21,7 +21,7 @@ nav_order: 4
 
 ## 01: Zentrales WG-basiertes Datenmodell
 
-Status: **Entschieden** 
+Status: **Entschieden, obsolete** 
 
 Updated: 06-02-2026
 
@@ -41,15 +41,15 @@ Wichtig war dabei:
 
 ### Entscheidung
 
-Wir haben uns dafür entschieden, die **WG als zentrales Kernelement des Datenmodells zu verwenden.
+Wir haben uns dafür entschieden, die **WG** als zentrales Kernelement des Datenmodells zu verwenden.
 - Eine WG dient als übergeordneter Container für fast alle Daten.
-- Nutzer:innen gehören jeweils zu **einer WG** 
-- Zentrale Tabellen wie Activity, Idea, ShoppingItem oder CleaningTemplate enthalten einen Fremdschlüssel (wg_id), über den sie eindeutig einer WG zugeordnet sind.
+- Nutzer:innen gehören jeweils zu **einer WG**. 
+- Zentrale Tabellen wie Activity, Idea, ShoppingItem oder CleaningTemplate enthalten einen Fremdschlüssel (`wg_id`), über den sie eindeutig einer WG zugeordnet sind.
 
-Durch diese Entscheidung ist klar geregt:
+Durch diese Entscheidung ist klar geregelt:
 - welche Daten zu welcher WG gehören
 - welche Nutzer:innen auf welche Daten zugreifen dürfen
-- dass Daten verschiedener WGs strikt getrennt bleiben
+- dass Daten verschiedener WGs strikt getrennt bleiben.
 
 Diese Struktur entspricht außerdem gut der realen Nutzung der App.
 
@@ -77,7 +77,7 @@ Gemeinsame Daten gehören immer zu einer WG, Nutzer:innen sind Mitglieder dieser
 ### Vorteile
 + klare Trennung zwischen verschiedenen WGs
 + gemeinschaftliche Nutzung von Daten logisch abgebildet
-+ einfache Filterung und Zugriffsprüfung über `wg_id``
++ einfache Filterung und Zugriffsprüfung über `wg_id`
 + gut erweiterbar (z.B. Rollen)
 
 ### Nachteile

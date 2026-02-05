@@ -5,6 +5,13 @@ parent: Technical Docs
 nav_order: 1
 ---
 
+<details open markdown="block">
+{: .text-delta }
+<summary>Table of contents</summary>
++ ToC
+{: toc }
+</details>
+
 # Architecture
 
 ## Overview
