@@ -161,7 +161,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![putzplan() sample](../assets/images/putzplan/putzplanreference.png)
+![putzplan() sample](assets/images/putzplan/putzplanreference.png)
 
 ---
 
@@ -331,3 +331,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+
+
+{: .fs-2 }
+Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
