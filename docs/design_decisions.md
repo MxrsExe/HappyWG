@@ -137,7 +137,7 @@ Wir nutzen ein **feature-spezifisches** Ownership-Modell:
 + Kann zu schlechter UX führen (zuständige Person kann Aufgabe nicht als erledigt markieren, wenn sie nicht Owner ist (**!**))
 
 ### Option 2: WG-weit darf jeder alles (maximal einfach, aber sehr unsicher)
-- Alle WG-Mitglieder dürfen von anderen WG-Mitgliedern alles wie z.B. löschen.
+Alle WG-Mitglieder dürfen von anderen WG-Mitgliedern alles wie z.B. löschen.
 
 #### Vorteile
 + Minimaler Implementationsaufwand: fast keine Ownership-Checks
@@ -150,7 +150,7 @@ Wir nutzen ein **feature-spezifisches** Ownership-Modell:
 + Spätere Korrektur ist teuer, da man nachträglich Checks + UI-Logik einbauen muss.
 
 ### Option 3 (gewählt): Feature-spezifische Regeln (Owner vs. zuständig)
-- Wer was machen kann wird pro Feature entschieden
+Wer was machen kann wird pro Feature entschieden.
 
 #### Vorteile
 + Realistische Regeln pro Feature (Activites: Activity Owner, Cleaning: assigned_to; Ideas: Owner; Like/Comment: WG)
@@ -162,7 +162,7 @@ Wir nutzen ein **feature-spezifisches** Ownership-Modell:
 + Policy-Änderung würden mehrere Endpoints/Templates betreffen.
   
 ### Option 4 Rollenmodell:
-- Es gibt durch z.B. `role="admin"` (_später implementierbar_) einen Administrator, der alles verändern kann.
+Es gibt durch z.B. `role="admin"` (_später implementierbar_) einen Administrator, der alles verändern kann.
 
 #### Vorteile
 + Klar skalierbar: Admin kann moderieren/aufräumen.
@@ -174,7 +174,7 @@ Wir nutzen ein **feature-spezifisches** Ownership-Modell:
 + Man muss trotzdem definieren, was Member dürfen (landet wieder bei Option 3 + Admin-Override)
 
 ### 02: Konsequenzen
-- Backend-Routen müssen vor Änderungen immer prüfen: `current_user.wg_id` == `object.wg_id` und getroffene Ownership-Regel zum Feature.
+- Backend-Routen müssen vor Änderungen immer prüfen: `current_user.wg_id == object.wg_id` und getroffene Ownership-Regel zum Feature.
 - Nicht zugewiesene oder unberechtige User können die Objekte anderer WG-Mitglieder nicht anfassen.
 - Spätere Einführung von Admin-Rollen möglich, erfordert aber konsistente Anpassung vieler Endpoints.
 
@@ -210,7 +210,7 @@ Wir trennen in:
 ### Betrachtete Alternativen
 
 #### Option 1: Eine gemeinsame CleaningTask Tabelle
-- Task-Card enthält alles
+Task-Card enthält alle Informationen und Buttons/Checkboxes.
 
 #### Vorteile
 - Einfacher Start: nur ein Objekt-Modell, weniger Joins
@@ -350,20 +350,20 @@ Beispiel aus HappyWG-Code:
 ### Betrachtete Alternativen
 
 ### Option 1: Association Table (pure join table) (chosen)
-- Einfaches n:m Mapping über eine Join-Tabelle mit zwei FKs und Composite PK
+Einfaches n:m Mapping über eine Join-Tabelle mit zwei FKs und Composite PK
 
 #### Vorteile
 - Relational korrekt für Many-to-Many (Normalisierung)
 - Einfaches **ORM-Handling** (siehe obiges Beispiel)
 - Keine Duplikate durch Composite PK 
 - Gute Performance bei typischen Abfragen; Eager Loading (`joinedLoad(Activity.participants)`) funktioniert damit gut
-- Wenig Code bzw. kein zusätzliches Model, keine extra CRUD
+- Wenig Code bzw. kein zusätzliches Model, keine extra CRUD-Operation
 
 #### Nachteile
 - Schwierig zu ändern, ggf. Migration auf Option 2 nötig
 
 ### Option 2: Association Object (eigenes Model)
-- z.B. `ActivityParticipant`
+z.B. `ActivityParticipant`
 
 #### Vorteile
 
