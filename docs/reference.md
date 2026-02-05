@@ -22,13 +22,9 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 
 ## Interne Hilfsfunktionen
 
-<<<<<<< HEAD
 ---
 
 ### `current_user()`
-=======
-### `curren_user()`
->>>>>>> parent of 79a3bb8 (edit readme.md)
 
 **Route:** keine (interne Funktion)
 
@@ -164,6 +160,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Zeigt den Putzplan der WG an und erlaubt das Erstellen neuer Putzaufgaben. Bei einem POST-Request wird eine neue Putzaufgabe inklusive Vorlage (Cleaning-Template) und zugehörigem Task (CleaningTask) erstellt.
 
 **Sample output:** 
+
+![get_lists() sample](../assets/images/putzplan/putzplanreference.png)
 
 ---
 
