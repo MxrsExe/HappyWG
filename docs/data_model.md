@@ -11,7 +11,7 @@ nav_order: 2
 ---
 
 ## Das Data Model von Happy WG, Stand 05.02.2025
-<img src="assets/images/data_model.drawio.png" alt="Data Model" width="1600" height= "1600">
+![DataModel](assets/images/data_model.png)
 
 ---
 
@@ -93,7 +93,7 @@ nav_order: 2
 `ACTIVITY`
 - **PK:** `activity_id`
 - **FKs:** `wg_id` → `Wg.wg_id`, `created_by` → `USER.user_id`
-- **Spalten:** `title`, `description`, `date`, `location`, `max_participants`, `created_at`, `updated_at`*
+- **Spalten:** `title`, `description`, `date`, `date_to`, `location`, `max_participants`, `created_at`
 - **Rolle:** User können Aktivitäten hinzufügen, die alle Informationen über diese Aktivität enthalten.
 
 ---
@@ -101,7 +101,7 @@ nav_order: 2
 `ACTIVITY_PARTICIPANTS` (Assoziationstabelle)
 - **Composite PK:** (`activity_id`, `user_id`)
 - **FKs:** `activity_id` → `ACTIVITY.activity_id`, `user_id` → `USER.user_id`
-- **Rolle:** Many-to-Many: Teilnehmer einer Activity
+- **Rolle:** Many-to-Many: Teilnehmer einer Activity.
 
 ---
 
@@ -119,19 +119,19 @@ nav_order: 2
 
 | Von | Zu | Beschreibung |
 | --- | --- | --- |
-| **WG** | USER | Eine WG kann viele User haben, ein User gehört zu einer WG |
-| **WG** | CLEANING_TEMPLATE | Eine WG kann viele Putzpläne haben, ein erstellter Putzplan gehört zu einer WG |
-| **WG** | SHOPPING_ITEM | Eine WG kann viele Einkaufsitems haben, ein erstelltes Einkaufsitem gehört zu einer WG |
-| **WG** | IDEA | Eine WG kann viele Ideen haben, eine erstellte Idee gehört zu einer WG |
-| **WG** | ACTIVITY | Eine WG kann viele Activities haben, ein eine erstellte Activity gehört zu einer WG |
-| **ACTIVITY** | ACTIVITY_PARTICIPANTS | Eine Activity kann viele Teilnehmer haben |
-| **CLEANING_TEMPLATE** | CLEANING_TASK | Jede Vorlage kann mehrere Tasks enthalten |
-| **USER** | CLEANING_TASK | Ein User kann mehrere Putzaufgaben haben, eine Putzaufgabe ist einem User zugeordnet |
-| **USER** | ACTIVITY_PARTICIPANTS | Ein User kann an vielen Activities teilnehmen, vermittelt über Activity_Participants |
-| **USER** | IDEA | Ein User kann Ideen erstellen, eine Idee kann von einem User erstellt werden |
-| **USER** | IDEA_COMMENT | Ein User kann mehrere Kommentare unter eine Idee schreiben, ein Kommentar kann von einem User erstellt werden |
-| **USER** | IDEA_LIKE | Ein User kann mehrere Ideen liken, ein Like kommt von einem User |
-| **IDEA** | IDEA_LIKE | Eine Idee kann mehrere Likes haben, ein gespeichertes Like gehört einer Idee |
+| **WG** | USER | Eine WG kann viele User haben, ein User gehört zu einer WG. |
+| **WG** | CLEANING_TEMPLATE | Eine WG kann viele Putzpläne haben, ein erstellter Putzplan gehört zu einer WG. |
+| **WG** | SHOPPING_ITEM | Eine WG kann viele Einkaufsitems haben, ein erstelltes Einkaufsitem gehört zu einer WG. |
+| **WG** | IDEA | Eine WG kann viele Ideen haben, eine erstellte Idee gehört zu einer WG. |
+| **WG** | ACTIVITY | Eine WG kann viele Activities haben, ein eine erstellte Activity gehört zu einer WG. |
+| **ACTIVITY** | ACTIVITY_PARTICIPANTS | Eine Activity kann viele Teilnehmer haben. |
+| **CLEANING_TEMPLATE** | CLEANING_TASK | Jede Vorlage kann mehrere Tasks enthalten. |
+| **USER** | CLEANING_TASK | Ein User kann mehrere Putzaufgaben haben, eine Putzaufgabe ist einem User zugeordnet. |
+| **USER** | ACTIVITY_PARTICIPANTS | Ein User kann an vielen Activities teilnehmen, vermittelt über Activity_Participants. |
+| **USER** | IDEA | Ein User kann Ideen erstellen, eine Idee kann von einem User erstellt werden. |
+| **USER** | IDEA_COMMENT | Ein User kann mehrere Kommentare unter eine Idee schreiben, ein Kommentar kann von einem User erstellt werden. |
+| **USER** | IDEA_LIKE | Ein User kann mehrere Ideen liken, ein Like kommt von einem User. |
+| **IDEA** | IDEA_LIKE | Eine Idee kann mehrere Likes haben, ein gespeichertes Like gehört einer Idee. |
 
 
 ---
