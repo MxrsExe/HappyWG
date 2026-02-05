@@ -187,6 +187,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+![delete_cleaning_task() sample](assets/images/putzplan/cleaningtaskreference.png)
+
 ---
 
 ### `innovation_board()`
@@ -199,6 +201,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+![innovation_board() sample](assets/images/innoboard/innovationboardreference.png)
+
 ---
 
 ### `delete_idea(idea_id)`
@@ -210,6 +214,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Löscht eine Idee. Nur der Ersteller der Idee darf diese löschen.
 
 **Sample output:** 
+
+![delete_idea(idea_id) sample](assets/images/innoboard/deleteideareference.png)
 
 ---
 
