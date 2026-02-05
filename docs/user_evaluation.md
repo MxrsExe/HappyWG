@@ -68,4 +68,11 @@ Insgesamt waren beide Testpersonen mit der App zufrieden und empfanden sie als a
 
 ### Konsequenzen
 
+Die Evaluation bestätig, dass die grundlegenden Design- und Architekturentscheidungen sinnvoll gewählt wurden und die App ihre Kernziel erfüllt.
 
+Da keine gravierenden Nutzungs-Probleme festgestellt wurden, sind keine strukturellen Änderungen an der Anwendung notwendig. Für zukünftige Weiterentwicklungen ergeben sich jedoch kleinere Verbesserungspotenziale:
+
++ visuelle Hervorhebung besonderes wichtiger Informationen im Dashboard, z.B. durch Frabkodierung
++ wichtige Hinweise drirekt **anklickbar** machen, sodass man schneller zu den relevanten Einträgen oder Aktionen gelangt
+
+Diese Anpassungen sind **optionale Verbesserungen**, die die Nutzung noch intuitiver und übersichtlicher machen könnten, ohne die aktuelle Funktionsweise zu verändern.
