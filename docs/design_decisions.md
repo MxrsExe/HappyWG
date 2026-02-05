@@ -35,7 +35,7 @@ Zu Beginng des Projekts stellte sich daher die Frage, **wie wir die Daten logisc
 
 Wichtig war dabei:
 - eine klare Trennung der Daten zwischen verschiedenen WGs
-- ein Modell, welches sich später gut erweitern lässt
+- ein Modell, welches sich später gut erweitern lässt.
 
 ---
 
@@ -52,6 +52,8 @@ Durch diese Entscheidung ist klar geregelt:
 - dass Daten verschiedener WGs strikt getrennt bleiben.
 
 Diese Struktur entspricht außerdem gut der realen Nutzung der App.
+
+_Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 
 ---
 
@@ -120,6 +122,8 @@ Wir nutzen ein **feature-spezifisches** Ownership-Modell:
 - **Cleaning Tasks/Templates:** Nur die zuständige Person (`assigned_to`) darf löschen bzw. erledigen (je nach Policy)
 - **Ideas:** Nur der Ersteller (`created_by`) darf löschen; WG-Mitglieder dürfen liken/kommentieren.
 - **Allgemein:** Zugriff ist zusätzlich immer über `wg_id` begrenzt (siehe [01: Zentrales WG-basiertes Datenmodell](#01-zentrales-wg-basiertes-datenmodell))
+  
+_Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 
 ---
 
@@ -205,6 +209,8 @@ Wir trennen in:
 
 **Grund**: Potentiell wollen wir die App privat erweitern und neue Features einfügen, die dadurch ermöglicht werden. Für andere Devs könnte diese Design-Entscheidung ebenfalls eine Hilfestellung für neue Features sein.
 
+_Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
+
 ---
 
 ### Betrachtete Alternativen
@@ -269,6 +275,8 @@ Das beeinflusst nicht nur die Datenintegrität, sondern auch spätere Anforderun
 
 Für unser jetziges MVP verwenden wir **Hard Delete** für echte Löschaktionen (z.B. `db.session.delete(...)).
 Für die Putzplan-Templates existiert zusätzlich ein **Soft-Delete** Feature `is_active`, mit dem Einträge aus der Standardansicht ausgeblendet bzw. durchgestrichen werden können.
+
+_Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 
 ---
 
@@ -344,6 +352,8 @@ Wir nutzen eine **Association Table (Join Tabelle)** `ACTIVITY_PARTICIPANTS` als
   
 Beispiel aus HappyWG-Code:
 `activity.participants.append(user)` (Aktivität beitreten) bzw. `activity.participants.remove(user)` (Aktivität verlassen)
+
+_Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 
 ---
 
