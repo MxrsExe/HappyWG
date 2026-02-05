@@ -12,7 +12,7 @@ nav_order: 4
 
 <details open markdown="block">
 {: .text-delta }
-<summary>Table of contents</summary>
+<summary>Inhaltsverzeichnis</summary>
 + ToC
 {: toc }
 </details>
