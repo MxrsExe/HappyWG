@@ -182,7 +182,9 @@ Wir nutzen ein **feature-spezifisches** Ownership-Modell:
 ## 03: Putzplan-Datenmodell - Cleaning Template vs. nur Cleaning Task (Plan vs. Ausführung)
 
 **Meta**
+
 **Status:** On Hold, relevant
+
 **Updated:** 05.02.2026
 
 ### Problemstellung
@@ -217,7 +219,7 @@ Wir trennen in:
 #### Nachteile
 - Änderungen am Plan könnten alte Einträge betreffen
 
-#### Option 2: Template + Task getrennt (chosen)
+### Option 2: Template + Task getrennt (chosen)
 
 #### Vorteile
 - Saubere Domänentrennung
@@ -229,7 +231,7 @@ Wir trennen in:
 - Beim Erstellen in der App immer 2 Schritte
 - Klare Policy benötigt
 
-#### Option 3: Template + automatisch generierte Tasks (Scheduler/Cron)
+### Option 3: Template + automatisch generierte Tasks (Scheduler/Cron)
 #### Vorteile
 + "Echte" Wiederkehr: systematisch jede Woche neue Tasks
 + Sehr gute Basis für Historie/Rotation (neue Features) ohne manuelles Erstellen
@@ -272,7 +274,7 @@ Für die Putzplan-Templates existiert zusätzlich ein **Soft-Delete** Feature `i
 
 ### Betrachtete Alternativen
 
-#### Option 1: Hard Delete direkt aus der DB (chosen)
+### Option 1: Hard Delete direkt aus der DB (chosen)
 #### Vorteile
 + Sehr simpel (einfach mit `db.session.delete(...)`)
 + Keine "gelöscht-Filter" in allen Queries nötig
@@ -283,7 +285,7 @@ Für die Putzplan-Templates existiert zusätzlich ein **Soft-Delete** Feature `i
 + Keine History (z.B. wer hat wann was gelöscht?)
 + Cascades können mehr löschen als erwartet (z.B. Template → Tasks), Vorsicht ist geboten
 
-#### Option 2: Soft Delete (mit Variable deleted_at)
+### Option 2: Soft Delete (mit Variable deleted_at)
 #### Vorteile
 + Wiederherstellen möglich (durch Archiv oder Undo)
 + History möglich
@@ -294,7 +296,7 @@ Für die Putzplan-Templates existiert zusätzlich ein **Soft-Delete** Feature `i
 + UI muss Archiv implementieren
 + Mehr Felder + mehr Tests
 
-#### Option 3: Hybrid (manche Entities soft, andere hard)
+### Option 3: Hybrid (manche Entities soft, andere hard)
 #### Vorteile
 + Flexibilität: Man kann wichtige Daten behalten, unwichtige löschen
 + Guter Kompromiss zwischen Aufwand und Nutzen.
@@ -304,11 +306,90 @@ Für die Putzplan-Templates existiert zusätzlich ein **Soft-Delete** Feature `i
 + Mehr Denkaufwand + Doku nötig
 + Verwirrungsgefahr
 
+---
+
 ### Konsequenzen
 
 - MVP bleibt simpel
 - Spätere Anforderungen wie "Wiederherstellen" erfordern Umstellung auf Soft Delete.
 - Soft Delete bedeutet: **alle** relevanten Queries **müssen** "nur nicht gelöschte Datensätze" filtern.
+
+## 05: Many-to-Many Activities - Association Table (`ACTIVITY_PARTICIPANTS`)
+
+**Meta**
+
+**Status:** Entschieden
+
+**Updated:** 05.02.2026
+
+### Problemstellung
+
+In HappyWG sollen WG-Mitglieder Aktivitäten (Events) beitreten oder verlassen können. Eine Aktivität kann dabei viele Teilnehmer haben, und ein User kann an vielen Aktivitäten teilnehmen. Somit entsteht eine klassische **Many-to-Many-Beziehung** zwischen `User` und `Activity`
+
+Wir müssen entscheiden, wie wir diese Beziehung im Datenmodell abbilden, sodass:
+
+- **Join/Leave** effizient möglich ist (ohne komplizierte SQL-Logik),
+- Duplikate verhindert werden (ein User soll nicht doppelt beitreten)
+- (Modell erweiterbar bleibt)
+
+---
+
+### Entscheidung
+
+Wir nutzen eine **Association Table (Join Tabelle)** `ACTIVITY_PARTICIPANTS` als reine Zuordnungstabelle:
+- Primärschlüssel ist ein **Composite Key** aus (`activity_id`,`user_id`), was die doppelte Teilnahme verhindert.
+- SQLAlchemy Many-to-Many Mapping über `secondary = activity_participants`:
+  - `Activity.participants`
+  - `User.joined_activities`
+  
+Beispiel aus HappyWG-Code:
+`activity.participants.append(user)` (Aktivität beitreten) bzw. `activity.participants.remove(user)` (Aktivität verlassen)
+
+---
+
+### Betrachtete Alternativen
+
+### Option 1: Association Table (pure join table) (chosen)
+- Einfaches n:m Mapping über eine Join-Tabelle mit zwei FKs und Composite PK
+
+#### Vorteile
+- Relational korrekt für Many-to-Many (Normalisierung)
+- Einfaches **ORM-Handling** (siehe obiges Beispiel)
+- Keine Duplikate durch Composite PK 
+- Gute Performance bei typischen Abfragen; Eager Loading (`joinedLoad(Activity.participants)`) funktioniert damit gut
+- Wenig Code bzw. kein zusätzliches Model, keine extra CRUD
+
+#### Nachteile
+- Schwierig zu ändern, ggf. Migration auf Option 2 nötig
+
+### Option 2: Association Object (eigenes Model)
+- z.B. `ActivityParticipant`
+
+#### Vorteile
+
+- Maximal erweiterbar, man kann neue Felder speichern
+- Flexiblere Queries
+
+#### Nachteile
+
+- Mehr Implementierungsaufwand, da zusätzliches Model mit ggf. eigener CRUD-Logik
+- **ORM-Zugriff** ist etwas komplexer
+- Wir brauchen nur beitreten und verlassen, deswegen overkill
+
+---
+
+### Konsequenzen
+
+- Saubere Logik
+- Kein doppeltes Beitreten derselben Activity
+- Beitreten & verlassen ist simpel
+- Performante Abfragen möglich
+
+
+
+
+
+
 
 
 {: .fs-2 }
