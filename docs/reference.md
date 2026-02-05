@@ -229,7 +229,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![post_comment(idea_id) sample](assets/images/innoboard/commentideareference.png)
+<img src="assets/images/innoboard/commentideareference.png" alt="post_comment sample" width="700"
 
 ---
 
@@ -243,6 +243,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+![activity_board() sample](assets/images/activityboard/activityreference.png)
+
 ---
 
 ### `join_activity(activity_id)`
@@ -255,6 +257,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+![activity_board() sample](assets/images/activityboard/activitybeigetretenreference.png)
+
 ---
 
 ### `delete_activity(activity_id)`
@@ -266,6 +270,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Löscht eine Aktivität. Nur der Ersteller der Aktivität darf diese löschen.
 
 **Sample output:** 
+
+![activity_board() sample](assets/images/activityboard/activityloeschenreference.png)
 
 ---
 
@@ -309,7 +315,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Purpose:** Erstellt eine ICS-Datei für eine Aktivität, die ein externe Kalender (z.B. Google Calendar) importiert werden kann.
 
-**Sample output:** 
+**Sample output:** Download einer `.ics`-Datei.
 
 ---
 
@@ -323,6 +329,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+![export_wg_json() sample](assets/images/dashboard/jsondateireference.png)
+
 ---
 
 ## Hilfsfunktionen (ohne Route)
@@ -333,7 +341,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Purpose:** Erstellt eine Google-Calendar-URL für eine Aktivität mit Titel, Datum, Beschreibung und Ort.
 
-**Sample output:** 
+**Sample output:** URL-String für Google Calendar.
 
 ---
 
@@ -341,7 +349,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Purpose:** Erstellt den Inhalt einer ICS-Kalenderdatei für den Export von Aktivitäten.
 
-**Sample output:** 
+**Sample output:** Text im ICS-Format.
 
 
 
