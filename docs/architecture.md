@@ -53,8 +53,10 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - **DB/ORM:** SQLite (dev) + SQLAlchemy (später leicht auf Postgres/MySQL migrierbar)
 - **Migrations:** Flask-Migrate (Alembic)
 - **Forms/Validation:** Flask-WTF / WTForms
-- **UI:** Bootstrap (CSS), minimale/no-JS Interaktionen (POST + Redirect)
+- **UI:** Bootstrap (CSS), no-JS Interaktionen (POST + Redirect)
 - **Kalenderexport:** iCalendar (.ics)
+
+---
 
 ## Codemap
 
@@ -100,6 +102,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 **`assets/`**
 - Dokumentationsbilder und Data Model
 
+---
 
 ## Cross-Cutting Concerns
 

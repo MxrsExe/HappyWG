@@ -798,7 +798,7 @@ def activity_ics(activity_id):
         uid=f"activity-{activity.activity_id}@wgplanner",
         title=activity.title,
         start_dt=activity.date,     # oder activity.time
-        end_dt=activity.updated_at,       # ggf. + timedelta(hours=2)
+        end_dt=activity.date_to,       # ggf. + timedelta(hours=2)
         description=activity.description or "",
         location=activity.location or "",
     )
