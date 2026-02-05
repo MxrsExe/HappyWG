@@ -161,7 +161,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![get_lists() sample](../assets/images/putzplan/putzplanreference.png)
+![putzplan() sample](../assets/images/putzplan/putzplanreference.png)
 
 ---
 
