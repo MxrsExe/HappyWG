@@ -112,6 +112,10 @@ nav_order: 2
 
 ---
 
+### Einkaufsplan
+
+---
+
 `ShoppingItem`
 - **PK:** `item_id` → `WG.wg_id`, `created_by` → `USER.user_id`
 - **FKs**: wg_id → WG.wg_id, added_by → USER.user_id, assigned_to → USER.user_id
