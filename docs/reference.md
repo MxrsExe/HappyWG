@@ -229,7 +229,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-<img src="assets/images/innoboard/commentideareference.png" alt="post_comment sample" width="700">
+<img src="assets/images/innoboard/commentideareference.png" alt="post_comment sample" width="200" height= "200">
 
 ---
 
