@@ -90,3 +90,8 @@ Gemeinsame Daten gehören immer zu einer WG, Nutzer:innen sind Mitglieder dieser
 | Gemeinsame Nutzung | eingeschränkt | vorgesehen |
 | Erweiterbarkeit | gering | gut |
 | Verständlichkeit | einfach | realitätsnah |
+
+{: .fs-2 }
+Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
+
+[def]: assets/images/innoboard/deleteideareference.png
