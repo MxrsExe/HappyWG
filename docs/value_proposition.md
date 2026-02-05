@@ -4,7 +4,7 @@ title: Value Proposition
 nav_order: 2
 ---
 
-## Value Proposition
+# Value Proposition
 
 **Problem**: Ungleiche Aufgabenverteilung, vergessene Einkäufe, Kommunikationslücken, unstrukturierter Alltag, Konflikte über Sauberkeit und Verantwortlichkeiten. Unsere App soll bei diesen Problemen helfen.
 
@@ -21,7 +21,7 @@ Unser Ziel ist, den Alltag in der WG spürbar zu erleichtern, Konflikte reduzier
 **Als Gruppe**: Großes Ambitionslevel, regelmäßige Arbeit am Projekt, keine Prokrastion, Großteil vor Weihnachten fertig haben?
 
 
-# Customer Journey
+## Customer Journey
 
 
 ## Login bzw. Registrierung
@@ -128,7 +128,7 @@ Die Aktivität mit all ihren Daten wird nun im Kalender angezeigt:
 
 Der User verlässt nun die Aktivität:
 
-![ActivityLeft](assets/images/activityboard/activity_left.png)
+![ActivityLeft](assets/images/activityboard/activityLeft.png)
 
 Im Folgenden will der User Produkte zum Einkaufen anlegen. Dazu wechselt er/sie auf die Einkaufsliste.
 
