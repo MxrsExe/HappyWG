@@ -173,7 +173,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Purpose:** Wechselt den Status einer Putzaufgabe zwischen open und completed. Beim Abschließen wird zusätzlich das Abschlussdatum gespeichert.
 
-**Sample output:** 
+**Sample output:** Kein direkter Output - Statusänderung sichtbar im Putzplant (Checkbox/Fortschrittsbalken).
 
 ---
 
@@ -229,6 +229,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+![post_comment(idea_id) sample](assets/images/innoboard/commentideareference.png)
+
 ---
 
 ### `activity_board()`
@@ -277,6 +279,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
+![einkaufsplan() sample](assets/images/putzplan/einkaufslistereference.png)
+
 ---
 
 ### `delete_shopping_item(item_id)`
@@ -288,6 +292,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Löscht einen Eintrag aus der Einkaufsliste
 
 **Sample output:** 
+
+![delete_shopping_item(item_id) sample](assets/images/putzplan/artikelgeloeschtreference.png)
 
 ---
 
@@ -341,3 +347,5 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
+
+[def]: assets/images/innoboard/deleteideareference.png
