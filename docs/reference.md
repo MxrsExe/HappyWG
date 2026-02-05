@@ -171,7 +171,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Methods:** `POST`
 
-**Purpose:** Wechselt den Status einer Putzaufgabe zwischen open und completed. Beim Abschließen wird zusätzlich das Abschlussdatum gespeichert.
+**Purpose:** Wechselt den Status einer Putzaufgabe zwischen `open` und `completed`. Beim Abschließen wird zusätzlich das Abschlussdatum gespeichert.
 
 **Sample output:** Kein direkter Output - Statusänderung sichtbar im Putzplant (Checkbox/Fortschrittsbalken).
 
@@ -187,7 +187,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![delete_cleaning_task() sample](assets/images/putzplan/cleaningtaskreference.png)
+![delete_cleaning_task(template_id) sample](assets/images/putzplan/deletecleaningtaskreference.png)
 
 ---
 
@@ -229,7 +229,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-<img src="assets/images/innoboard/commentideareference.png" alt="post_comment sample" width="700"
+<img src="assets/images/innoboard/commentideareference.png" alt="post_comment sample" width="700">
 
 ---
 
