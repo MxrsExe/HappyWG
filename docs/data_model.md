@@ -74,6 +74,34 @@ nav_order: 2
 - **Spalten:** `name`, `quantity`, `created_at`
 - **Rolle:** User können Einkaufsitems anlegen mit der zuständigen Person, Menge & Name
 
+### Beziehungen zwischen den Tabellen
+
+#### 1:N Beziehungen
+
+| Von | Zu | Beschreibung |
+| --- | --- | --- |
+| **WG** | USER | Eine WG kann viele User haben, ein User gehört zu einer WG |
+| **WG** | CLEANING_TEMPLATE | Eine WG kann viele Putzpläne haben, ein erstellter Putzplan gehört zu einer WG |
+| **WG** | SHOPPING_ITEM | Eine WG kann viele Einkaufsitems haben, ein erstelltes Einkaufsitem gehört zu einer WG |
+| **WG** | IDEA | Eine WG kann viele Ideen haben, eine erstellte Idee gehört zu einer WG |
+| **WG** | ACTIVITY | Eine WG kann viele Activities haben, ein eine erstellte Activity gehört zu einer WG |
+| **ACTIVITY** | ACTIVITY_PARTICIPANTS | Eine Activity kann viele Teilnehmer haben |
+| **CLEANING_TEMPLATE** | CLEANING_TASK | Jede Vorlage kann mehrere Tasks enthalten |
+| **USER** | CLEANING_TASK | Ein User kann mehrere Putzaufgaben haben, eine Putzaufgabe ist einem User zugeordnet |
+| **USER** | ACTIVITY_PARTICIPANTS | Ein User kann an vielen Activities teilnehmen, vermittelt über Activity_Participants |
+| **USER** | IDEA | Ein User kann Ideen erstellen, eine Idee kann von einem User erstellt werden |
+| **USER** | IDEA_COMMENT | Ein User kann mehrere Kommentare unter eine Idee schreiben, ein Kommentar kann von einem User erstellt werden |
+| **USER** | IDEA_LIKE | Ein User kann mehrere Ideen liken, ein Like kommt von einem User |
+| **IDEA** | IDEA_LIKE | Eine Idee kann mehrere Likes haben, ein gespeichertes Like gehört einer Idee |
+
+
+#### N:M Beziehungen
+
+| Von | Zu | Beschreibung |
+| --- | --- | --- |
+| **USER** | ACTIVITY_PARTICIPANTS | Ein User kann an vielen Activities teilnehmen, vermittelt über Activity_Participants |
+
+
 
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
