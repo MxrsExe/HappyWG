@@ -10,8 +10,8 @@ nav_order: 2
 
 ---
 
-## Das Data Model von Happy WG, Stand 03.02.2025
-<img src="assets/images/data_model.drawio.png" alt="Data Model" width="1500" height= "1500">
+## Das Data Model von Happy WG, Stand 05.02.2025
+<img src="assets/images/data_model.drawio.png" alt="Data Model" width="1600" height= "1600">
 
 ---
 
@@ -22,12 +22,16 @@ nav_order: 2
 ---
 
 ### Dashboard
+
 ---
+
 `WG`
 - **PK:** `wg_id`
 - **Spalten:** `name` (unique), invite_code (String(6)), created_at 
 - **Rollen:** Scope für fast alle Daten & Kollaboration
+
 ---
+
 `User`
 - **PK:** `user_id`
 - **Spalten:** FK: Wg → `wg_id`(nullable),`username` (unique), `email` (unique), `password_hash`, `role` (default: member; für Erweiterungen geeignet)
@@ -36,13 +40,17 @@ nav_order: 2
 ---
 
 ### Putzplan
+
 ---
+
 `CLEANING_TEMPLATE`
 - **PK:** `template_id`
 - **FK:** `wg_id` → `WG.wg_id`
 - **Spalten:** `name`, `description`, `frequency`*, `is_active`
 **Rolle:** Für weitere Erweiterungen gedacht; Template abspeichern und wiederverwenden (_aus Zeitgründen & Projektkomplexität nicht implementiert_)
+
 ---
+
 `CLEANING_TASK`
 - **PK:** `task_id`
 - **FKs:** `template_id` → `CLEANING_TEMPLATE.template_id`, `assigned_to` → `USER.user_id`
@@ -52,38 +60,51 @@ nav_order: 2
 ---
 
 ### InnovationBoard
+
 ---
+
 `IDEA`
 - **PK:** `idea_id`
 - **FKs:** `wg_id` 
 - **Spalten:** `title`, `description`, `color`, `created_at`, `updated_at`* & `status`*
 - **Rolle:** WG-Mitglieder können eine Idee erstellen, beinhaltet alle wichtigen Infos zu dieser Idee.
+
 ---
+
 `IDEA_COMMENT`
 - **PK:** `comment_id`
 - **FKs:** `idea_id` → `IDEA.idea_id`, `user_id` → `USER.user_id`
 - **Spalten:** `content`, `created_at`
 - **Rolle:** Gehört einer Idee, der User kann diese Idee kommentieren.
+
 ---
+
 `IDEA_LIKE`
 - **PK:** `like_id`
 - **FKs:** `idea_id` → `IDEA.idea_id`, `user_id` → `USER.user_id`
 - **Rolle:** Die Idee hat einen Like-Button, welchen die User klicken können. Ein Like von diesem User wird dieser Idee hinzugefügt.
 
 ---
+
 ### ActivityBoard
+
 ---
+
 `ACTIVITY`
 - **PK:** `activity_id`
 - **FKs:** `wg_id` → `Wg.wg_id`, `created_by` → `USER.user_id`
 - **Spalten:** `title`, `description`, `date`, `location`, `max_participants`, `created_at`, `updated_at`*
 - **Rolle:** User können Aktivitäten hinzufügen, die alle Informationen über diese Aktivität enthalten.
+
 ---
+
 `ACTIVITY_PARTICIPANTS` (Assoziationstabelle)
 - **Composite PK:** (`activity_id`, `user_id`)
 - **FKs:** `activity_id` → `ACTIVITY.activity_id`, `user_id` → `USER.user_id`
 - **Rolle:** Many-to-Many: Teilnehmer einer Activity
+
 ---
+
 `ShoppingItem`
 - **PK:** `item_id` → `WG.wg_id`, `created_by` → `USER.user_id`
 - **FKs**: wg_id → WG.wg_id, added_by → USER.user_id, assigned_to → USER.user_id
@@ -111,12 +132,15 @@ nav_order: 2
 | **USER** | IDEA_COMMENT | Ein User kann mehrere Kommentare unter eine Idee schreiben, ein Kommentar kann von einem User erstellt werden |
 | **USER** | IDEA_LIKE | Ein User kann mehrere Ideen liken, ein Like kommt von einem User |
 | **IDEA** | IDEA_LIKE | Eine Idee kann mehrere Likes haben, ein gespeichertes Like gehört einer Idee |
+
+
 ---
 ### N:M Beziehungen
 
 | Von | Zu | Beschreibung |
 | --- | --- | --- |
 | **USER** | ACTIVITY_PARTICIPANTS | Ein User kann an vielen Activities teilnehmen, vermittelt über Activity_Participants |
+
 ---
 
 
