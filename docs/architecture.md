@@ -54,7 +54,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 ### Visualisierung der Architektur
 ![AppArchitectureVisual](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-101303.png)
 
-### Tech-Stack:
+### Tech-Stack
 - **Backend:** Python, Flask
 - **Templating:** Jinja2
 - **DB/ORM:** SQLite (dev) + SQLAlchemy (später leicht auf Postgres/MySQL migrierbar)

@@ -23,7 +23,7 @@ nav_order: 4
 
 Status: **Entschieden, obsolete** 
 
-Updated: 06-02-2026
+Updated: 05-02-2026
 
 ### Problemstellung
 
@@ -91,7 +91,95 @@ Gemeinsame Daten gehören immer zu einer WG, Nutzer:innen sind Mitglieder dieser
 | Erweiterbarkeit | gering | gut |
 | Verständlichkeit | einfach | realitätsnah |
 
+---
+
+## 02: Authorization-Modell - Wer darf was?
+
+Status:**Entschieden, obsolete**
+
+**Updated:** 05.02.2026
+
+### Problemstellung
+
+In HappyWG gibt es mehrere Features (Activities, Putzplan, Ideas, Einkaufsliste), bei denen User Daten ändern oder löschen können.
+Daher müssen wir festlegen, **wer welche Aktionen** durchführen darf (z.B. löschen, Status ändern, beitreten/abmelden), wegen diesen Regeln:
+
+- die Sicherheitslogik in den Routes bestimmen (Backend),
+- die UI bestimmen (Buttons anzeigen/ausblenden),
+- und spätere Änderungen sehr teuer machen (viele Endpoints + Templates betroffen)
+
+Wie gestalten wir die Experience so, dass jedes WG-Mitglied gleichberechtigt ist und klare Aufgaben & das immaterielle Eigentum der Mitglieder nicht verletzt werden?
+
+### Entscheidung
+
+Wir nutzen ein **feature-spezifisches** Ownership-Modell:
+
+- **Activites:** Nur `created_by` darf löschen.
+- **Cleaning Tasks/Templates:** Nur die zuständige Person (`assigned_to`) darf löschen bzw. erledigen (je nach Policy)
+- **Ideas:** Nur der Ersteller (`created_by`) darf löschen; WG-Mitglieder dürfen liken/kommentieren.
+- **Allgemein:** Zugriff ist zusätzlich immer über `wg_id` begrenzt (siehe [01: Zentrales WG-basiertes Datenmodell](#01-zentrales-wg-basiertes-datenmodell))
+
+---
+
+### Betrachtete Alternativen
+
+### Option 1: Nur Owner darf alles (einheitlich)
+
+#### Vorteile 
++ Einfach zu implementieren
++ Weniger Sonderfälle in Routes & Templates
+
+#### Nachteile
++ Passt nicht zur Realität einer WG und unserer Philosophie
++ Unflexibel: "Zuständigkeit" als Konzept bringt wenig, wenn Owner alles steuert.
++ Kann zu schlechter UX führen (zuständige Person kann Aufgabe nicht als erledigt markieren, wenn sie nicht Owner ist (**!**))
+
+### Option 2: WG-weit darf jeder alles (maximal einfach, aber sehr unsicher)
+- Alle WG-Mitglieder dürfen von anderen WG-Mitgliedern alles wie z.B. löschen.
+
+#### Vorteile
++ Minimaler Implementationsaufwand: fast keine Ownership-Checks
++ Sehr schnell fürs MVP
+
+#### Nachteile
++ Unsere Philosophie ist, dass jedes WG-Mitglied gleichberechtigt sein & nicht über andere Mitglieder und deren Zuständigkeiten & Aufgaben bestimmen sollen, dies geschieht aber über diese Option.
++ **Sicherheits-/Vertrauensprobleme:** Jeder darf alles löschen/verändern: Chaos, nicht gut für eine WG.
++ Konflikte innerhalb der WG (z.B. "Wer hat mein Event gelöscht?" oder "Ich weiß nicht mehr, welche Reinigungsaufgabe ich habe!")
++ Spätere Korrektur ist teuer, da man nachträglich Checks + UI-Logik einbauen muss.
+
+### Option 3 (gewählt): Feature-spezifische Regeln (Owner vs. zuständig)
+- Wer was machen kann wird pro Feature entschieden
+
+#### Vorteile
++ Realistische Regeln pro Feature (Activites: Activity Owner, Cleaning: assigned_to; Ideas: Owner; Like/Comment: WG)
++ Bessere UX: Flash messages nach einem Button-Klick weisen den unberechtigen User drauf hin, dass er nicht berechtigt ist.
++ Gute Basis für späteres Rollenmodell (z.B. Admin als Erweiterung)
+
+#### Nachteile
++ Etwas mehr Komplexität: pro Feature andere Checks
++ Policy-Änderung würden mehrere Endpoints/Templates betreffen.
+  
+### Option 4 Rollenmodell:
+- Es gibt durch z.B. `role="admin"` (_später implementierbar_) einen Administrator, der alles verändern kann.
+
+#### Vorteile
++ Klar skalierbar: Admin kann moderieren/aufräumen.
++ Gut für Missbrauchsfälle
+
+#### Nachteile
++ Mehr Modell/UI-Aufwand (Rollenpflege, Admin-UI, Tests)
++ Für unser MVP overkill
++ Man muss trotzdem definieren, was Member dürfen (landet wieder bei Option 3 + Admin-Override)
+
+
+
+
+
+
+
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
 
 [def]: assets/images/innoboard/deleteideareference.png
+
+
