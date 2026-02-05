@@ -70,3 +70,6 @@ Da keine gravierenden Nutzungs-Probleme festgestellt wurden, sind keine struktur
 + wichtige Hinweise drirekt **anklickbar** machen, sodass man schneller zu den relevanten Einträgen oder Aktionen gelangt
 
 Diese Anpassungen sind **optionale Verbesserungen**, die die Nutzung noch intuitiver und übersichtlicher machen könnten, ohne die aktuelle Funktionsweise zu verändern.
+
+{: .fs-2 }
+Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
