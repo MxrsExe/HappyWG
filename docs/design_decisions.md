@@ -110,6 +110,8 @@ Daher müssen wir festlegen, **wer welche Aktionen** durchführen darf (z.B. lö
 
 Wie gestalten wir die Experience so, dass jedes WG-Mitglied gleichberechtigt ist und klare Aufgaben & das immaterielle Eigentum der Mitglieder nicht verletzt werden?
 
+---
+
 ### Entscheidung
 
 Wir nutzen ein **feature-spezifisches** Ownership-Modell:
@@ -171,10 +173,142 @@ Wir nutzen ein **feature-spezifisches** Ownership-Modell:
 + Für unser MVP overkill
 + Man muss trotzdem definieren, was Member dürfen (landet wieder bei Option 3 + Admin-Override)
 
+### 02: Konsequenzen
+- Backend-Routen müssen vor Änderungen immer prüfen: `current_user.wg_id` == `object.wg_id` und getroffene Ownership-Regel zum Feature.
+- Nicht zugewiesene oder unberechtige User können die Objekte anderer WG-Mitglieder nicht anfassen.
+- Spätere Einführung von Admin-Rollen möglich, erfordert aber konsistente Anpassung vieler Endpoints.
 
 
+## 03: Putzplan-Datenmodell - Cleaning Template vs. nur Cleaning Task (Plan vs. Ausführung)
 
+**Meta**
+**Status:** On Hold, relevant
+**Updated:** 05.02.2026
 
+### Problemstellung
+
+Wir wollten ursprünglich einen Putzplan abbilden, bei dem Aufgaben
+- wiederkehrend geplant werden können (z.B. _weekly_) (_nicht implementiert_)
+- einzelnen WG-Mitgliedern zugewiesen werden können
+- einen Status (open/completed) + Zeitstempel tragen,
+- **ggf.** als _späteres Feature_ Historie, Rotation oder Statistiken ermöglichen
+
+Die Frage ist: Modellieren wir das als eins oder trennen wir Vorlage (Plan) und Ausführung (Task)?
+
+### Vorläufige Entscheidung
+
+Wir trennen in:
+- `CleaningTemplate` = Plan/Vorlage (Name, Beschreibung, Frequenz, wg_id, is_active)
+- `CleaningTask` = konkrete Ausführung/Instanz (assigned_to, status, completed_at, template_id)
+
+**Grund**: Potentiell wollen wir die App privat erweitern und neue Features einfügen, die dadurch ermöglicht werden. Für andere Devs könnte diese Design-Entscheidung ebenfalls eine Hilfestellung für neue Features sein.
+
+---
+
+### Betrachtete Alternativen
+
+#### Option 1: Eine gemeinsame CleaningTask Tabelle
+- Task-Card enthält alles
+
+#### Vorteile
+- Einfacher Start: nur ein Objekt-Modell, weniger Joins
+- CRUD-Ops schneller zu bauen
+
+#### Nachteile
+- Änderungen am Plan könnten alte Einträge betreffen
+
+#### Option 2: Template + Task getrennt (chosen)
+
+#### Vorteile
+- Saubere Domänentrennung
+- Ideal für spätere Features (_geplant zu implementieren, aus Zeit- und Scopegründen nicht geschafft_)
+- Weniger Daten-Duplikation
+
+#### Nachteile
+- Mehr Joins/Relationships in Queries/Templates
+- Beim Erstellen in der App immer 2 Schritte
+- Klare Policy benötigt
+
+#### Option 3: Template + automatisch generierte Tasks (Scheduler/Cron)
+#### Vorteile
++ "Echte" Wiederkehr: systematisch jede Woche neue Tasks
++ Sehr gute Basis für Historie/Rotation (neue Features) ohne manuelles Erstellen
+
+#### Nachteile
++ Mehr Infrastruktur/Komplexität (Scheduler, Background Jobs etc.)
++ Zu viel Aufwand 
++ Fehleranfälliger
+
+---
+
+### Konsequenzen
+
+- Es ist möglich, später neue Features einfach hinzuzufügen.
+- **Queries/Joins notig:** Für die Anzeige/Filterung wird häufiger über Relationships gearbeitet (`template.tasks`, Join auf Template für wg_id Scoping)
+- Gerade ohne diese Features kein Nutzen, aber da vorher so geplant, haben wir es drin gelassen.
+
+## 04: Hard Delete vs Soft Delete (Daten löschen oder deaktivierebn)
+
+**Meta**
+
+**Status:** Entschieden, obsolet
+
+**Updated:** 05.02.2026
+
+### Problemstellung
+Bei Löschfunktionen (z.B. Idee löschen, Putzplan-Template löschen, Einkaufsitem löschen etc.) stellt sich die Frage:
+  - Sollen diese Datensätze wirklich aus der DB entfernt werden (**Hard Delete**)?
+  - Oder nur als "gelöscht/deaktiviert" markiert werden (**Soft Delete**)?
+Das beeinflusst nicht nur die Datenintegrität, sondern auch spätere Anforderungen wie History, Wiederherstellung und, insbesondere für Devs, das Debugging.
+
+---
+
+### Entscheidung
+
+Für unser jetziges MVP verwenden wir **Hard Delete** für echte Löschaktionen (z.B. `db.session.delete(...)).
+Für die Putzplan-Templates existiert zusätzlich ein **Soft-Delete** Feature `is_active`, mit dem Einträge aus der Standardansicht ausgeblendet bzw. durchgestrichen werden können.
+
+---
+
+### Betrachtete Alternativen
+
+#### Option 1: Hard Delete direkt aus der DB (chosen)
+#### Vorteile
++ Sehr simpel (einfach mit `db.session.delete(...)`)
++ Keine "gelöscht-Filter" in allen Queries nötig
++ Weniger Datenballast & Sonderlogik
+
+#### Nachteile
++ Keine Wiederherstellung der Daten möglich, da irreversibel gelöscht
++ Keine History (z.B. wer hat wann was gelöscht?)
++ Cascades können mehr löschen als erwartet (z.B. Template → Tasks), Vorsicht ist geboten
+
+#### Option 2: Soft Delete (mit Variable deleted_at)
+#### Vorteile
++ Wiederherstellen möglich (durch Archiv oder Undo)
++ History möglich
++ Besser für 1) WG: Transparenz in Gruppen, 2) Dev: Debugging
+
+#### Nachteile
++ Jede Query muss "nicht gelöscht" irgendwie filtern, wodurch mehr Fehlerquellen entstehen könnten
++ UI muss Archiv implementieren
++ Mehr Felder + mehr Tests
+
+#### Option 3: Hybrid (manche Entities soft, andere hard)
+#### Vorteile
++ Flexibilität: Man kann wichtige Daten behalten, unwichtige löschen
++ Guter Kompromiss zwischen Aufwand und Nutzen.
+
+#### Nachteile
++ Inkonsistent: Entwickler müssen pro Entity wissen, was gilt.
++ Mehr Denkaufwand + Doku nötig
++ Verwirrungsgefahr
+
+### Konsequenzen
+
+- MVP bleibt simpel
+- Spätere Anforderungen wie "Wiederherstellen" erfordern Umstellung auf Soft Delete.
+- Soft Delete bedeutet: **alle** relevanten Queries **müssen** "nur nicht gelöschte Datensätze" filtern.
 
 
 {: .fs-2 }
