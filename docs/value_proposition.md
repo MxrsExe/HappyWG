@@ -22,7 +22,8 @@ Mit einem smarten WG-Planer,Putzplänen, einem flexiblen Innovation-Board für I
 Unser Ziel ist, den Alltag in der WG spürbar zu erleichtern, Konflikte reduzieren, Verantwortungen fair zu verteilen und gleichzeitig die Gemeinschaft stärken. 
 
 ## **Goals**:
-**Susann**: Mein WG Leben leichter und angenehmer machen, Programmiererfahrung sammeln, gegebenenfalls Web App im Alltag benutzen
+**Susann**: Mein WG Leben leichter und angenehmer machen, Programmiererfahrung sammeln, gegebenenfalls Web App im Alltag benutzen.
+
 **Marcel**: Programmiererfahrung sammeln im Bereich Python und Full Stack Web Development für das Berufsleben ggf.
 
 **Als Gruppe**: Großes Ambitionslevel, regelmäßige Arbeit am Projekt, keine Prokrastion, Großteil vor Weihnachten fertig haben?
