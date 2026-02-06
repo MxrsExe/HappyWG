@@ -80,8 +80,8 @@ Stellt sicher, dass nur eingeloggte Nutzer auf bestimmte Seiten zugreifen könne
 Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 <div style="display: flex; gap: 10px;">
-    <img src="assets/images/login_register/loginreference.png" alt="login sample" width="250">
-    <img src="assets/images/login_register/erfolgreicherloginreference.png" alt="login sample" width="250">
+    <img src="assets/images/login_register/loginreference.png" alt="login sample" width="260">
+    <img src="assets/images/login_register/erfolgreicherloginreference.png" alt="login sample" width="260">
 </div>
 ---
 
@@ -136,7 +136,6 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** Erfolgsmeldung mit Einladungscode und Weiterleitung zur Join-Seite.
 
-![create_wg() sample](assets/images/wg_creation_or_join/generatecodereference.png)
 <img src="assets/images/wg_creation_or_join/generatecodereference.png" alt="create_wg sample" width="250" height= "250">
 
 ---
@@ -287,9 +286,9 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:**
 
-<img src="assets/images/activityboard/leaveactivityreference.png" alt="post_comment sample" width="250" height= "250">
+<img src="assets/images/activityboard/leaveactivityreference.png" alt="post_comment sample" width="300" height= "250">
 
-<img src="assets/images/activityboard/leftactivityreference.png" alt="post_comment sample" width="250" height= "250">
+<img src="assets/images/activityboard/leftactivityreference.png" alt="post_comment sample" width="300" height= "250">
 
 ---
 
