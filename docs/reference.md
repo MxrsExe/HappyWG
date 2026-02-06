@@ -80,8 +80,8 @@ Stellt sicher, dass nur eingeloggte Nutzer auf bestimmte Seiten zugreifen könne
 Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 <div style="display: flex; gap: 10px;">
-    <img src="assets/images/login_register/loginreference.png" alt="login sample" width="300">
-    <img src="assets/images/login_register/erfolgreicherloginreference.png" alt="login sample" width="300">
+    <img src="assets/images/login_register/loginreference.png" alt="login sample" width="250">
+    <img src="assets/images/login_register/erfolgreicherloginreference.png" alt="login sample" width="250">
 </div>
 ---
 
@@ -286,6 +286,10 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Entfernt den eingeloggten Benutzer als Teilnehmer einer Aktivität.
 
 **Sample output:**
+
+<img src="assets/images/activityboard/leaveactivityreference.png" alt="post_comment sample" width="250" height= "250">
+
+<img src="assets/images/activityboard/leftactivityreference.png" alt="post_comment sample" width="250" height= "250">
 
 ---
 
