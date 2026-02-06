@@ -276,6 +276,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 ![activity_board() sample](assets/images/activityboard/activitybeigetretenreference.png)
 
+---
+
 ### `leave_activity(activity_id)`
 
 **Route:** `/activity/<int:activity_id>/leave_activity`
