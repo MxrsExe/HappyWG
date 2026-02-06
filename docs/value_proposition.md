@@ -51,6 +51,8 @@ Danach landet der User auf dem Dashboard, welches leer ist und im Verlauf noch m
 
 Der User möchte einen Putzplan anlegen. Dazu wählt er/sie in der Navigationsleiste auf dem Dashboard den "Putzplan"-Button.
 
+---
+
 ## Putzplan
 ![PutzplanGeneral](assets/images/putzplan/putzplan_general.png)
 
@@ -76,6 +78,8 @@ Bei Erledigung aller Aufgaben (aus Demonstrationsgründen hier nur eine) wird di
 ![PutzplanCard](assets/images/putzplan/task_completed.png)
 ![PutzplanCardCompleted](assets/images/putzplan/task_completed_progressbar.png)
 
+---
+
 ## InnovationBoard
 
 Das Prinzip ist das gleiche wie im Putzplan. Man sieht ein leeres InnovationBoard, in dem man mit dem blauen Button oben rechts ("✨Neue Idee") Ideen für die WG erstellen kann.
@@ -96,6 +100,8 @@ Der User klickt auf Erstellen und bekommt seine Card mit der gewünschten Akzent
 ![InnoCardCommentscetion](assets/images/innoboard/innocard_commentsection.png)
 
 Anschließend wechselt der User auf das ActivityBoard.
+
+---
 
 ## ActivityBoard
 
@@ -139,6 +145,8 @@ Der User verlässt nun die Aktivität:
 
 Im Folgenden will der User Produkte zum Einkaufen anlegen. Dazu wechselt er/sie auf die Einkaufsliste.
 
+---
+
 ## Einkaufsliste
 
 ![EinkaufslisteEmpty](assets/images/einkaufsliste/einkaufsplan_empty.png)
@@ -158,7 +166,9 @@ Anschließend geht der User zurück auf das Dashboard und sieht die allgemeine �
 ![dashboard](assets/images/dashboard/dashboard_filled.png)
 ![WgMember](assets/images/dashboard/wg_member.png)
 
-## Kooperation in der Wohngemeinschaft
+---
+
+## Kollaboration in der Wohngemeinschaft
 
 Da ein integraler Bestandteil des WG-Lebens das Zusammenleben der WG-Mitgliedern ist, haben wir das Programm so gestaltet, dass es mehrere Mitglieder in einer WG geben kann, die zur selben Zeit verschiedene Sachen machen können. Aus Demonstrationsgründen werden im Folgenden nur die wichtigsten Features des Kollaborations-Features gezeigt.
 
@@ -179,10 +189,14 @@ Weiteres WG-Mitglied erstellt neue Putzaufgabe und sieht, wieviele Tasks noch of
 Das zweite WG-Mitglied will eine Putzaufgabe von einem weiteren WG-Mitglied löschen, was nicht möglich ist. Das geschieht ebensfalls bei dem InnovationBoard (Ideen) und ActivityBoard (Aktivitäten), dies wird aber aus Simplizitätsgründen übersprungen, da dies eine repetitive Funktion darstellt.
 ![2ndUserDeleteTask](assets/images/putzplan/danger_msg_putzplan.png)
 
+---
+
 Im **InnovationBoard** kann das 2. WG-Mitglied jetzt den Vorschlag von Mars liken und kommentieren (Klick auf "Kommentare", Dropdown), und selber einen Vorschlag posten (übersprungen, da selber Erstellprozess):
 ![InnoLikeAndComment](assets/images/innoboard/comment_like.png)
 ![InnoCommented](assets/images/innoboard/commented_inno.png)
 ![InnoFromOtherMember](assets/images/innoboard/inno_from_second_user.png)
+
+---
 
 Im **ActivityBoard** tritt das Mitglied einer Aktivität bei:
 ![activityJoined](assets/images/activityboard/ActivityJoined.png)
@@ -191,8 +205,12 @@ Im **ActivityBoard** tritt das Mitglied einer Aktivität bei:
 Es kann auch eine neue Aktivität erstellen:
 ![activityCreateNew](assets/images/activityboard/activity_new.png)
 
+---
+
 Im **Einkaufsplan** kann das weitere WG-Mitglied neue Produkte hinzufügen:
 ![ShoppingItemPlus](assets/images/einkaufsliste/newShoppingItem.png)
+
+---
 
 Am Ende kehrt das weitere WG-Mitglied auf das **Dashboard** zurück und sieht die Übersicht mit den **aktualisierten Informationen** (individuelle Aufgaben und letzte Aktivitäten)
 ![dashboardFilled2](assets/images/dashboard/dashboard2ndMember.png)

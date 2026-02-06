@@ -14,6 +14,8 @@ nav_order: 1
 
 # Goals achieved & missed
 
+---
+
 ## Goals achieved
 
 - Web-Anwendung gebaut, die einen tatsächlichen Nutzen in einer echten WG hat (siehe [User Evaluation]({{ site.baseurl }}/user_evaluation.html)).
@@ -24,6 +26,7 @@ nav_order: 1
 - "Vor Weihnachten (2025) größtenteils fertig zu werden" war eines unserer Ziele, geschafft haben wir es aber nicht.
 - Einige Features (z.B. im Putzplan Task Templates speichern und wöchentlich wiederverwenden) wurden nicht implementiert, da doch ein wenig Overkill für Projektscope & noch anderen Funktionalitäten, die noch implementiert werden sollten.
 
+---
 
 ## How we would improve next time
 
