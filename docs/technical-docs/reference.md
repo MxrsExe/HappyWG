@@ -120,7 +120,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Purpose:** Willkommensseite nach dem Login. Zeigt Option zum Erstellen oder Beitreten einer WG an. Zugriff nur für eingeloggt Nutzer erlaubt.
 
-**Sample output:** 
+**Sample output** 
 
 ![create_or_join_wg() sample]({{ site.baseurl}}/assets/images/wg_creation_or_join/wg_creation_or_join.png)
 
