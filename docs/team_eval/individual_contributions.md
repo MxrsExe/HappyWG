@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Individual Contributions
-nav_order: 6
+parent: Team Evaluation
+nav_order: 3
 ---
 
 # Individual Contributions

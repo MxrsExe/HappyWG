@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Reference
-parent: Technical Docs
+parent: Technical documentation
 nav_order: 3
 ---
 

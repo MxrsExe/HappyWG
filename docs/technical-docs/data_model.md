@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Data model
-parent: Technical Docs
+parent: Technical documentation
 nav_order: 2
 ---
 

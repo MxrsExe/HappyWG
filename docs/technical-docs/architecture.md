@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Architecture
-parent: Technical Docs
+parent: Technical documentation
 nav_order: 1
 ---
 

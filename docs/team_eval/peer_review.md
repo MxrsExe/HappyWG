@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Peer review
-parent: Personal Notes
-nav_order: 2
+parent: Team Evaluation
+nav_order: 4
 ---
 
 # Peer Review
