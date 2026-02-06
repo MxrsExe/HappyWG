@@ -49,10 +49,10 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - **Design:** Für das Design auf den Webseiten wird größtenteils Bootstrap (Klassen) genutzt. Im ActivityBoard gibt es zusätzlich custom CSS. 
 
 ### High-Level Visualisierung des allgemeinen Flows mit externen Akteuren:
-![SimpleFlow](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-094043.png)
+![SimpleFlow]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-094043.png)
 
 ### Visualisierung der Architektur
-![AppArchitectureVisual](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-101303.png)
+![AppArchitectureVisual]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-101303.png)
 
 ### Tech-Stack
 - **Backend:** Python, Flask
@@ -68,7 +68,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 ## Codemap
 
 **High-Level Codemap-Visualisierung**
-![ComponentDiagram](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-122120.png)
+![ComponentDiagram]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-122120.png)
 
 **(Routes / Controllers)`app.py`** 
 
@@ -120,7 +120,7 @@ Praktische Regel:
 -**Jede** CRUD-Operation muss sich zwangsläufig prüfen, ob das Objekt Teil der spezifischen WG ist.
 - Sollte ein Objekt indirekt zu einem anderen Objekt gehören (Bsp. `CleaningTask -> CleaningTemplate -> wg_id`), sollte man einen Join- oder Relationship-Check ausführen.
 
-![MultiTenancy](assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-134844.png)
+![MultiTenancy]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-134844.png)
 
 ### Autorisierungsmodell (wer darf was ändern?)
 
@@ -147,7 +147,7 @@ Da das N+1 Query-Problem vermieden werden soll, werden die Beziehungen "eager" g
 Bootstrap erwartet Kategorien wie `success`, `danger`, `warning`, `info`.
 Wenn im Code Kategorien wie `error` verwendet werden, sollten sie im Template auf `danger` gemappt werden, damit die Alerts korrekt rot/grün oder eine andere Farbe angezeigt werden.
 
-![FlashMsgRed](assets/images/architecture/danger_flash.png)
+![FlashMsgRed]({{ site.baseurl }}/assets/images/architecture/danger_flash.png)
 
 ### Kalender-Export (.ics)
 Activities können als `.ics` exportiert werden.
@@ -156,7 +156,7 @@ Diese ICS-Route erstellt serverseitig ein gültiges iCalendar Format und liefert
 ### CSRF-Schutz (Formulare)
 Alle `POST`-Forms müssen das CSRF-Token haben (in diesem Fall `form.hidden_tag()` [im jinja2-Template]).
 
-![hiddentag](assets/images/architecture/hiddentag.png)
+![hiddentag]({{ site.baseurl }}/assets/images/architecture/hiddentag.png)
 
 
 
