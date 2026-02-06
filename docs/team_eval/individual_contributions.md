@@ -7,7 +7,7 @@ nav_order: 3
 
 # Individual Contributions
 
-**(!)** Auskunft über die Funktionen in [Reference]({{ site.baseurl }}/reference.html).
+**(!)** Auskunft über die Funktionen in [Reference]({{ site.baseurl }}/technical-docs/reference.html).
 
 ## Marcel (github.com/MxrsExe): 
 - Host von dieser GitHub Repository (Happy WG)
