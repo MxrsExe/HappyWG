@@ -122,7 +122,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output** 
 
-![create_or_join_wg() sample]({{ site.baseurl}}/assets/images/wg_creation_or_join/wg_creation_or_join.png)
+![create_or_join_wg() sample]({{ site.baseurl}}/assets/images/wg_creation_or_join/wg_create_or_join.png)
 
 
 ---
