@@ -80,9 +80,9 @@ Stellt sicher, dass nur eingeloggte Nutzer auf bestimmte Seiten zugreifen könne
 Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 
-<img src="assets/images/login_register/loginreference.png" alt="login sample" width="400">
+<img src="{{ site.baseurl }}/assets/images/login_register/loginreference.png" alt="login sample" width="400">
 
-<img src="assets/images/login_register/erfolgreicherloginreference.png" alt="login sample" width="400">
+<img src="{{ site.baseurl }}/assets/images/login_register/erfolgreicherloginreference.png" alt="login sample" width="400">
 
 ---
 
@@ -108,7 +108,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-<img src="assets/images/login_register/registerfehlgeschlagenreference.png" alt="login sample" width="400" height= "400">
+<img src="{{ site.baseurl }}/assets/images/login_register/registerfehlgeschlagenreference.png" alt="login sample" width="400" height= "400">
 
 ---
 
@@ -122,7 +122,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![create_or_join_wg() sample](assets/images/wg_creation_or_join/wg_creation_or_join.png)
+![create_or_join_wg() sample]({{ site.baseurl }}/assets/images/wg_creation_or_join/wg_creation_or_join.png)
 
 
 ---
@@ -137,7 +137,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** Erfolgsmeldung mit Einladungscode und Weiterleitung zur Join-Seite.
 
-<img src="assets/images/wg_creation_or_join/generatecodereference.png" alt="create_wg sample" width="400" height= "400">
+<img src="{{ site.baseurl}}/assets/images/wg_creation_or_join/generatecodereference.png" alt="create_wg sample" width="400" height= "400">
 
 ---
 
@@ -151,7 +151,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** Weiterleitung zum Dashboard der WG nach erfolgreichem Beitritt.
 
-![join_wg() sample](assets/images/wg_creation_or_join/invitation_code_eingabe.png)
+![join_wg() sample]({{ site.baseurl}}/assets/images/wg_creation_or_join/invitation_code_eingabe.png)
 
 ---
 
@@ -165,7 +165,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![dashboard() sample](assets/images/dashboard/dashboardreference.png)
+![dashboard() sample]({{ site.baseurl}}/assets/images/dashboard/dashboardreference.png)
 
 ---
 
@@ -179,7 +179,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![putzplan() sample](assets/images/putzplan/putzplanreference.png)
+![putzplan() sample]{{ site.baseurl}}/assets/images/putzplan/putzplanreference.png)
 
 ---
 
@@ -205,7 +205,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![delete_cleaning_task(template_id) sample](assets/images/putzplan/deletecleaningtaskreference.png)
+![delete_cleaning_task(template_id) sample]({{ site.baseurl}}/assets/images/putzplan/deletecleaningtaskreference.png)
 
 ---
 
@@ -219,7 +219,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![innovation_board() sample](assets/images/innoboard/innovationboardreference.png)
+![innovation_board() sample]({{ site.baseurl}}/assets/images/innoboard/innovationboardreference.png)
 
 ---
 
@@ -233,7 +233,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![delete_idea(idea_id) sample](assets/images/innoboard/deleteideareference.png)
+![delete_idea(idea_id) sample]({{ site.baseurl}}/assets/images/innoboard/deleteideareference.png)
 
 ---
 
@@ -247,7 +247,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-<img src="assets/images/innoboard/commentideareference.png" alt="post_comment sample" width="400" height= "400">
+<img src="{{ site.baseurl}}/assets/images/innoboard/commentideareference.png" alt="post_comment sample" width="400" height= "400">
 
 ---
 
@@ -261,7 +261,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![activity_board() sample](assets/images/activityboard/activityreference.png)
+![activity_board() sample]({{ site.baseurl}}/assets/images/activityboard/activityreference.png)
 
 ---
 
@@ -275,7 +275,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![activity_board() sample](assets/images/activityboard/activitybeigetretenreference.png)
+![activity_board() sample]({{ site.baseurl}}/assets/images/activityboard/activitybeigetretenreference.png)
 
 ---
 
@@ -289,9 +289,9 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:**
 
-<img src="assets/images/activityboard/leaveactivityreference.png" alt="post_comment sample" width="400">
+<img src="{{ site.baseurl}}/assets/images/activityboard/leaveactivityreference.png" alt="post_comment sample" width="400">
 
-<img src="assets/images/activityboard/leftactivityreference.png" alt="post_comment sample" width="400">
+<img src="{{ site.baseurl}}/assets/images/activityboard/leftactivityreference.png" alt="post_comment sample" width="400">
 
 ---
 
@@ -305,7 +305,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![activity_board() sample](assets/images/activityboard/activityloeschenreference.png)
+![activity_board() sample]({{ site.baseurl}}/assets/images/activityboard/activityloeschenreference.png)
 
 ---
 
@@ -319,7 +319,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![einkaufsplan() sample](assets/images/putzplan/einkaufslistereference.png)
+![einkaufsplan() sample]({{ site.baseurl}}/assets/images/putzplan/einkaufslistereference.png)
 
 ---
 
@@ -333,7 +333,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![delete_shopping_item(item_id) sample](assets/images/putzplan/artikelgeloeschtreference.png)
+![delete_shopping_item(item_id) sample]({{ site.baseurl}}/assets/images/putzplan/artikelgeloeschtreference.png)
 
 ---
 
@@ -363,7 +363,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![export_wg_json() sample](assets/images/dashboard/jsondateireference.png)
+![export_wg_json() sample]({{ site.baseurl}}/assets/images/dashboard/jsondateireference.png)
 
 ---
 
@@ -390,4 +390,4 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
 
-[def]: assets/images/innoboard/deleteideareference.png
+[def]: {{ site.baseurl}}/assets/images/innoboard/deleteideareference.png
