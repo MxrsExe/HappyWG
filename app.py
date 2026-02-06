@@ -1,11 +1,10 @@
-from os import name
+
 from random import random
 from sqlite3 import IntegrityError
 import string
-from tempfile import template
-from flask import Flask, current_app, flash, jsonify, redirect, render_template,request, url_for,session, Response, abort
+from flask import Flask, flash, jsonify, redirect, render_template,request, url_for,session, Response, abort
 from datetime import timezone
-from sqlalchemy import func, text
+from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 import random
 from datetime import datetime
@@ -35,10 +34,6 @@ def current_user():
     return User.query.get(uid) if uid else None
 
 
-@app.shell_context_processor
-def make_shell_context():
-    return {'db': db, 'User': User}
-
 @app.cli.command()
 def init_db():
     """Initialize the database."""
@@ -50,9 +45,9 @@ def init_db():
 
 def index():
 
-    if request.method == 'POST':
-        return "This is a POST request"
-    return "Hello, World! Get Request Received"
+    if "user_id" in session:
+        return redirect(url_for("dashboard"))
+    return redirect(url_for("login"))
 
 def generate_unique_code(length=6):
     while True:
