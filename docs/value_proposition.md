@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Value Proposition
-nav_order: 2
+nav_order: 1
 ---
 
 <details open markdown="block">
