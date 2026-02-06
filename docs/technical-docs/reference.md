@@ -395,13 +395,17 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output: - (siehe PutzplanForm)**
 
+---
 
 ### `class LoginForm(FlaskForm)`
 
 **Purpose:** Definiert das Login-Formular (Benutzername + Passwort) inklusive Validierung (Pflichtfelder, Längenbegrenzung). Dient als zentrale Eingabeschicht für die Login-Route, bevor Credentials in der Datenbank geprüft werden.
 
 **Sample output:** 
+
 ![LoginForm]({{ site.baseurl }}/assets/images/login_register/loginForm.png)
+
+---
 
 ### `class RegisterForm(FlaskForm)`
 
@@ -410,12 +414,16 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Sample output:** 
 ![RegisterForm]({{ site.baseurl }}/assets/images/login_register/registerForm.png)
 
+---
+
 ### `class PutzplanForm(FlaskForm)`
 
 **Purpose:** Formular zum Erstellen einer neuen Putzaufgabe. Validiert Aufgabe, zuständige Person und Datumsbereich. Nutzt UserExistsValidator, damit "Zuständig" nur ein existierender User sein kann (und dadurch keine ungültigen Zuweisungen entstehen).
 
 **Sample output:**
 ![onlyWgMemberTaskForm]({{ site.baseurl }}/assets/images/putzplan/flaskForm_onlyWGmember.png)
+
+---
 
 ### `class InnovationForm(FlaskForm)`
 
@@ -424,12 +432,16 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Sample output:**
 ![InnovationForm]({{ site.baseurl }}/assets/images/innoboard/innoForm.png)
 
+---
+
 ### `class CommentForm(FlaskForm)`
 
 **Purpose:** Formular zum Posten von Kommentaren auf Ideen. Sichert ab, dass Kommentare nicht leer sind und eine maximale Länge nicht überschreiten. Dadurch bleiben Inhalte strukturiert und UI/Layout stabil.
 
 **Sample output:**
 ![CommentForm]({{ site.baseurl }}/assets/images/innoboard/commentForm.png)
+
+---
 
 ### `class ActivityForm(FlaskForm)`
 
@@ -438,12 +450,15 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Sample output:**
 ![ActivityForm]({{ site.baseurl }}/assets/images/activityboard/activityForm.png)
 
+---
+
 ### `class EinkaufsplanForm(FlaskForm)`
 
 **Purpose:** Formular zum Hinzufügen von Einkaufsartikeln mit Artikelname und Menge. Validiert Pflichtfelder und Längenbereich, damit Einträge konsistent sind und nicht leer/zu lang werden.
 
 **Sample output:**
 ![EinkaufsplanForm]({{ site.baseurl }}/assets/images/einkaufsliste/einkaufsplanForm.png)
+
 
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
