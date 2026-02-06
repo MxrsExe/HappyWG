@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Design Decisions
-parent: Technical Docs
+parent: Technical documentation
 nav_order: 4
 ---
 
