@@ -6,6 +6,8 @@ nav_order: 6
 
 # Individual Contributions
 
+**(!)** Auskunft über die Funktionen in [Reference]({{ site.baseurl }}/reference.html).
+
 ## Marcel (github.com/MxrsExe): 
 - Host von dieser GitHub Repository (Happy WG)
 - Putzplan
