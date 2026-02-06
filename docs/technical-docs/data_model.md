@@ -18,7 +18,7 @@ nav_order: 2
 ---
 
 ## Das Data Model von Happy WG, Stand 05.02.2025
-![DataModel](/docs/assets/images/data_model.png)
+![DataModel]({{ site.baseurl }}/assets/images/data_model.png)
 
 ---
 
