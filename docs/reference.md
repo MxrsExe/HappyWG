@@ -46,7 +46,7 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 
 **Sample output:** String (z.B. A9F3KQ)
 
-![generate_uniquie_code(length=6) sample](assets/images/wg_creation_or_join/generatecodereference.png)
+<img src="assets/images/wg_creation_or_join/generatecodereference.png" alt="generate_unique_code sample" width="250" height= "250">
 
 ---
 
@@ -79,10 +79,10 @@ Stellt sicher, dass nur eingeloggte Nutzer auf bestimmte Seiten zugreifen könne
 **Sample output:** Erfolgreicher Login -> Weiterleitung zur Willkommensseite. 
 Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
-![login() sample](assets/images/login_register/loginreference.png)
-![login() sample](assets/images/putzplan/erfolgreicherloginreference.png)
-
-
+<div style="display: flex; gap: 10px;">
+    <img src="assets/images/login_register/loginreference.png" alt="login sample" width="250" height= "250">
+    <img src="assets/images/login_register/erfolgreicherloginreference.png" alt="login sample" width="250" height= "250">
+</div>
 ---
 
 ### `logout()`
@@ -107,8 +107,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** 
 
-![register() sample](assets/images/login_register/registerfehlgeschlagenreference.png)
-
+<img src="assets/images/login_register/registerfehlgeschlagenreference.png" alt="login sample" width="250" height= "250">
 
 ---
 
@@ -138,6 +137,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Sample output:** Erfolgsmeldung mit Einladungscode und Weiterleitung zur Join-Seite.
 
 ![create_wg() sample](assets/images/wg_creation_or_join/generatecodereference.png)
+<img src="assets/images/wg_creation_or_join/generatecodereference.png" alt="create_wg sample" width="250" height= "250">
 
 ---
 
