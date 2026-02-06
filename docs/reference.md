@@ -46,6 +46,8 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 
 **Sample output:** String (z.B. A9F3KQ)
 
+![generate_uniquie_code(length=6) sample](assets/images/wg_creation_or_join/generatecodereference.png)
+
 ---
 
 ### `login_required(f)`
@@ -55,7 +57,7 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 **Methods:** -
 
 **Purpose:** Decorator-Funktion zum Schutz von Routen.
-Stellt sicher, dass nur eingeloggt Nutzer auf bestimmte Seiten zugreifen können. Falls kein Nutzer eingeloggt ist, erfolgt eine Weiterleitung zur Login-Seite.
+Stellt sicher, dass nur eingeloggte Nutzer auf bestimmte Seiten zugreifen können. Falls kein Nutzer eingeloggt ist, erfolgt eine Weiterleitung zur Login-Seite.
 
 **Sample output:** Weiterleitung zu Login-Seite oder Ausführung der geschützten Route.
 
@@ -77,6 +79,10 @@ Stellt sicher, dass nur eingeloggt Nutzer auf bestimmte Seiten zugreifen können
 **Sample output:** Erfolgreicher Login -> Weiterleitung zur Willkommensseite. 
 Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
+![login() sample](assets/images/login_register/loginreference.png)
+![login() sample](assets/images/putzplan/erfolgreicherloginreference.png)
+
+
 ---
 
 ### `logout()`
@@ -97,9 +103,12 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Methods:** `GET`, `POST`
 
-**Purpose:** Registriert einen neuen Benutzer. Das Passwort wird gehasht in der Datenbank gespeichert. Nach erfolgreicher Registrierung wird der Benutzer automatisch eingeloggt.
+**Purpose:** Registriert einen neuen Benutzer. Das Passwort wird gehasht in der Datenbank gespeichert. Nach erfolgreicher Registrierung wird der Benutzer automatisch eingeloggt. Wenn der Nutzer bereits existiert oder Passwörter nicht übereinstimmen bekommt er eine Fehlermeldung.
 
-**Sample output:** Weiterleitung zur Willkommensseite mit Erfolgsmeldung.
+**Sample output:** 
+
+![register() sample](assets/images/login_register/registerfehlgeschlagenreference.png)
+
 
 ---
 
@@ -111,7 +120,10 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Purpose:** Willkommensseite nach dem Login. Zeigt Option zum Erstellen oder Beitreten einer WG an. Zugriff nur für eingeloggt Nutzer erlaubt.
 
-**Sample output:** Gerendertes Welcome-Template.
+**Sample output:** 
+
+![create_or_join_wg() sample](assets/images/wg_creation_or_join/wg_creation_or_join.png)
+
 
 ---
 
@@ -125,6 +137,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** Erfolgsmeldung mit Einladungscode und Weiterleitung zur Join-Seite.
 
+![create_wg() sample](assets/images/wg_creation_or_join/generatecodereference.png)
+
 ---
 
 ### `join_wg()`
@@ -137,6 +151,8 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Sample output:** Weiterleitung zum Dashboard der WG nach erfolgreichem Beitritt.
 
+![join_wg() sample](assets/images/wg_creation_or_join/invitation_code_eingabe.png)
+
 ---
 
 ### `dashboard()`
@@ -147,7 +163,9 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Purpose:** Zentrale Übersichtsseite der WG. Zeigt Statistiken, offene Aufgaben, Einkaufsliste, kommende Events, letzte Aktivitäten sowie alle WG-Mitglieder an. Alle Daten werden anhand der wg_id gefiltert, um Mandantentrennungsicherzustellen.
 
-**Sample output:** Gerendertes Dashboard mit personalisierten WG-Daten.
+**Sample output:** 
+
+![dashboard() sample](assets/images/dashboard/dashboardreference.png)
 
 ---
 
@@ -313,7 +331,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Methods:** `POST`
 
-**Purpose:** Erstellt eine ICS-Datei für eine Aktivität, die ein externe Kalender (z.B. Google Calendar) importiert werden kann.
+**Purpose:** Erstellt eine ICS-Datei für eine Aktivität, die in einen externen Kalender (z.B. Google Calendar) importiert werden kann.
 
 **Sample output:** Download einer `.ics`-Datei.
 
