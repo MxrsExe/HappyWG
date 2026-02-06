@@ -40,7 +40,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
   Models bilden Tabellen/Beziehungen ab, Queries werden als Python-Objekte formuliert.
 - **ORM-Instanzierung & Persistenz:** Anschließend zu **SQLAlchemy ORM:** beispielhafte Erstellung der Objekt-Instanzen durch `new_activity = Activity(...)`, dann `db.session.commit()`.
 - **Performance/Eager Loading:** Beispielsweise `.options(joinedload(Activity.creator), joinedload(Activity.participants))` → vermeidet [N+1](https://www.stefan-goebel.com/2018/was-ist-das-n1-query-problem/) Queries im Template (alle Daten werden mittels einer einzigen Query geladen).
-- **Multi-Tenancy (WG-Scoping) über `wg_id` [kritische Designentscheidung]({{ site.baseurl }}/design_decisions.html):**  
+- **Multi-Tenancy (WG-Scoping) über `wg_id` [(kritische Designentscheidung)]({{ site.baseurl }}/design_decisions.html):**  
   Alle relevanten Datenobjekte hängen an einer WG; **jede** Query/Änderung wird auf `current_user.wg_id` begrenzt → verhindert Cross-WG Datenzugriffe.
 - **Session-basierte Authentifizierung:** 
   Nach Login wird `session["user_id"]` gesetzt; ein `login_required` Decorator schützt Routes.
