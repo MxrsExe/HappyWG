@@ -1,7 +1,6 @@
 ---
 layout: default
-title: Design Decisions
-parent: Technical Docs
+title: User Evaluation
 nav_order: 4
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Goals achieved & missed
-parent: Personal Notes
+parent: Team Evaluation
 nav_order: 1
 ---
 
