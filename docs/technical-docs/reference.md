@@ -46,7 +46,7 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 
 **Sample output:** String (z.B. A9F3KQ)
 
-<img src="assets/images/wg_creation_or_join/generatecodereference.png" alt="generate_unique_code sample" width="400" height= "400">
+<img src="{{ site.baseurl }}/assets/images/wg_creation_or_join/generatecodereference.png" alt="generate_unique_code sample" width="400" height= "400">
 
 ---
 
