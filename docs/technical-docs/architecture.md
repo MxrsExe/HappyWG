@@ -57,7 +57,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 ### Tech-Stack
 - **Backend:** Python, Flask
 - **Templating:** Jinja2
-- **DB/ORM:** SQLite (dev) + SQLAlchemy (später leicht auf Postgres/MySQL migrierbar)
+- **DB/ORM:** SQLite (dev) + SQLAlchemy 
 - **Forms/Validation:** Flask-WTF / WTForms
 - **UI:** Bootstrap (CSS), no-JS Interaktionen (POST + Redirect)
 - **Kalenderexport:** iCalendar (.ics)
