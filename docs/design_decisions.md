@@ -215,7 +215,7 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 
 ### Betrachtete Alternativen
 
-#### Option 1: Eine gemeinsame CleaningTask Tabelle
+### Option 1: Eine gemeinsame CleaningTask Tabelle
 Task-Card enthält alle Informationen und Buttons/Checkboxes.
 
 #### Vorteile

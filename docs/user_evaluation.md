@@ -31,7 +31,7 @@ Konkret wollten wir folgende Fragen beantworten:
 
 ### Methode
 
-Die Evaluation haben wir unter anderem mit den **zwei Mitbewohnerinnen von Susann Pietzuch** durchgeführt, die hatten waren natürlich **nicht an der Umsetzung des Projekt beteiligt** und kannten die App vorher nicht.
+Die Evaluation haben wir unter anderem mit den **zwei Mitbewohnerinnen von Susann Pietzuch** durchgeführt, die **nicht an der Umsetzung des Projekt beteiligt** waren und die App vorher nicht kannten.
 
 Vorgehen:
 1. Den Testpersonen wurde kurz erklärt, dass es sich um eine Web-App zur Organisaiton einer WG handelt.
@@ -40,10 +40,10 @@ Vorgehen:
 + Erstellen einer WG bzw. Beitritt zu einer bestehenden WG über einen Einladungscode
 + Navigation zum Dashboard
 + Ausführen einzelner Aktionen wie das Hinzufügen eines Einkaufsitems oder das Anlegen einer Aktivität
-3. Während der Nutzung haben wir beobachtet,
+1. Während der Nutzung haben wir beobachtet,
 + ob Fragen aufkamen,
 + an welchen Stellen Unsicherheiten oder Missverständnisse entstanden.
-4. Nach der Nutzung gaben die Testpersonen ein kurzes mündliches Feedback zur Bedienbarkeit und Verständlichkeit.
+1. Nach der Nutzung gaben die Testpersonen ein kurzes mündliches Feedback zur Bedienbarkeit und Verständlichkeit.
 
 ---
 
@@ -62,12 +62,12 @@ Insgesamt waren beide Testpersonen mit der App zufrieden und empfanden sie als a
 
 ### Konsequenzen
 
-Die Evaluation bestätig, dass die grundlegenden Design- und Architekturentscheidungen sinnvoll gewählt wurden und die App ihre Kernziel erfüllt.
+Die Evaluation bestätigt, dass die grundlegenden Design- und Architekturentscheidungen sinnvoll gewählt wurden und die App ihre Kernziele erfüllt.
 
-Da keine gravierenden Nutzungs-Probleme festgestellt wurden, sind keine strukturellen Änderungen an der Anwendung notwendig. Für zukünftige Weiterentwicklungen ergeben sich jedoch kleinere Verbesserungspotenziale:
+Da keine gravierenden Nutzungs-Probleme festgestellt wurden, sind keine strukturellen Änderungen an der Anwendung notwendig. Für zukünftige Weiterentwicklungen ergeben sich aus der Evaluation jedoch noch kleinere Verbesserungspotenziale:
 
-+ visuelle Hervorhebung besonderes wichtiger Informationen im Dashboard, z.B. durch Frabkodierung
-+ wichtige Hinweise drirekt **anklickbar** machen, sodass man schneller zu den relevanten Einträgen oder Aktionen gelangt
++ visuelle Hervorhebung besonderes wichtiger Informationen im Dashboard, z.B. durch Farbkodierung
++ wichtige Hinweise direkt **anklickbar** machen, sodass man schneller zu den relevanten Einträgen oder Aktionen gelangt
 
 Diese Anpassungen sind **optionale Verbesserungen**, die die Nutzung noch intuitiver und übersichtlicher machen könnten, ohne die aktuelle Funktionsweise zu verändern.
 
