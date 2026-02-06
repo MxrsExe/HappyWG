@@ -401,7 +401,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Definiert das Login-Formular (Benutzername + Passwort) inklusive Validierung (Pflichtfelder, Längenbegrenzung). Dient als zentrale Eingabeschicht für die Login-Route, bevor Credentials in der Datenbank geprüft werden.
 
 **Sample output:** 
-![LoginForm]({{ site.baseurl }}/assets/login_register/loginForm.png)
+![LoginForm]({{ site.baseurl }}/assets/images/login_register/loginForm.png)
 
 ### `class RegisterForm(FlaskForm)`
 
@@ -415,7 +415,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Purpose:** Formular zum Erstellen einer neuen Putzaufgabe. Validiert Aufgabe, zuständige Person und Datumsbereich. Nutzt UserExistsValidator, damit "Zuständig" nur ein existierender User sein kann (und dadurch keine ungültigen Zuweisungen entstehen).
 
 **Sample output:**
-![onlyWgMemberTaskForm]({{ site.baseurl }}/assets/putzplan/flaskForm_onlyWGmember.png)
+![onlyWgMemberTaskForm]({{ site.baseurl }}/assets/images/putzplan/flaskForm_onlyWGmember.png)
 
 ### `class InnovationForm(FlaskForm)`
 
