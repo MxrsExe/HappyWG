@@ -249,11 +249,13 @@ Task-Card enthält alle Informationen und Buttons/Checkboxes.
 
 ---
 
-### Konsequenzen
+### 03: Konsequenzen
 
 - Es ist möglich, später neue Features einfach hinzuzufügen.
 - **Queries/Joins notig:** Für die Anzeige/Filterung wird häufiger über Relationships gearbeitet (`template.tasks`, Join auf Template für wg_id Scoping)
 - Gerade ohne diese Features kein Nutzen, aber da vorher so geplant, haben wir es drin gelassen.
+
+---
 
 ## 04: Hard Delete vs Soft Delete (Daten löschen oder deaktivierebn)
 
@@ -316,7 +318,7 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 
 ---
 
-### Konsequenzen
+### 04: Konsequenzen
 
 - MVP bleibt simpel
 - Spätere Anforderungen wie "Wiederherstellen" erfordern Umstellung auf Soft Delete.
@@ -388,7 +390,7 @@ z.B. `ActivityParticipant`
 
 ---
 
-### Konsequenzen
+### 05: Konsequenzen
 
 - Saubere Logik
 - Kein doppeltes Beitreten derselben Activity

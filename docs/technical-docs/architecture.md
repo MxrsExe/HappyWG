@@ -58,7 +58,6 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - **Backend:** Python, Flask
 - **Templating:** Jinja2
 - **DB/ORM:** SQLite (dev) + SQLAlchemy (später leicht auf Postgres/MySQL migrierbar)
-- **Migrations:** Flask-Migrate (Alembic)
 - **Forms/Validation:** Flask-WTF / WTForms
 - **UI:** Bootstrap (CSS), no-JS Interaktionen (POST + Redirect)
 - **Kalenderexport:** iCalendar (.ics)
@@ -123,6 +122,8 @@ Praktische Regel:
 ![MultiTenancy]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-134844.png)
 
 ### Autorisierungsmodell (wer darf was ändern?)
+
+Dies stellt eine [Designentscheidung]({{ site.baseurl }}/design_decisions.html#02-authorization-modell) dar.
 
 Verschiedene Features haben unterschiedliche Ownership-Regeln:
 - **Activities:** In der Regel darf nur created_by (Ersteller) eine Aktivität löschen.
