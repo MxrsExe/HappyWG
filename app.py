@@ -1,4 +1,8 @@
 
+
+"""FÜR DIE QUELLEN: Alle Quellen sind möglichst genau im Code als Kommentar (#) angegeben und durch "#--------" getrennt. 
+Für weitere Informationen zu den Quellen bzw. LLM-Prompts, siehe jeweiligen PDFs."""
+
 from random import random
 from sqlite3 import IntegrityError
 import string
@@ -16,7 +20,7 @@ from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Ide
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm, RegisterForm, LoginForm
-    
+
 
 app = Flask(__name__)
 #session
@@ -330,7 +334,7 @@ def putzplan():
 
                 flash("Eintrag erfolgreich erstellt!", "success")
                 return redirect(url_for("putzplan"))
-
+    #Quellen: Autocomplete in VS Code, Debug + Vervollständigung mit ChatGPT, inbesondere alles nach "filter_by()"
     putzplan_eintraege = (CleaningTemplate.query
                           .filter_by(wg_id=user.wg_id, is_active=True)  #Filtern nach wg_id und is_active = True, damit nur aktive Einträge direkt angezeigt werden (standard)
                           .order_by(CleaningTemplate.template_id.desc()) #Sortieren nach template_id absteigend
@@ -341,6 +345,8 @@ def putzplan():
              .filter(CleaningTemplate.wg_id == user.wg_id)  # Filtern nach wg_id
              .all())    #Alle Tasks holen
     
+    #---------------------------------------------------------------------------
+    #Quellen: ChatGPT (Prompt: HTML-Skript für Fortschrittsbalken)
     #Berechnung des Fortschritts
     total_tasks = len(tasks)
     #Anzahl der abgeschlossenen Tasks berechnen
@@ -348,17 +354,20 @@ def putzplan():
     #Fortschritt in Prozent berechnen, wenn keine gibt, dann 0% und Progressbar bleibt leer
     progress = int((completed_tasks / total_tasks) * 100) if total_tasks else 0
 
+    #---------------------------------------------------------------------------
+
     return render_template(
         "putzplan.html",
         form=form,
         all_users=all_users,
         putzplan=putzplan_eintraege,
+        #Quellen für die unteren 3 Variablen: ChatGPT(Prompt: HTML-Skript für Fortschrittsbalken)
         total_tasks=total_tasks,
         completed_tasks=completed_tasks,
-        progress=progress
+        progress=progress 
     )
 
-
+#-----------------------------------------------------------------------------
 @app.route("/putzplan/task/<int:task_id>/toggle", methods=["POST"])
 @login_required
 def toggle_cleaning_task(task_id):
