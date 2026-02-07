@@ -282,22 +282,25 @@ def putzplan():
         return redirect(url_for("login"))
 
     form = PutzplanForm() 
+#--------------------------------------------------------------------------------------------------------------
     #Alle WG-Mitglieder laden für das Dropdown im Formular (Zuständigkeit auswählen im Modal)
     #Quellen: ChatGPT (Prompt: Bugfix AttributeError 'NoneType' object has no attribute 'wg_id')
     all_users = User.query.filter_by(wg_id=user.wg_id).all()
-
+#--------------------------------------------------------------------------------------------------------------
     #POST: Neue Putzplan-Aufgabe erstellen
     if request.method == "POST":
         if form.validate_on_submit():
+        #--------------------------------------------------------------------------------------------------------------
             #Quellen: ChatGPT (Prompt/Debug: validate_on_submit False)
             zustaendig_name = request.form.get("zustaendig", "").strip() #Name des zuständigen WG-Mitglieds aus dem Formular holen
-
+        #--------------------------------------------------------------------------------------------------------------
             #Zuständigen User aus der DB laden (nur aus derselben WG!)
             #Quellen: ChatGPT (Prompt: "Zuständig kommt aus einem datalist-input – wie finde ich den User dazu")
             assigned_user = User.query.filter_by(
                 wg_id=user.wg_id,
                 username=zustaendig_name
             ).first()
+        #--------------------------------------------------------------------------------------------------------------
 
             #Fehlermeldung, falls der User nicht existiert (sollte nicht passieren, da aus Dropdown gewählt wird)
             #Quellen: ChatGPT (Prompt: wieso packt er nicht die aufgabe auf die seite, die ich erstellt habe)
@@ -308,7 +311,8 @@ def putzplan():
 
             else:
                 #Isocalendar & Umrechnung: https://docs.python.org/3/library/datetime.html
-                kw = form.von_datum.data.isocalendar().week  #Kalenderwoche aus dem von_datum-Feld holen
+                #Kalenderwoche aus dem von_datum-Feld holen
+                kw = form.von_datum.data.isocalendar().week  
                 #Template erstellen (Plan/Zeitraum), zum Lernen
                 #Quellen: ChatGPT (Prompt: (1) "wieso packt er nicht die aufgabe auf die seite, die ich erstellt habe")
                 """Man musste natürlich eine Instanz der Klasse erstellen, damit die init-Methode ausgeführt wird und die template_id generiert wird,
@@ -322,11 +326,12 @@ def putzplan():
                     is_active=True
                 )
                 db.session.add(new_template)
-
+            #--------------------------------------------------------------------------------------------------------------
                 #flush() = vorübergehendes Speichern, aber noch kein Commit
                 #Quellen: ChatGPT (Prompt-Kontext: Template + Task erstellen; Hinweis zu flush())
                 db.session.flush() #Damit new_template.template_id verfügbar ist, bevor commit() aufgerufen wird (für Task)
 
+            #--------------------------------------------------------------------------------------------------------------
                 #Neuen Task erstellen mithilfe von der soeben erstellten Vorlage
                 #Quellen: ChatGPT (Prompt: (2) "wieso packt er nicht die aufgabe auf die seite, die ich erstellt habe")
                 #-> Task speichern (Zuständig = assigned_to)
@@ -391,6 +396,7 @@ def toggle_cleaning_task(task_id):
     if task.template.wg_id != user.wg_id:
         abort(404)
 
+    #--------------------------------------------------------------------------------------------------------------
     #Quellen: ChatGPT (Prompt: warum zeigt er mir completed_at nicht an?)
     #-> completed_at beim Toggle setzen (completed -> datetime.now, open -> None)
     #Status umschalten
@@ -400,7 +406,7 @@ def toggle_cleaning_task(task_id):
     else:
         task.status = "completed"
         task.completed_at = datetime.now()
-
+    #--------------------------------------------------------------------------------------------------------------
     #Speichern in der DB
     db.session.commit()
     return redirect(url_for("putzplan"))
@@ -473,6 +479,8 @@ def innovation_board():
                 return redirect(url_for("innovation_board"))
         else:
             flash("Fehler beim Einreichen der Innovation. Bitte überprüfen Sie die Eingaben.", "danger")
+
+    #----------------------------------------------------------------------------------------------------------------------
     #Ideen anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, joinedload(...) für weniger Queries und richtiges Laden der Relationen
     #Quelle: ChatGPT-Verlauf (Query mit joinedload für Creator + optional Comments->User)
     ideas = (Idea.query
@@ -480,7 +488,7 @@ def innovation_board():
              .options(joinedload(Idea.creator)) 
              .order_by(Idea.created_at.desc())
              .all())
-    
+    #---------------------------------------------------------------------------------------------------------------------
     return render_template("innovationboard.html", form=form, all_users=all_users,ideas=ideas, comment_form=CommentForm())
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -490,6 +498,7 @@ def innovation_board():
 @login_required
 def delete_idea(idea_id):
 
+    #--------------------------------------------------------------------------------------------------------------
     #aktuellen User laden und konkrete Idee laden, prüfen ob der User der Ersteller der Idee ist, wenn nicht -> 403 und Flashmeldung
     #Bezug auf creator: Beziehung in Idea Model
     #Quelle: ChatGPT-Verlauf (Delete-Route, Owner-Check: "optional: nur Ersteller darf löschen")
@@ -505,6 +514,7 @@ def delete_idea(idea_id):
         flash("Sie können nur Ihre eigenen Ideen löschen.", "danger")
         return redirect(url_for("innovation_board"))
     
+    #--------------------------------------------------------------------------------------------------------------
     #Idee löschen
     db.session.delete(idea) 
     db.session.commit()
@@ -516,7 +526,6 @@ def delete_idea(idea_id):
 @login_required
 def toggle_like(idea_id):
 
-
     #User_id holen und Guard-Klausel: Sicherstellen, dass der User eingeloggt ist
     user_id = int(session["user_id"])  
     #Überprüfen, ob der User die Idee bereits geliked hat
@@ -526,6 +535,7 @@ def toggle_like(idea_id):
     if idea.wg_id != user.wg_id:
         abort(404)
 
+    #-------------------------------------------------------------------------------------------------------------------------------------
     #Quelle: ChatGPT-Verlauf (Prompt: "ich würde gerne auch likes hinzufügen, wie geht das?" -> Toggle-Route + Logik)
     #Standard-Toggle: existiert -> unlike, sonst like, plus IntegrityError rollback
     #Wenn ja, Like entfernen, sonst Like hinzufügen
@@ -540,14 +550,17 @@ def toggle_like(idea_id):
     except IntegrityError:
         db.session.rollback()
 
+    #--------------------------------------------------------------------------------------------------------------
+
     return redirect(url_for("innovation_board"))
 
 #Post route, da das Formular data ändert (neuer Kommentar erstellen)
 @app.route("/ideas/<int:idea_id>/comment", methods=["POST"])
 @login_required
 def post_comment(idea_id):
-    
-    #Quelle: ChatGPT-Verlauf (Umstieg auf echtes WTForms CommentForm + validate_on_submit + form.content.data)
+
+    #--------------------------------------------------------------------------------------------------------------
+    #Quellen: ChatGPT-Verlauf+ Autocomplete zu Anfang (Umstieg auf echtes WTForms CommentForm + validate_on_submit + form.content.data)
     user_id = int(session["user_id"])
     user = User.query.get(user_id)
     idea = Idea.query.get_or_404(idea_id)
@@ -624,6 +637,7 @@ def activity_board():
         .options(joinedload(Activity.creator), joinedload(Activity.participants))
         .order_by(Activity.created_at.desc())
         .all())
+    
     #----------------------------------------------------------------------------------------------------------------
     #Rendern der Seite mit Formular und Aktivitäten
     return render_template(
@@ -649,11 +663,12 @@ def join_activity(activity_id):
         abort(404)
 
     #----------------------------------------------------------------------------------------------------------------
-    # Prüfen, ob der User bereits Teilnehmer ist, damit er/sie nicht doppelt beitreten kann
+    #Prüfen, ob der User bereits Teilnehmer ist, damit er/sie nicht doppelt beitreten kann
     #Quellen: ChatGPT (Prompt: "ich sehe die user nicht, die beigetreten sind")
     if user in activity.participants:
         flash("Du nimmst bereits teil.", "danger")
         return redirect(url_for("activity_board"))
+    
     #----------------------------------------------------------------------------------------------------------------
     #Prüfen, ob die maximale Teilnehmerzahl erreicht ist, len(activity.participants) gibt die aktuelle Anzahl der Teilnehmer zurück
     #Quellen: ChatGPT (Prompt: "wie würde ich rangehen, wenn ich ein optionales maximale teilnehmer zahl feld einfügen möchte")
