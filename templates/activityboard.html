@@ -46,6 +46,7 @@
       <br>
       <p class="activity-desc mb-2">{{ activity.description }}</p>
       <br>
+      <!------------------------------------------------------------------------------------------------------->
       <!-- Quellen: Eigene Überlegungen mit Autocomplete, dann ChatGPT-Hilfe (Prompts:
            - "wie zeige ich hier richtige alle namen der activity participants an"
            - "ich sehe die user nicht, die beigetreten sind"
@@ -66,7 +67,7 @@
             {% endif %}
           </small>
         </div>
-      
+      <!--------------------------------------------------------------------------------------------------------->
       <small class="text-muted" style = "margin-bottom: 10px;">📅 {{ activity.date.strftime('%d.%m.%Y %H:%M') }} bis {{ activity.date_to.strftime('%d.%m.%Y %H:%M') }}</small>
       {% if activity.location %}
         <br>
@@ -76,11 +77,13 @@
 
       <small class="text-muted" style="margin-top: 20px; margin-bottom: 5px;">Gepostet von {{ activity.creator.username }} am {{ activity.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
       <br>
-      <!--Quelle: ChatGPT (Prompt: "als ich leave eingefügt habe, rendern die buttons nicht mehr richtig. wie fixe ich das?")-->
+      <!----------------------------------------------------------------------------------------------------------------------------------->
+      <!--Quelle: ChatGPT (Prompt: "als ich leave eingefügt habe, rendern die buttons nicht mehr richtig. wie fixe ich das?")
+      +Debugging-Prompts "warum wechselt der join button nicht MEHR auf leave?"-->
             {% set is_joined = current_user_id and (activity.participants   
             | selectattr('user_id', 'equalto', current_user_id)
             | list | length > 0) %}
-        
+      <!----------------------------------------------------------------------------------------------------------------------------------->
         <form method="POST"
               action="{% if is_joined %}{{ url_for('leave_activity', activity_id=activity.activity_id) }}{% else %}{{ url_for('join_activity', activity_id=activity.activity_id) }}{% endif %}"
               class="m-0 action-form">     
@@ -89,7 +92,8 @@
             <form method="POST"
                   action="{% if is_joined %}{{ url_for('leave_activity', activity_id=activity.activity_id) }}{% else %}{{ url_for('join_activity', activity_id=activity.activity_id) }}{% endif %}"
                   class="m-0 d-inline">
-
+              <!-- Quellen: ChatGPT (Prompts:
+              - "ja mach diesen button" (ursprüunglich aber selber erstellt)-->
               <button type="submit"
                       class="btn btn-sm action-btn {% if is_joined %}action-leave{% else %}action-join{% endif %}">
                 {% if is_joined %}𝗟𝖾𝖺𝗏𝖾 ✘{% else %}𝖩𝗈𝗂𝗇 ➥{% endif %}
@@ -187,6 +191,8 @@
         justify-content: center;
         margin-top: 20px;
     }
+    /* Quellen: ChatGPT (Prompt: "wie mache ich es, dass diese beiden buttons unter der
+       card (delete und join) in der card drinne sind ...?" */
 
     .activity-card {
         
@@ -201,7 +207,8 @@
         max-width: 500px;
     }
     
-
+    /* Quellen: ChatGPT (Prompt: "ja mach diesen button"
+       => Form unten rechts "ankleben") */
     .activity-card .action-form{
       position: absolute;
       right: 12px;
@@ -209,6 +216,8 @@
       margin: 0;
     }
 
+    /* Quellen: ChatGPT (Prompt: "ja mach diesen button"
+       => Button-Box + Styles) */
     .activity-card .action-btn{
       display: inline-block;
       width: auto;
@@ -239,7 +248,7 @@
 
       }
 
-
+      
       .activity-desc {
           white-space: pre-wrap; /* Zeilenumbrüche behalten */
           overflow-wrap: anywhere; /* Lange Wörter umbrechen */

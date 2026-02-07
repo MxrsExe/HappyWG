@@ -28,11 +28,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
 db.init_app(app)
 
 
-
-#def current_user():
- #   uid = session.get("user_id")
-  #  return User.query.get(uid) if uid else None
-
+#Quelle: https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
 @app.cli.command()
 def init_db():
     """Initialize the database."""
@@ -744,12 +740,16 @@ def einkaufsplan():
     if request.method == "POST":
 
         if form.validate_on_submit():
-            # random zuständig aus der WG (fallback: current_user)
+        #-----------------------------------------------------------------------------------------------------------------------
+        # random zuständig aus der WG (fallback: current_user)
+        # Quellen: Selbst versucht, dann ChatGPT-Hilfe
+        # Prompt: "assigned_to=random.randint(1, 3) wie randomisiere ich, wer zustädnig für den einkauf ist"
             u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first() #random() ist aus sqlalchemy, nicht random modul
-
+        #------------------------------------------------------------------------------------------------------------------------
+            # Quellen: ChatGPT (Prompt: "u.user_id (user_id ist \"any\") (Bugfix)
             #Random WG-Member wird ein Produkt zugewiesen, falls kein User in der WG ist, wird der aktuelle User zugewiesen
             assigned_to = u.user_id if u else current_user.user_id
-
+        #------------------------------------------------------------------------------------------------------------------------
             #Neues Einkaufs-Item erstellen (Instanz)
             new_item = ShoppingItem(
                 wg_id=wg_id,
@@ -768,7 +768,8 @@ def einkaufsplan():
             return redirect(url_for("einkaufsplan"))
         else:
             flash("Fehler beim Hinzufügen. Bitte Eingaben prüfen.", "danger")
-
+    #------------------------------------------------------------------------------------------------------------------
+    #Quelle: Auto-Completion + ChatGPT Prompt: "mach bitte dass es funktioniert" (Bugfix)
     #Items anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, .options(joinedload(...)) für weniger Queries
     shopping_items = (ShoppingItem.query
         .filter_by(wg_id=wg_id)
@@ -779,10 +780,11 @@ def einkaufsplan():
         .order_by(ShoppingItem.item_id.desc())
         .all()
     )
-
+    #------------------------------------------------------------------------------------------------------------------
     #Rendern der Seite mit Formular und Items
     return render_template("einkaufsplan.html", form=form, shopping_items=shopping_items)
      
+#Eigenleistung
 # Delete Einkaufs Item
 @app.route("/einkaufsplan/item/<int:item_id>/delete", methods=["POST"])
 @login_required
@@ -800,6 +802,9 @@ def delete_shopping_item(item_id):
     db.session.commit()
     flash("Artikel erfolgreich gelöscht.", "success")
     return redirect(url_for("einkaufsplan"))
+
+#------------------------------------------------------------------------------------------------------------------------------------
+#Quelle: ChatGPT (Prompt: "wie würde eine funktion aussehen, die das datum in google calendar oder apple calendar macht?")
 
 from urllib.parse import urlencode
 
@@ -870,6 +875,9 @@ def activity_ics(activity_id):
         headers={"Content-Disposition": f'attachment; filename="activity-{activity_id}.ics"'}
     )
 
+#---------------------------------------------------------------------------------------------------------------------------------------------
+
+#Quellen: Autocomplete (Eigenleistung) + Inspiration von: https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
 #wg Daten als JSON exportieren
 @app.route("/export/wg.json", methods=["GET"])
 def export_wg_json():
@@ -947,9 +955,4 @@ def export_wg_json():
 
     return jsonify(data)
 
-#run the app
-#if __name__ == "__main__":
-   # with app.app_context():
-    #    db.create_all()  # erstellt alle Tabellen in der Datenbank
-    #app.run(debug=True)
 
