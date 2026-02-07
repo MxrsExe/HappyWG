@@ -55,7 +55,9 @@ def generate_unique_code(length=6):
         if not Wg.query.filter_by(invite_code=code).first():
             return code
 
- #bevor eine route ausgeführt wird, prüfen ob der User eingeloggt ist!   
+# Quelle: Lehrmaterial Full Stack Web Development, HWR Berlin, 
+# "Python - Part 2", https://hwrberlin.github.io/fswd/python-pt2.html, Zugriff am 03.01.2026.
+ #bevor eine Route ausgeführt wird, prüfen ob der User eingeloggt ist!   
 def login_required(f):
     @wraps(f)                                   #f ist die Funktion die geschützt werden soll
     def decorated_function(*args, **kwargs):    #neue Funktion läuft statt der alten
