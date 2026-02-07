@@ -15,12 +15,10 @@ from functools import wraps
 from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User, Wg
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm, RegisterForm, LoginForm
+from forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm, RegisterForm, LoginForm
 
 
 app = Flask(__name__)
-#session
-#app.secret_key = "super-secret-key"
 
 #Quellen: ChatGPT (nach Debug: "es steht tatsächlich 0", "er zeigt trotzdem noch 0 einträge, wieso") + 
 #https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
