@@ -45,7 +45,8 @@ def index():
         return redirect(url_for("dashboard"))
     return redirect(url_for("login"))
 #----------------------------------------------------------------------------------------------------------------
-#Quelle: Angelehnt an: GeeksforGeeks, "Generate random string of given length", (Zugriff 10.01.2026).
+#Quellen: Angelehnt an: GeeksforGeeks, "Generate random string of given length", (Zugriff 10.01.2026).,
+#ChatGPT (Prompt: Hier ist meine aktuelle Code-Generierung:...Was müsste ich ändern, damit ich zufällige, eindeutige Invite-Codes erstelle, die nicht in der Datenbank existieren?)
 def generate_unique_code(length=6):
     while True:
         code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
@@ -175,7 +176,7 @@ def create_wg():
     return render_template("create_wg.html")
 
 #----------------------------------------------------------------------------------------------------------------
-#Quelle: 
+#Quelle: ChatGPT (Prompt: Wie kann ich in Flask prüfen, ob ein POST-Request erfolgt ist, und gleichzeitig das Formularfeld invite_code auslesen, auf Leerwert prüfen und eine Flash-Meldung ausgeben?)
 @app.route("/welcome/join_wg/", methods=['GET', 'POST'])
 @login_required
 def join_wg():
@@ -208,7 +209,7 @@ def dashboard():
 
     wg = Wg.query.get(user.wg_id)
 
-
+#Quellen: Angelehnt an: ChatGPT (Prompt: Ich möchte auf meiner Dashboard-Seite für einen Nutzer verschiedene Zähler anzeigen: offene Aufgaben, neue Ideen, kommende Events und Einkäufe. Wie kann ich die Anzahl der passenden Einträge aus der Datenbank mit SQLAlchemy abrufen?)
     offene_putzaufgaben_count = CleaningTask.query.filter_by(assigned_to=user.user_id, status='open').count()
     
     neue_ideen_count = Idea.query.filter_by(wg_id=wg.wg_id).count()
@@ -223,6 +224,9 @@ def dashboard():
         'events': max(kommende_events, 0),
         'einkauf': max(einkauf_count, 0)
     }
+    
+#Quelle: Lehrmaterial Full Stack Web Development, HWR Berlin, 
+# "Python, Part 1, u.a. Data Structures", https://hwrberlin.github.io/fswd/python.html, Zugriff am 14.01.2026.
     #Hinweis-Box
     wichtige_hinweise = {
         "putz": [],
