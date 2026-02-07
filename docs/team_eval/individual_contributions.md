@@ -24,7 +24,7 @@ nav_order: 3
 
 ## Marcel (github.com/MxrsExe): 
 - Host von dieser GitHub Repository (Happy WG)
-- `app.py`: Zeilen: 290-997
+- `app.py`: Zeilen: 290-997 (Ende)
 - **Putzplan**
   - Ganze `putzplan.html`
   - in `app.py` - für den Putzplan zuständige Funktionen & Routes 
