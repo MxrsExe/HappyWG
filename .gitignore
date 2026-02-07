@@ -1,6 +1,10 @@
 
 #Ignore __pycache__ folder (precompiled Python files)
 __pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
 
 #Ignore venv folder (Python virtual environment)
 venv/
