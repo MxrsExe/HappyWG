@@ -2,7 +2,9 @@
 
 ## **Local Setup** 
 **Step 1: Repository klonen**
+
 **Step 2:** Virtuelle Umgebung erstellen & aktivieren (Windows: `python -m venv venv` **ODER** auf MacOS/Linux: `python3 -m venv .venv`, dann `source .venv/bin/activate`)
+
 **Step 3:** Im Virtual Environment Dependencies installieren (`pip install -r requirements.txt`):
 
 ```console
