@@ -1,12 +1,3 @@
-# import sqlite3
-
-# from flask import current_app, g
-# from flask_sqlalchemy import SQLAlchemy
-
-# db = SQLAlchemy()
-
-
-
 from datetime import datetime
 import click
 
