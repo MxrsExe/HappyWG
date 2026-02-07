@@ -15,12 +15,10 @@ from functools import wraps
 from db import Activity, CleaningTask, CleaningTemplate, Idea, Idea_Comment, Idea_Like, ShoppingItem,db, User, Wg
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm, RegisterForm, LoginForm
+from forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationForm, PutzplanForm, RegisterForm, LoginForm
 
 
 app = Flask(__name__)
-#session
-#app.secret_key = "super-secret-key"
 
 #Quellen: ChatGPT (nach Debug: "es steht tatsächlich 0", "er zeigt trotzdem noch 0 einträge, wieso") + 
 #https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
@@ -759,17 +757,13 @@ def einkaufsplan():
     if request.method == "POST":
 
         if form.validate_on_submit():
-        #-----------------------------------------------------------------------------------------------------------------------
-        # random zuständig aus der WG (fallback: current_user)
-        # Quellen: Selbst versucht, dann ChatGPT-Hilfe
-        # Prompt: "assigned_to=random.randint(1, 3) wie randomisiere ich, wer zustädnig für den einkauf ist"
-            u = User.query.filter_by(wg_id=wg_id).order_by(func.random()).first() #random() ist aus sqlalchemy, nicht random modul
+
         #------------------------------------------------------------------------------------------------------------------------
             # Quellen: ChatGPT (Prompt: "u.user_id (user_id ist \"any\") (Bugfix)
-            #Random WG-Member wird ein Produkt zugewiesen, falls kein User in der WG ist, wird der aktuelle User zugewiesen
-            assigned_to = u.user_id if u else current_user.user_id
+            assigned_to = current_user.user_id
         #------------------------------------------------------------------------------------------------------------------------
             #Neues Einkaufs-Item erstellen (Instanz)
+            
             new_item = ShoppingItem(
                 wg_id=wg_id,
                 added_by=current_user.user_id,
@@ -812,10 +806,16 @@ def delete_shopping_item(item_id):
     # Laden des Items
     item = ShoppingItem.query.get_or_404(item_id)
     user = User.query.get(session['user_id'])
+    user_id = int(session["user_id"])
 
+    current_user = User.query.get(user_id) if user_id else None
     if item.wg_id != user.wg_id:
         abort(404)
 
+    if item.assigned_to != current_user.user_id:
+        flash("Nur die zuständige Person kann diesen Artikel löschen.", "danger")
+        return redirect(url_for("einkaufsplan"))
+    
     #aus der DB löschen und commiten
     db.session.delete(item)
     db.session.commit()
