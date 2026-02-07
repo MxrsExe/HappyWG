@@ -27,6 +27,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
 
 db.init_app(app)
 
+#----------------------------------------------------------------------------------------------------------------
 #Quelle: https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
 @app.cli.command()
 def init_db():
@@ -44,6 +45,7 @@ def index():
         return redirect(url_for("dashboard"))
     return redirect(url_for("login"))
 #----------------------------------------------------------------------------------------------------------------
+#Quelle: Angelehnt an: GeeksforGeeks, "Generate random string of given length", (Zugriff 10.01.2026).
 def generate_unique_code(length=6):
     while True:
         code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
@@ -51,8 +53,9 @@ def generate_unique_code(length=6):
         if not Wg.query.filter_by(invite_code=code).first():
             return code
 
+#----------------------------------------------------------------------------------------------------------------
 # Quelle: Lehrmaterial Full Stack Web Development, HWR Berlin, 
-# "Python - Part 2", https://hwrberlin.github.io/fswd/python-pt2.html, Zugriff am 03.01.2026.
+# "Python - Part 2", https://hwrberlin.github.io/fswd/python-pt2.html, Zugriff am 10.01.2026.
  #bevor eine Route ausgeführt wird, prüfen ob der User eingeloggt ist!   
 def login_required(f):
     @wraps(f)                                   #f ist die Funktion die geschützt werden soll
@@ -62,7 +65,10 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
-    
+
+#----------------------------------------------------------------------------------------------------------------
+#Quelle: Angelehnt an: Lehrmaterial Full Stack Web Development, HWR Berlin, 
+# "User Interfaces", https://hwrberlin.github.io/fswd/user-interfaces.html, Zugriff am 08.01.2026.
  #login-Funktion   
 @app.route("/login/", methods=['GET', 'POST'])
 def login():
@@ -89,12 +95,16 @@ def login():
     
 
     return render_template("login.html", form=form)
-    
+
+#----------------------------------------------------------------------------------------------------------------
+#Quelle: Stack Overflow, "How do I clear a flask session?", (Zugriff: 13.01.2026)   
 @app.route("/logout/")
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
+#----------------------------------------------------------------------------------------------------------------
+#Quelle:
 @app.route("/register/", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -127,7 +137,8 @@ def register():
 
     return render_template("register.html", form=form)
 
-
+#----------------------------------------------------------------------------------------------------------------
+#Quelle:
 @app.route("/welcome/", methods=['GET', 'POST'])
 @login_required
 def create_or_join_wg():
@@ -136,6 +147,8 @@ def create_or_join_wg():
 
     return render_template("welcome.html", username=user.username)
 
+#----------------------------------------------------------------------------------------------------------------
+#Quelle:
 @app.route("/welcome/create_wg/", methods=['GET', 'POST'])
 @login_required
 def create_wg():
@@ -161,7 +174,8 @@ def create_wg():
     
     return render_template("create_wg.html")
 
-
+#----------------------------------------------------------------------------------------------------------------
+#Quelle: 
 @app.route("/welcome/join_wg/", methods=['GET', 'POST'])
 @login_required
 def join_wg():
@@ -256,8 +270,9 @@ def dashboard():
     
     if not letzte_aktivitaeten:
         letzte_aktivitaeten.append({"zeitpunkt": None, "text": "Momentan gibt es keine Aktivitäten"})
-
-    letzte_aktivitaeten.sort(key=lambda x: x.get("zeitpunkt") or datetime.min, reverse=True) #Quelle: ChatGPT
+#----------------------------------------------------------------------------------------------------------------  
+    #Quelle: 
+    letzte_aktivitaeten.sort(key=lambda x: x.get("zeitpunkt") or datetime.min, reverse=True) 
     letzte_aktivitaeten = letzte_aktivitaeten[:10]
 
     wg_mitglieder = User.query.filter_by(wg_id=wg.wg_id).all()

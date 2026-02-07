@@ -59,3 +59,11 @@ https://www.stefan-goebel.com/2018/was-ist-das-n1-query-problem/
 
 Bootstrap-Theme: https://bootswatch.com/zephyr/
 
+GeeksforGeeks. Generate random string of given length. Abschnitt: “Using random.choices()”, (last updated: 11.07.2025)
+https://www.geeksforgeeks.org/python/python-generate-random-string-of-given-length/, (Zugriff: 10.01.2026)
+
+Stack Overflow. (2014). How do I clear a flask session?
+https://stackoverflow.com/questions/27747578/how-do-i-clear-a-flask-session
+(Zugriff: 13.01.2026)
+
+
