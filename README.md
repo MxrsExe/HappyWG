@@ -1,5 +1,7 @@
 # Web-Development-Project Happy WG
 
+Readme-Quelle (Aufbau): https://github.com/hwrberlin/fswd-app/blob/main/README.md?plain=1
+
 ## **Local Setup** 
 **Step 1: Repository klonen:** `git clone HappyWG`
 
