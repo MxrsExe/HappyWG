@@ -104,7 +104,7 @@ def logout():
     return redirect(url_for('login'))
 
 #----------------------------------------------------------------------------------------------------------------
-#Quelle:
+#Quelle: ChatGPT (Prompt: Hier ist mein bisheriger Code für die Registrierungsroute, was fehlt noch?: ...)
 @app.route("/register/", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -138,7 +138,7 @@ def register():
     return render_template("register.html", form=form)
 
 #----------------------------------------------------------------------------------------------------------------
-#Quelle:
+#Quelle: ChatGPT (Prompt: Ich habe die Route für die Welcome-Seite nach dem Login oder Register: Welche Funktionen sind wichtig?...)
 @app.route("/welcome/", methods=['GET', 'POST'])
 @login_required
 def create_or_join_wg():
