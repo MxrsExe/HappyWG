@@ -149,9 +149,8 @@
 
 <div class="d-flex flex-column gap-3 mt-3">
 <!-- Completed-Style (visuelles Feedback)
-     Quellen: ChatGPT, VS Code Autocomplete, eigene Versuche
-     Prompt/Anforderung (07.02.26, Folgeidee): "Status 'completed' visuell machen (z.B. Aufgabe durchgestrichen + leicht ausgegraut)"
-     Angepasst und eingerückt mit ChatGPT an Bootswtach-Theme "Zephyr": https://bootswatch.com/zephyr/ -->
+     Quellen: ChatGPT, VS Code Autocomplete, eigene Versuche, https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
+     Angepasst und eingerückt mit ChatGPT an Bootswatch-Theme "Zephyr": https://bootswatch.com/zephyr/ -->
   {% for eintrag in putzplan %}
     {% set task = eintrag.tasks[0] if eintrag.tasks else None %}
     {% set assigned_name = (eintrag.tasks[0].assigned_user.username if eintrag.tasks and eintrag.tasks[0].assigned_user else "—") %}
@@ -171,6 +170,7 @@
                          id="task{{ task.task_id }}"
                          name="done"
                          value="1"
+                         
                          {% if is_done %}checked{% endif %}>
 
                   <label class="form-check-label fw-semibold task-label {% if is_done %}text-decoration-line-through{% endif %}"
@@ -201,7 +201,7 @@
               Der Button war in JavaScript, in HTML umgewandelt ohne Hilfe-->
           <!-- Bugfix / UI-Layering
           Quelle: eigene Versuche, dann ChatGPT-Hilfe
-          Prompt (07.02.26): "wie mache ich es, dass diese delete buttons nicht im modal drin sind?"-->
+          Prompt: "wie mache ich es, dass diese delete buttons nicht im modal drin sind?"-->
             {% if task %}
               <form method="POST" action="{{ url_for('delete_cleaning_task', template_id=eintrag.template_id) }}" class="m-0">
               

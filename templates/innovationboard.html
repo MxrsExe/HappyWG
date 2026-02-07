@@ -29,19 +29,36 @@
 
   {% for idea in ideas %}
     <div class="card shadow-sm border-0">
+      <!-- Quelle: ChatGPT
+           Prompt: "ich habe ja es ja so dass man in der card die farbe auswählen kann. aber die farben sind nicht so schön, das macht ja wtforms. kann man irgendwie die farben schöner machen mit bootstrap?"
+           (Farbe nur im Header/Badge/Border nutzen statt vollflächig) -->
+      <!-- Quelle: ChatGPT
+           Prompt: "wie mache ich statt der color codes meine namen hin"
+           (Header nutzt idea.color oder Default-Farbe) -->
      <div class="card-header" style="background-color: {{ idea.color or '#0d6efd' }};">
      </div>
+     <!--------------------------------------------------------------------------------------->
   <div class="card-body">
+    <!-- Quelle: ChatGPT
+             Prompt: "ich würde gerne auch likes hinzufügen, wie geht das?"
+             + Hinweis im Verlauf: Like/Delete oben sauber ausrichten (Header-Zeile nur dafür) -->
+        <!-- Top row: Like left, Delete right -->
 
     <!-- Top row: Like left, Delete right -->
     <div class="d-flex justify-content-between align-items-start mb-3">
-
+      <!-------------------------------------------------------------------------------------------->
+      <!-- Quelle: ChatGPT
+               Prompt: "ich würde gerne auch likes hinzufügen, wie geht das?"
+               (POST Route + Button/Form in der Card) -->
       <form method="POST" action="{{ url_for('toggle_like', idea_id=idea.idea_id) }}" class="m-0">
         <button type="submit" class="btn btn-light btn-sm rounded-pill">
           👍 <span class="ms-1">{{ idea.likes|length }}</span>
         </button>
-      </form>
-
+      </form> 
+      <!-------------------------------------------------------------------------------------------->
+      <!-- Quelle: ChatGPT
+               Prompt: "wie mache ich einen löschen button für die ideen cards?"
+               (Delete als POST-Form; bei CSRF aktiv Token rein) -->
       <form method="POST" action="{{ url_for('delete_idea', idea_id=idea.idea_id) }}" class="m-0">
         <button type="submit"
                 class="btn btn-sm btn-outline-danger"
@@ -50,8 +67,9 @@
                 aria-label="Idee löschen">
           🗑️
         </button>
+      <!-------------------------------------------------------------------------------------------->
       </form>
-
+    <!---------------------------------------------------------------------------------------------------->
     </div>
 
     <!-- Title -->
@@ -67,10 +85,16 @@
     </p>
 
     <!-- Meta -->
+     <!-- Quelle: ChatGPT
+             Prompt-Kontext: Creator/Relationship anzeigen (im Verlauf als "Template: Creator anzeigen" beschrieben)
+             (Ausgabe: idea.creator.username) -->
     <small class="d-block mb-3 text-black-50">
       Erstellt von {{ idea.creator.username }} am {{ idea.created_at.strftime('%d.%m.%Y') }}
     </small>
-
+    <!---------------------------------------------------------------------------------------->
+    <!-- Quelle: ChatGPT
+             Prompt: "wie mache ich es, dass man die kommentare öffnen kann von einer idea card und selbst eins verfassen kann?"
+             (aufklappbare Kommentar-Sektion pro Idee) -->
     <!-- Comments toggle (Bootstrap collapse) -->
     <a class="fw-semibold text-decoration-none text-black-50"
        data-bs-toggle="collapse"
@@ -80,7 +104,7 @@
        aria-controls="comments-{{ idea.idea_id }}">
       💬 Kommentare ({{ idea.comments|length if idea.comments else 0 }})
     </a>
-
+    <!---------------------------------------------------------------------------------------->
     <div class="collapse mt-2" id="comments-{{ idea.idea_id }}">
       <div class="bg-white text-dark rounded-3 p-3">
 
@@ -105,7 +129,6 @@
 
       </div>
     </div>
-
   </div>
 </div>
 
@@ -136,6 +159,13 @@
                 style="display:block; margin-top:5px; padding:8px; width:100%; height:100px; resize: vertical; white-space: pre-wrap;"
             ) }}
         </div>
+        <!--------------------------------------------------------------------------------------------------------------------------------------------------->
+        <!-- Quelle: ChatGPT
+             Prompt: "wie mache ich statt der color codes meine namen hin"
+             (Preset-Liste mit (Name, HEX) und Radio-Buttons, User sieht Namen, gesendet wird HEX) -->
+        <!-- Quelle: ChatGPT
+             Prompt: "ich habe ja es ja so dass man in der card die farbe auswählen kann. aber die farben sind nicht so schön, das macht ja wtforms. kann man irgendwie die farben schöner machen mit bootstrap?"
+             (Preset-Farben anbieten, wirkt sauberer) -->
         <div style="margin-bottom: 15px;">
           <label for="color" class ="form-label">Farbe auswählen:</label>
           <div class="d-flex flex-wrap gap-2 mb-2">
@@ -159,6 +189,7 @@
                       {% if form.color.data == c %}checked{% endif %}>
                 <span class="me-1" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:{{ c }};vertical-align:-2px;"></span>
                 {{ name }}
+          <!------------------------------------------------------------------------------------------------------------------------------------------------------->
               </label>
             {% endfor %}
           </div>

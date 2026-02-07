@@ -16,6 +16,10 @@
 <h5>Gemeinsame Einkaufsliste für die WG</h5>
 
 <br>
+ <!-- 
+  Quellen, gilt für den unteren Block: ChatGPT (Prompt: "kannst du mir die einrückung korrekt machen etc") 
+  + Umcodierung in CSS-Klassen von Bootswatch "Zephyr": https://bootswatch.com/zephyr/
+  -->
 
 <h5>Neuen Einkaufsartikel hinzufügen</h5>
 <form method="POST" action="{{ url_for('einkaufsplan') }}" class="mb-4">
@@ -52,7 +56,6 @@
   {% for item in shopping_items %}
     <div class="col-12 col-md-6 col-lg-4">
       <div class="card shadow-sm h-100 position-relative">
-
         <!-- Delete (oben rechts) -->
         <form method="POST"
               action="{{ url_for('delete_shopping_item', item_id=item.item_id) }}"
@@ -79,7 +82,8 @@
               {{ item.added_by }}
             {% endif %}
           </small>
-
+          
+          <!-- Quellen: ChatGPT (Prompt: "wie mache ich das unten rechts in die card rein?") -->
           {% if item.assigned_to_user %}
             <span class="badge text-bg-secondary position-absolute bottom-0 end-0 m-2">
               {{ item.assigned_to_user.username }}

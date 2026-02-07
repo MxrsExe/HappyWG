@@ -182,6 +182,7 @@ Es gibt durch z.B. `role="admin"` (_später implementierbar_) einen Administrato
 - Nicht zugewiesene oder unberechtige User können die Objekte anderer WG-Mitglieder nicht anfassen.
 - Spätere Einführung von Admin-Rollen möglich, erfordert aber konsistente Anpassung vieler Endpoints.
 
+---
 
 ## 03: Putzplan-Datenmodell - Cleaning Template vs. nur Cleaning Task (Plan vs. Ausführung)
 
