@@ -1,7 +1,7 @@
 # Web-Development-Project Happy WG
 
 ## **Local Setup** 
-**Step 1: Repository klonen**
+**Step 1: Repository klonen:** `git clone HappyWG`
 
 **Step 2:** Virtuelle Umgebung erstellen & aktivieren (Windows: `python -m venv venv` **ODER** auf MacOS/Linux: `python3 -m venv .venv`, dann `source .venv/bin/activate`)
 
@@ -12,6 +12,7 @@
 ```
 
 > File `📄requirements.txt` erstellt mit diesem Command: `pip freeze > requirements.txt`
+
 **Step 4:** DB initialisieren (im Terminal mit venv aktiv: `flask init-db`)
 
 ```console
