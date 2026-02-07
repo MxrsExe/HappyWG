@@ -74,7 +74,9 @@ Das hat mir Sicherheit gegeben, weil ich wusste: Auf sie kann man sich verlassen
 
 ### Tipp für die Zukunft
 
-Ich fände es super, wenn sie diesen "Dranbleiben-Mindset" beibehält und sich weiterhin traut, Fragen früh zu stellen, sobald etwas unklar ist. Gerade weil sie Herausforderungen aktiv angeht, kann sie dadurch noch schneller vorankommen. Wenn etwas nicht klappen will, niemals aufgeben!
+Ich fände es super, wenn sie diesen "Dranbleiben-Mindset" beibehält und sich weiterhin traut, Fragen früh zu stellen, sobald etwas unklar ist. Gerade weil sie Herausforderungen aktiv angeht, kann sie dadurch noch schneller vorankommen. 
+
+---
 
 ## Susann - Review 2
 
@@ -89,6 +91,8 @@ Das hat mir geholfen, Inhalte schneller einzuordnen und Lücken zu schließen. A
 ### Tipp für die Zukunft
 
 Ich würde ihr empfehlen, genau diesen Weg weiterzugehen: Inhalte aktiv nacharbeiten, kleine Lernschritte fest einplanen und das Gelernte direkt in Mini-Beispielen anwenden. So kann sie ihr Programmier-Selbstvertrauen weiter ausbauen - und wird noch stärker darin, anderen im Team Orientierung zu geben.
+
+---
 
 ## Susann - Review 3
 
