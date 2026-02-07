@@ -11,8 +11,11 @@
     <a class="nav-link" href="{{ url_for('activity_board') }}">ActivityBoard</a>
     <a class="nav-link" href="{{ url_for('einkaufsplan') }}">Einkauf</a>
 </nav>
-
+<!-- Quelle: ChatGPT + VS-Code Autocomplete, eigene Versuche
+     Prompt: "wie mache ich es dass der button oben rechts angezeigt wird"---->
+    
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+<!------------------------------------------------------------------------------------------------->
   <h1 style="margin:0;">Putzplan</h1>
 
   <label for="modalToggle" class="btn btn-lg btn-primary">
@@ -21,7 +24,18 @@
 </div>
 <h5>Verwalte die Reinigungsaufgaben in deiner WG</h5>
 
-
+<!-- Fortschrittsbalken / Progress-Bar
+     Quellen:
+     - VS Code Autocomplete (Bootstrap Markup/Klassen)
+     - ChatGPT
+       Prompt: "wie mache ich in das obige skript das skript rein für eine progress bar, wenn jemand eine aufgabe erledigt hat: <div class='progress-stacked'>..."
+       Prompt: "CleaningTemplate hat kein status attribut, aber CleaningTask hat, was soll ich jetzt machen?"
+       Prompt: "ich will, dass der fortschritt in der bar angezeigt wird. wie mache ich das?"
+       Prompt: "wie mache ich, dass dieser text nicht mehr in der leiste drinne ist, sondern auf der leiste oder ein wenig drüber"
+      Quelle: ChatGPT
+      Prompt: "ich bin jetzt wieder im putzplan. kannst du das so umschreiben, wie ich es bei den anderen seiten habe?"
+      Hinweis: Block "Fortschritt" + progress-stacked + remaining-Berechnung stammt aus dieser Umstellung (Tabelle → Cards/Bootstrap-Layout).
+-->
 {% set remaining = 100 - progress %}
 
 <div class="position-relative" style="margin-top: 14px;">
@@ -61,7 +75,11 @@
 
 </div>
 <br>
+<!----------------------------------------------------------------------------------------->
 
+<!-- Modal (ohne JavaScript) via Checkbox-Hack
+     Quelle: ChatGPT, VS Code Autocomplete, eigene Versuche
+     Prompt: (im Kontext Modal/Flow) Template mit <input type="checkbox" id="modalToggle"> + :checked CSS, um Backdrop/Modal ein-/auszublenden.-->
 <input type="checkbox" id="modalToggle" style="display: none;">
 
 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; z-index: 1;" id="modalBackdrop"></div>
@@ -95,7 +113,6 @@
             list="users",
             id="zustaendig",
             style="display:block; margin-top:5px; padding:8px; width:100%;",
-            placeholder="z.B. Max"
         ) }}
 
         <datalist id="users">
@@ -112,7 +129,12 @@
         {{ form.submit() }}
     </form>
 </div>
-
+<!------------------------------------------------------->
+<!-- CSS-only Modal (Checkbox-Trick)
+  Quelle: ChatGPT
+  Prompt: "wieso kann ich nicht den button 'neue aktivität' klicken?"
+  (Antwort beinhaltete Fix der Checkbox-ID + das Prinzip '#modalToggle:checked ~ ...' für CSS-only Modals.)
+-->
 <style>
     #modalToggle:checked ~ #modalBackdrop {
         display: block !important;
@@ -123,8 +145,13 @@
     }
 </style>
 
-<div class="d-flex flex-column gap-3 mt-3">
+<!------------------------------------------------------------------------------------------------------------------------------------->
 
+<div class="d-flex flex-column gap-3 mt-3">
+<!-- Completed-Style (visuelles Feedback)
+     Quellen: ChatGPT, VS Code Autocomplete, eigene Versuche
+     Prompt/Anforderung (07.02.26, Folgeidee): "Status 'completed' visuell machen (z.B. Aufgabe durchgestrichen + leicht ausgegraut)"
+     Angepasst und eingerückt mit ChatGPT an Bootswtach-Theme "Zephyr": https://bootswatch.com/zephyr/ -->
   {% for eintrag in putzplan %}
     {% set task = eintrag.tasks[0] if eintrag.tasks else None %}
     {% set assigned_name = (eintrag.tasks[0].assigned_user.username if eintrag.tasks and eintrag.tasks[0].assigned_user else "—") %}
@@ -135,7 +162,6 @@
 
         <!-- Top row: checkbox/title + assigned + delete -->
         <div class="d-flex justify-content-between align-items-start gap-3">
-
           <div class="flex-grow-1">
             {% if task %}
               <form method="POST" action="{{ url_for('toggle_cleaning_task', task_id=task.task_id) }}" class="m-0">
@@ -168,9 +194,17 @@
 
           <div class="d-flex flex-column align-items-end gap-2">
             <span class="badge text-bg-secondary">{{ assigned_name }}</span>
-
+<!-------------------------------------------------------------------------------------------------------------------------------->
+          <!--Delete-Button Positionierung (pro Card / pro Eintrag)
+              Quelle: Eigene Versuche, dann mit ChatGPT-Hilfe
+              Prompt: "wo gehört der löschen Button rein?"
+              Der Button war in JavaScript, in HTML umgewandelt ohne Hilfe-->
+          <!-- Bugfix / UI-Layering
+          Quelle: eigene Versuche, dann ChatGPT-Hilfe
+          Prompt (07.02.26): "wie mache ich es, dass diese delete buttons nicht im modal drin sind?"-->
             {% if task %}
               <form method="POST" action="{{ url_for('delete_cleaning_task', template_id=eintrag.template_id) }}" class="m-0">
+              
                 <button type="submit"
                         class="btn btn-sm btn-outline-danger"
                         title="Löschen"
@@ -195,7 +229,10 @@
 </div>
 
 <style>
-  
+  /* Status "completed" visuell machen (durchstreichen/ausgrauen)
+    Quelle: ChatGPT (Web App - venv in Git Repo)
+    Prompt:"den Status 'completed' visuell machen (z.B. Aufgabe durchgestrichen + leicht ausgegraut)"
+  */
   .task-check:checked + .task-label {
     text-decoration: line-through;
     opacity: 0.7;

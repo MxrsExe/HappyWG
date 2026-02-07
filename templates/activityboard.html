@@ -26,12 +26,13 @@
 <div class="activities-list">
   {% for activity in activities %}
     <div class="activity-card">
+      <!-- Quellen: ChatGPT (Prompt: "wie mache ich, dass der user nur seine eigenen aktivitäten löschen kann?"-->
       <form method="POST" action="{{ url_for('delete_activity', activity_id=activity.activity_id) }}" style="position: absolute; top: 12px; right: 12px; margin: 0;">
           <button type="submit" class="btn btn-sm btn-outline-danger" 
             title = "löschen" aria-label="löschen"
             >🗑️</button>
       </form>
-
+      <!-- Quellen: ChatGPT (Prompt: "method not allowed" / "Route erwartet GET, gesendet POST ⇒ 405 Method Not Allowed" + Template-Beispiel für Button/Link 'In Kalender speichern (.ics)') -->
       <form method="POST" action="{{ url_for('activity_ics', activity_id=activity.activity_id) }}"
       style="position:absolute; top:12px; right:50px; margin-right:10px;">
         <button type="submit"
@@ -45,6 +46,10 @@
       <br>
       <p class="activity-desc mb-2">{{ activity.description }}</p>
       <br>
+      <!-- Quellen: Eigene Überlegungen mit Autocomplete, dann ChatGPT-Hilfe (Prompts:
+           - "wie zeige ich hier richtige alle namen der activity participants an"
+           - "ich sehe die user nicht, die beigetreten sind"
+           => Block zum Anzeigen (mit optionaler Anzahl + Liste)) -->
         <div class="pb-3 mb-3 border-bottom background-light p-2 rounded-3">
           <small class="text-muted">
             {% if activity.max_participants %}
@@ -71,6 +76,7 @@
 
       <small class="text-muted" style="margin-top: 20px; margin-bottom: 5px;">Gepostet von {{ activity.creator.username }} am {{ activity.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
       <br>
+      <!--Quelle: ChatGPT (Prompt: "als ich leave eingefügt habe, rendern die buttons nicht mehr richtig. wie fixe ich das?")-->
             {% set is_joined = current_user_id and (activity.participants   
             | selectattr('user_id', 'equalto', current_user_id)
             | list | length > 0) %}
@@ -141,7 +147,6 @@
             
             {{ form.max_participants(
                 style="display:block; margin-top:5px; padding:8px; width:100%;",
-                placeholder="z.B. 10"
             ) }}
             
 

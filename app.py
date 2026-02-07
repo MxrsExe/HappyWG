@@ -1,8 +1,4 @@
 
-
-"""FÜR DIE QUELLEN: Alle Quellen sind möglichst genau im Code als Kommentar (#) angegeben und durch "#--------" getrennt. 
-Für weitere Informationen zu den Quellen bzw. LLM-Prompts, siehe jeweiligen PDFs."""
-
 from random import random
 from sqlite3 import IntegrityError
 import string
@@ -280,6 +276,7 @@ def dashboard():
 def putzplan():
     
     #aktuellen User laden
+    #Quellen: ChatGPT (Prompt: Bugfix: AttributeError 'NoneType' object has no attribute 'wg_id')
     user = User.query.get(session["user_id"])
 
     #Wenn kein User -> weiterleiten (sollte nicht passieren)
@@ -289,27 +286,37 @@ def putzplan():
 
     form = PutzplanForm() 
     #Alle WG-Mitglieder laden für das Dropdown im Formular (Zuständigkeit auswählen im Modal)
+    #Quellen: ChatGPT (Prompt: Bugfix AttributeError 'NoneType' object has no attribute 'wg_id')
     all_users = User.query.filter_by(wg_id=user.wg_id).all()
 
     #POST: Neue Putzplan-Aufgabe erstellen
     if request.method == "POST":
         if form.validate_on_submit():
+            #Quellen: ChatGPT (Prompt/Debug: validate_on_submit False)
             zustaendig_name = request.form.get("zustaendig", "").strip() #Name des zuständigen WG-Mitglieds aus dem Formular holen
 
-            #Zuständigen User aus der DB laden
+            #Zuständigen User aus der DB laden (nur aus derselben WG!)
+            #Quellen: ChatGPT (Prompt: "Zuständig kommt aus einem datalist-input – wie finde ich den User dazu")
             assigned_user = User.query.filter_by(
                 wg_id=user.wg_id,
                 username=zustaendig_name
             ).first()
 
             #Fehlermeldung, falls der User nicht existiert (sollte nicht passieren, da aus Dropdown gewählt wird)
+            #Quellen: ChatGPT (Prompt: wieso packt er nicht die aufgabe auf die seite, die ich erstellt habe)
             if not assigned_user:
                 flash("WG-Mitglied existiert nicht", "danger")
                 return redirect(url_for("putzplan"))
             #Neue Vorlage und Task erstellen, falls noch nicht vorhanden 
 
             else:
+                #Isocalendar & Umrechnung: https://docs.python.org/3/library/datetime.html
                 kw = form.von_datum.data.isocalendar().week  #Kalenderwoche aus dem von_datum-Feld holen
+                #Template erstellen (Plan/Zeitraum), zum Lernen
+                #Quellen: ChatGPT (Prompt: (1) "wieso packt er nicht die aufgabe auf die seite, die ich erstellt habe")
+                """Man musste natürlich eine Instanz der Klasse erstellen, damit die init-Methode ausgeführt wird und die template_id generiert wird,
+                die man für die Erstellung des Tasks braucht. 
+                Das war der Hauptgrund, warum es nicht funktioniert hat. (Bei den anderen Seiten dann selber umgesetzt.)"""
                 new_template = CleaningTemplate(
                     wg_id=user.wg_id,
                     name=form.aufgabe.data,
@@ -318,10 +325,14 @@ def putzplan():
                     is_active=True
                 )
                 db.session.add(new_template)
+
                 #flush() = vorübergehendes Speichern, aber noch kein Commit
+                #Quellen: ChatGPT (Prompt-Kontext: Template + Task erstellen; Hinweis zu flush())
                 db.session.flush() #Damit new_template.template_id verfügbar ist, bevor commit() aufgerufen wird (für Task)
 
                 #Neuen Task erstellen mithilfe von der soeben erstellten Vorlage
+                #Quellen: ChatGPT (Prompt: (2) "wieso packt er nicht die aufgabe auf die seite, die ich erstellt habe")
+                #-> Task speichern (Zuständig = assigned_to)
                 new_task = CleaningTask(
                     template_id=new_template.template_id,
                     assigned_to=assigned_user.user_id,
@@ -334,12 +345,16 @@ def putzplan():
 
                 flash("Eintrag erfolgreich erstellt!", "success")
                 return redirect(url_for("putzplan"))
-    #Quellen: Autocomplete in VS Code, Debug + Vervollständigung mit ChatGPT, inbesondere alles nach "filter_by()"
+    
+    #--------------------------------------------------------------------------------------------------------------------
+    #Quellen: Autocomplete in VS Code + Eigenleistung + ChatGPT-Hilfe
+    #ChatGPT (Prompt: "Wie filtere ich CleaningTemplate nach wg_id")
     putzplan_eintraege = (CleaningTemplate.query
                           .filter_by(wg_id=user.wg_id, is_active=True)  #Filtern nach wg_id und is_active = True, damit nur aktive Einträge direkt angezeigt werden (standard)
                           .order_by(CleaningTemplate.template_id.desc()) #Sortieren nach template_id absteigend
                           .all()) #Alle Einträge der WG holen
-
+    #--------------------------------------------------------------------------------------------------------------------
+    #Quellen: ChatGPT (Prompt: "CleaningTemplate hat kein status attribut, aber CleaningTask hat, was soll ich jetzt machen?")
     tasks = (CleaningTask.query
              .join(CleaningTemplate) # Join mit CleaningTemplate für wg_id
              .filter(CleaningTemplate.wg_id == user.wg_id)  # Filtern nach wg_id
@@ -379,6 +394,8 @@ def toggle_cleaning_task(task_id):
     if task.template.wg_id != user.wg_id:
         abort(404)
 
+    #Quellen: ChatGPT (Prompt: warum zeigt er mir completed_at nicht an?)
+    #-> completed_at beim Toggle setzen (completed -> datetime.now, open -> None)
     #Status umschalten
     if task.status == "completed":
         task.status = "open"
@@ -393,27 +410,39 @@ def toggle_cleaning_task(task_id):
 
 @app.route("/putzplan/task/<int:template_id>/delete", methods=["POST"])
 def delete_cleaning_task(template_id):
+    #---------------------------------------------------------------------------------------------
+    #Quellen: ChatGPT (Prompt: "ich will einfach den eintrag löschen können und ihn von der seite weghaben")
+    #-> Problem: Seite rendert aus CleaningTemplate; nur Task löschen lässt Card evtl. bestehen, daher Template löschen (cascade delete in DB sorgt dafür, dass auch Task gelöscht wird)
     user_id = session.get("user_id")
     template = CleaningTemplate.query.get_or_404(template_id)
     user = User.query.get(user_id)
     if template.wg_id != user.wg_id:
         abort(404)
-    
+    #---------------------------------------------------------------------------------------------
     #Task
     task = template.tasks[0] if template.tasks else None
     if not task:
         flash("Kein Task gefunden.", "danger")
         return redirect(url_for("putzplan"))
-
+    #---------------------------------------------------------------------------------------------
+    # Quellen: (Delete-Policy im Verlauf diskutiert: "nur Zuständiger darf löschen" als Option)
     if task.assigned_to != user_id:
         flash("Nur die zuständige Person kann diese Aufgabe löschen.", "danger")
         return redirect(url_for("putzplan"))
-    
+    #---------------------------------------------------------------------------------------------
     db.session.delete(template)
     db.session.commit()
     flash("Aufgabe erfolgreich gelöscht.", "success")
     return redirect(url_for("putzplan"))
 
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Quellen-Kontext:
+# - Like-Feature (Route/Toggle + Template-Hinweise) entstand aus Prompt: "ich würde gerne auch likes hinzufügen, wie geht das?"
+#   
+# - Kommentare/CommentForm + CSRF Debug/Hidden-Tag aus Prompts: CSRF token missing + "kommentarspalte größer machen wie geht das?"
+#   
+# - Delete-Route + Owner-Check + Button/Delete-Idee aus: (Delete Button + "optional: nur Ersteller darf löschen")
 
 @app.route("/innovationboard/", methods=['GET', 'POST'])
 @login_required
@@ -424,7 +453,7 @@ def innovation_board():
     #aktuellen User laden
     user = User.query.filter_by(user_id=user_id).first()
 
-    all_users = User.query.all()
+    all_users = User.query.filter_by(wg_id=user.wg_id).all()
     #POST: Neue Idee erstellen
     if request.method == 'POST':
         #Wenn das Formular valide ist, erstelle neue Idee (Instanz), Abrufen der Formulardaten
@@ -448,6 +477,7 @@ def innovation_board():
         else:
             flash("Fehler beim Einreichen der Innovation. Bitte überprüfen Sie die Eingaben.", "danger")
     #Ideen anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, joinedload(...) für weniger Queries und richtiges Laden der Relationen
+    #Quelle: ChatGPT-Verlauf (Query mit joinedload für Creator + optional Comments->User)
     ideas = (Idea.query
              .filter_by(wg_id=user.wg_id)   
              .options(joinedload(Idea.creator)) 
@@ -456,6 +486,8 @@ def innovation_board():
     
     return render_template("innovationboard.html", form=form, all_users=all_users,ideas=ideas, comment_form=CommentForm())
 
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
 #post route, da das Formular data ändert (löschen)
 @app.route("/innovation_board/idea/<int:idea_id>/delete", methods=["POST"])
 @login_required
@@ -463,6 +495,7 @@ def delete_idea(idea_id):
 
     #aktuellen User laden und konkrete Idee laden, prüfen ob der User der Ersteller der Idee ist, wenn nicht -> 403 und Flashmeldung
     #Bezug auf creator: Beziehung in Idea Model
+    #Quelle: ChatGPT-Verlauf (Delete-Route, Owner-Check: "optional: nur Ersteller darf löschen")
     idea = Idea.query.get_or_404(idea_id)
     user_id = int(session["user_id"])
     user = User.query.get(user_id)
@@ -470,6 +503,7 @@ def delete_idea(idea_id):
     if idea.wg_id != user.wg_id:
         abort(404)
 
+    #Owner-Regel: Nur der Ersteller der Idee darf sie löschen
     if idea.created_by != user_id:
         flash("Sie können nur Ihre eigenen Ideen löschen.", "danger")
         return redirect(url_for("innovation_board"))
@@ -485,6 +519,7 @@ def delete_idea(idea_id):
 @login_required
 def toggle_like(idea_id):
 
+
     #User_id holen und Guard-Klausel: Sicherstellen, dass der User eingeloggt ist
     user_id = int(session["user_id"])  
     #Überprüfen, ob der User die Idee bereits geliked hat
@@ -493,6 +528,9 @@ def toggle_like(idea_id):
     idea = Idea.query.get_or_404(idea_id)
     if idea.wg_id != user.wg_id:
         abort(404)
+
+    #Quelle: ChatGPT-Verlauf (Prompt: "ich würde gerne auch likes hinzufügen, wie geht das?" -> Toggle-Route + Logik)
+    #Standard-Toggle: existiert -> unlike, sonst like, plus IntegrityError rollback
     #Wenn ja, Like entfernen, sonst Like hinzufügen
     if existing:
         db.session.delete(existing)   # unlike
@@ -511,7 +549,8 @@ def toggle_like(idea_id):
 @app.route("/ideas/<int:idea_id>/comment", methods=["POST"])
 @login_required
 def post_comment(idea_id):
-   
+    
+    #Quelle: ChatGPT-Verlauf (Umstieg auf echtes WTForms CommentForm + validate_on_submit + form.content.data)
     user_id = int(session["user_id"])
     user = User.query.get(user_id)
     idea = Idea.query.get_or_404(idea_id)
@@ -544,6 +583,8 @@ def post_comment(idea_id):
 
     return redirect(url_for("innovation_board"))
 
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
 #Get und Post route, da das Formular data abruft und ändert (neue Aktivität erstellen) 
 @app.route("/activityboard/", methods=["GET", "POST"])
 @login_required
@@ -575,14 +616,18 @@ def activity_board():
             db.session.add(new_activity)
             db.session.commit()
             return redirect(url_for("activity_board"))
+    #---------------------------------------------------------------------------------------------------------------
     #Aktivitäten anzeigen, nach WG filtern, mit User-Relationen laden, absteigend sortieren, alle holen, joinedload(...) für weniger Queries und richtiges Laden der
     #Relationen
+    # Quellen: ChatGPT (Prompt: "ich sehe die user nicht, die beigetreten sind")
+        #+ (Prompt: "wie zeige ich hier richtige alle namen der activity participants an")
+        #-> Lösung: participants/creator sauber eager-loaden, damit Template Teilnehmerliste zuverlässig rendern kann.
     activities = (Activity.query
         .filter_by(wg_id=wg_id)
         .options(joinedload(Activity.creator), joinedload(Activity.participants))
         .order_by(Activity.created_at.desc())
         .all())
-
+    #----------------------------------------------------------------------------------------------------------------
     #Rendern der Seite mit Formular und Aktivitäten
     return render_template(
         "activityboard.html",
@@ -606,18 +651,26 @@ def join_activity(activity_id):
     if activity.wg_id != user.wg_id:
         abort(404)
 
+    #----------------------------------------------------------------------------------------------------------------
     # Prüfen, ob der User bereits Teilnehmer ist, damit er/sie nicht doppelt beitreten kann
+    #Quellen: ChatGPT (Prompt: "ich sehe die user nicht, die beigetreten sind")
     if user in activity.participants:
         flash("Du nimmst bereits teil.", "danger")
         return redirect(url_for("activity_board"))
-
-    # Prüfen, ob die maximale Teilnehmerzahl erreicht ist, len(activity.participants) gibt die aktuelle Anzahl der Teilnehmer zurück
+    #----------------------------------------------------------------------------------------------------------------
+    #Prüfen, ob die maximale Teilnehmerzahl erreicht ist, len(activity.participants) gibt die aktuelle Anzahl der Teilnehmer zurück
+    #Quellen: ChatGPT (Prompt: "wie würde ich rangehen, wenn ich ein optionales maximale teilnehmer zahl feld einfügen möchte")
     if activity.max_participants and len(activity.participants) >= activity.max_participants:
         flash("Die Aktivität ist bereits voll.", "danger")
         return redirect(url_for("activity_board"))
-
-    # User zur Teilnehmerliste hinzufügen
+    
+    #----------------------------------------------------------------------------------------------------------------
+    #User zur Teilnehmerliste hinzufügen
+    #Quellen: ChatGPT (Prompt: "kann man das auch ohne activityParticipant machen?")
+    """Antwort: Liste benutzen, da Beziehung in Activity Model als participants definiert ist, was eine Liste von User-Objekten zurückgibt, die an der Aktivität teilnehmen"""
     activity.participants.append(user)
+
+#----------------------------------------------------------------------------------------------------------------
     db.session.commit()
     flash("Du bist beigetreten!", "success")    
 
@@ -637,14 +690,16 @@ def leave_activity(activity_id):
 
     if activity.wg_id != user.wg_id:
         abort(404)
-
-    # Prüfen, ob der User tatsächlich Teilnehmer ist
+#----------------------------------------------------------------------------------------------------------------
+    #Prüfen, ob der User tatsächlich Teilnehmer ist
+    #Quellen: ChatGPT (Prompt: "wie kann ich nur die activities leaven, in denen ich drin bin?")
     if user not in activity.participants:
         flash("Du nimmst nicht teil.", "danger")
         return redirect(url_for("activity_board"))
 
     # User aus der Teilnehmerliste entfernen
     activity.participants.remove(user)
+#----------------------------------------------------------------------------------------------------------------
     db.session.commit()
     flash("Du hast die Aktivität verlassen.", "success")    
 
@@ -657,11 +712,14 @@ def delete_activity(activity_id):
     #aktuellen User laden und konkrete Aktivität laden
     current_user_id = int(session["user_id"])
     activity = Activity.query.get_or_404(activity_id)
+
+    #----------------------------------------------------------------------------------------------------------------
     # Prüfen, ob der aktuelle User der Ersteller der Aktivität ist, creator ist die Beziehung in Activity Model
+    # Quellen: ChatGPT (Prompt: "wie mache ich, dass der user nur seine eigenen aktivitäten löschen kann?")
     if activity.created_by != current_user_id:
         flash("Sie können nur Ihre eigenen Aktivitäten löschen.", "danger")
-        
         return redirect(url_for("activity_board"))
+    #----------------------------------------------------------------------------------------------------------------
     # Aktivität löschen
     db.session.delete(activity)
     db.session.commit()
