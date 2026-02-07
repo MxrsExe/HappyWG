@@ -290,11 +290,11 @@ def dashboard():
 @app.route("/putzplan/", methods=["GET", "POST"])
 @login_required
 def putzplan():
-    
+    #--------------------------------------------------------------------------------------------------------
     #aktuellen User laden
     #Quellen: ChatGPT (Prompt: Bugfix: AttributeError 'NoneType' object has no attribute 'wg_id')
     user = User.query.get(session["user_id"])
-
+    #--------------------------------------------------------------------------------------------------------
     #Wenn kein User -> weiterleiten (sollte nicht passieren)
     if not user:
         session.clear()
@@ -819,7 +819,7 @@ def einkaufsplan():
     #Rendern der Seite mit Formular und Items
     return render_template("einkaufsplan.html", form=form, shopping_items=shopping_items)
      
-#Eigenleistung
+
 # Delete Einkaufs Item
 @app.route("/einkaufsplan/item/<int:item_id>/delete", methods=["POST"])
 @login_required
