@@ -15,3 +15,12 @@ Weiteres: Bei einigen Abschnitten könnte mehr LLM-Benutzung stattgefunden haben
 
 In diesen Fällen haben wir die Hauptquelle angegeben, z.B. "ChatGPT", auch wenn es kleinere Hilfen von anderen Quellen gab 
 (z.B. Fehlersuche, Syntax-Hilfe, Debugging-Hilfe, Prompt-Formulierungshilfe etc.).
+
+Quellensammlung:
+https://github.com/hwrberlin/fswd-app/tree/main (Struktur der App)
+https://hwrberlin.github.io/fswd-app/
+https://hwrberlin.github.io/fswd/ (Alle Überschriften "Python + VS Code Setup" bis "Design Decisions")
+
+Bootstrap-Theme: https://bootswatch.com/zephyr/
+
+LLM-Prompt-PDFs: 
