@@ -275,7 +275,7 @@ def dashboard():
     if not letzte_aktivitaeten:
         letzte_aktivitaeten.append({"zeitpunkt": None, "text": "Momentan gibt es keine Aktivitäten"})
 #----------------------------------------------------------------------------------------------------------------  
-    #Quelle: 
+    #Quelle: ChatGPT (Prompt: Ich habe ja eine Liste von Aktivitäten mit Zeitpunkten. Wie kann ich sie so sortieren, dass die neuesten zuerst stehen, und danach nur die letzten 10 Elemente behalten?)
     letzte_aktivitaeten.sort(key=lambda x: x.get("zeitpunkt") or datetime.min, reverse=True) 
     letzte_aktivitaeten = letzte_aktivitaeten[:10]
 
