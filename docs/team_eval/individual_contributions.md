@@ -9,6 +9,13 @@ nav_order: 3
 
 **(!)** Auskunft über die Funktionen in [Reference]({{ site.baseurl }}/technical-docs/reference.html).
 
+<details open markdown="block">
+{: .text-delta }
+<summary>Inhaltsverzeichnis</summary>
++ ToC
+{: toc }
+</details>
+
 ## Marcel (github.com/MxrsExe): 
 - Host von dieser GitHub Repository (Happy WG)
 
