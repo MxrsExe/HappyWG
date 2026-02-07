@@ -17,6 +17,8 @@ nav_order: 4
 ---
 # Susann an Marcel 
 
+---
+
 ## Marcel - Review 1
 
 ### Meine Wahrnehmung
@@ -27,6 +29,8 @@ Sein Wissen  hat mir geholfen, Aufgaben schneller zu verstehen und selbstständi
 
 ### Tipp für die Zukunft
 Ich fände es schön, wenn Marcel weiterhin sein Fachwissen einbringt und neue Ideen aktiv mit dem Team teilt. Das unterstützt die Zusammenarbeit sehr und trägt dazu bei, das alle am Ball bleiben.
+
+---
 
 ## Marcel - Review 2
 
@@ -39,6 +43,8 @@ Seine Motivation und Hilfsbereitschaft haben mich selbst angesteckt und dazu bei
 ### Tipp für die Zukunft
 Ich würde mir wünschen, dass er dieses Engagement und seine Hilfsbereitschaft beibehält, da sie das Team positiv beeinflussen und die Zusammenarbeit sehr erleichtern. 
 
+---
+
 ## Marcel - Review 3
 
 ### Meine Wahrnehmung
@@ -50,7 +56,11 @@ Das hat mich manchmal ein wenig unter Druck gesetzt, aber gleichzeitig dafür ge
 ### Tipp für die Zukunft
 Vielleicht könnten wir bei komplexeren Aufgaben gemeinsam kurze Abstimmungen oder Deadlines vereinbaren, damit sich alle gut einplanen können. Das würde die Zusammenarbeit noch angenehmer und effizienter machen. 
 
+---
+
 # Marcel an Susann
+
+---
 
 ## Susann - Review 1
 
