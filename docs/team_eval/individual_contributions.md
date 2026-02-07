@@ -7,7 +7,11 @@ nav_order: 3
 
 # Individual Contributions
 
+---
+
 **(!)** Auskunft über die Funktionen in [Reference]({{ site.baseurl }}/technical-docs/reference.html).
+
+---
 
 <details open markdown="block">
 {: .text-delta }
@@ -15,6 +19,8 @@ nav_order: 3
 + ToC
 {: toc }
 </details>
+
+---
 
 ## Marcel (github.com/MxrsExe): 
 - Host von dieser GitHub Repository (Happy WG)
@@ -72,6 +78,8 @@ nav_order: 3
   - `Einkaufsform(FlaskForm)`
 
 - **`design_decisions.md` (nur geschrieben, zusammen entschieden)**
+
+---
 
 ## Susann (github.com/susi-hwr): 
 
