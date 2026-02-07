@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+#Quelle: ChatGPT (Prompt: "kann man das auch ohne activityParticipant machen? Einfach vom user")
 activity_participants = db.Table(
     "ACTIVITY_PARTICIPANTS",
     db.Column("activity_id", db.Integer, db.ForeignKey("ACTIVITY.activity_id"), primary_key=True),
@@ -30,7 +31,7 @@ class User(db.Model):
     added_items = db.relationship('ShoppingItem', foreign_keys='ShoppingItem.added_by', back_populates='added_by_user')
     assigned_items = db.relationship('ShoppingItem', foreign_keys='ShoppingItem.assigned_to', back_populates='assigned_to_user')
 
-    
+    #Quelle: ChatGPT (Prompt: "wie würde ich hier [in new_activity] participants darstellen, wenn jeder einzeln joinen kann")
     joined_activities = db.relationship(
         "Activity",
         secondary=activity_participants,

@@ -48,10 +48,10 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - **Kalender-Export:** Activities lassen sich als **.ics** herunterladen (serverseitig generiert, `text/calendar`) und in gängige Kalender importieren.
 - **Design:** Für das Design auf den Webseiten wird größtenteils Bootstrap (Klassen) genutzt. Im ActivityBoard gibt es zusätzlich custom CSS. 
 
-### High-Level Visualisierung des allgemeinen Flows mit externen Akteuren:
+### High-Level Visualisierung des allgemeinen Flows mit externen Akteuren (Mermaid):
 ![SimpleFlow]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-094043.png)
 
-### Visualisierung der Architektur
+### Visualisierung der Architektur (Mermaid)
 ![AppArchitectureVisual]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-101303.png)
 
 ### Tech-Stack
@@ -66,7 +66,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 
 ## Codemap
 
-**High-Level Codemap-Visualisierung**
+**High-Level Codemap-Visualisierung (Mermaid)**
 ![ComponentDiagram]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-122120.png)
 
 **(Routes / Controllers)`app.py`** 
