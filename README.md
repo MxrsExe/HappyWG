@@ -1,11 +1,33 @@
 # Web-Development-Project Happy WG
 
 ## **Local Setup** 
-1. Repository klonen
-2. Virtuelle Umgebung erstellen & aktivieren (Windows: `python -m venv venv` **ODER** auf MacOS/Linux: `python3 -m venv .venv`, dann `source .venv/bin/activate`)
-3. Dependencies installieren (pip install -r requirements.txt)
-4. DB initialisieren / Migrationen ausführen (im Terminal mit venv aktiv: `flask init-db`)
-5. App starten
+**Step 1: Repository klonen**
+**Step 2:** Virtuelle Umgebung erstellen & aktivieren (Windows: `python -m venv venv` **ODER** auf MacOS/Linux: `python3 -m venv .venv`, dann `source .venv/bin/activate`)
+**Step 3:** Im Virtual Environment Dependencies installieren (`pip install -r requirements.txt`):
+
+```console
+(venv) C:\Users\...\Web-Development-Project> pip install -r requirements.txt
+```
+
+> File `📄requirements.txt` erstellt mit diesem Command: `pip freeze > requirements.txt`
+**Step 4:** DB initialisieren (im Terminal mit venv aktiv: `flask init-db`)
+
+```console
+(venv) PS C:\Users\...\Web-Development-Project> flask init-db
+Database has been initialized.
+```
+
+**Step 5:**. App starten (`flask run --reload`)
+
+```console
+(venv) PS C:\Users\...\Web-Development-Project> flask run --reload
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment.
+Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+ * Restarting with stat
+```
 
 
 FÜR DIE QUELLEN: Alle Quellen sind möglichst genau im Code als Kommentar (#) angegeben und getrennt. 
