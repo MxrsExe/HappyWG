@@ -24,18 +24,6 @@ Diese Seite sammelt die wichtigsten internen Funktionen und Routen der Flask-Web
 
 ---
 
-### `current_user()`
-
-**Route:** keine (interne Funktion)
-
-**Methods:** -
-
-**Purpose:** Ermittelt den aktuell eingeloggten Benutzer anhand der user_id aus der Session. Wird verwendet, um im Backend auf den aktuellen User zuzugreifen, ohne den Session-Code zu wiederholen.
-
-**Sample output:** User-Objekt oder None, falls kein Nutzer eingeloggt ist.
-
----
-
 ### `generate_unique_code(length=6)`
 
 **Route:** keine (interne Funktion)
