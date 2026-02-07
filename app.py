@@ -755,16 +755,13 @@ def einkaufsplan():
     if request.method == "POST":
 
         if form.validate_on_submit():
-        #-----------------------------------------------------------------------------------------------------------------------
 
-            u = User.query.filter_by(wg_id=wg_id).order_by(user_id=user_id).first() 
         #------------------------------------------------------------------------------------------------------------------------
             # Quellen: ChatGPT (Prompt: "u.user_id (user_id ist \"any\") (Bugfix)
-            #Random WG-Member wird ein Produkt zugewiesen, falls kein User in der WG ist, wird der aktuelle User zugewiesen
-            assigned_to = u.user_id if u else current_user.user_id
+            assigned_to = current_user.user_id
         #------------------------------------------------------------------------------------------------------------------------
             #Neues Einkaufs-Item erstellen (Instanz)
-            assigned_to = current_user.user_id
+            
             new_item = ShoppingItem(
                 wg_id=wg_id,
                 added_by=current_user.user_id,
