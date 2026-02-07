@@ -37,27 +37,27 @@ Press CTRL+C to quit
  * Restarting with stat
 ```
 
+## Quellen
 
-FÜR DIE QUELLEN: Alle Quellen sind möglichst genau im Code als Kommentar (#) angegeben und getrennt. 
+Alle Quellen bzw. LLM Prompts sind möglichst genau im Code als Kommentar (#) angegeben (z.B. "Quelle: ChatGPT (Prompt: ...)") und getrennt ("#--------"). 
 Für weitere Informationen zu den Quellen bzw. LLM-Prompts, siehe die jeweiligen PDFs (unter docs/llm_prompts_files/).
 
-Weiteres: Bei einigen Abschnitten könnte mehr LLM-Benutzung stattgefunden haben, da wir uns (vor allem am Anfang) unsicher waren oder nicht wussten, wie Sachen umzusetzen sind bzw. funktionieren, einiges konnte man nicht aus den Vorlesungsfolien entnehmen und LLMs eine sehr große Hilfe darstellen, wenn es um das Verständnis geht. 
-
-In diesen Fällen haben wir die Hauptquelle angegeben, z.B. "ChatGPT", auch wenn es kleinere Hilfen von anderen Quellen gab 
-(z.B. Fehlersuche, Syntax-Hilfe, Debugging-Hilfe, Prompt-Formulierungshilfe etc.).
-
 Weitere Quellensammlung:
-https://github.com/hwrberlin/fswd-app/tree/main (Struktur der App)
 
-https://hwrberlin.github.io/fswd-app/
+Eck, Alexander (2024): "fwsd-app": https://github.com/hwrberlin/fswd-app/tree/main 
+(Struktur der App) (Letzter Zugriff: 07.02.2026)
 
-https://hwrberlin.github.io/fswd/ (Alle Überschriften "Python + VS Code Setup" bis "Design Decisions")
+Eck, Alexander (2024) "Project Name": https://hwrberlin.github.io/fswd-app/
+(Inhalt) (Letzter Zugriff: 07.02.2026)
 
-https://docs.python.org/3/library/datetime.html
+Eck, Alexander (2025) "Full-Stack Web Dev @HWR Berlin": https://hwrberlin.github.io/fswd/ (Alle Überschriften "Python + VS Code Setup" bis "Design Decisions")
+(Lehrmaterial) (Letzter Zugriff: 07.02.2026)
 
-https://www.stefan-goebel.com/2018/was-ist-das-n1-query-problem/
+"datetime — Basic date and time types" (o.D): ttps://docs.python.org/3/library/datetime.html (Letzter Zugriff: 27.01.2026)
 
-Bootstrap-Theme: https://bootswatch.com/zephyr/
+Göbel, Stefan (2018): "Was ist das N+1 Query Problem?": https://www.stefan-goebel.com/2018/was-ist-das-n1-query-problem/ (Letzter Zugriff: 04.02.2026)
+
+Bootstrap-Theme: https://bootswatch.com/zephyr/ (Letzter Zugriff: 16.01.2026)
 
 GeeksforGeeks. Generate random string of given length. Abschnitt: “Using random.choices()”, (last updated: 11.07.2025)
 https://www.geeksforgeeks.org/python/python-generate-random-string-of-given-length/, (Zugriff: 10.01.2026)

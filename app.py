@@ -322,21 +322,24 @@ def putzplan():
         #--------------------------------------------------------------------------------------------------------------
 
             #Fehlermeldung, falls der User nicht existiert (sollte nicht passieren, da aus Dropdown gewählt wird)
-            #Quellen: ChatGPT (Prompt: wieso packt er nicht die aufgabe auf die seite, die ich erstellt habe)
+            #Quellen: ChatGPT (Prompt: "wieso packt er nicht die aufgabe auf die seite, die ich erstellt habe") 
             if not assigned_user:
                 flash("WG-Mitglied existiert nicht", "danger")
                 return redirect(url_for("putzplan"))
             #Neue Vorlage und Task erstellen, falls noch nicht vorhanden 
 
             else:
-                #Isocalendar & Umrechnung: https://docs.python.org/3/library/datetime.html
+                #------------------------------------------------------------------------------------------------------
+                #Isocalendar & Umrechnung, Quelle: https://docs.python.org/3/library/datetime.html
                 #Kalenderwoche aus dem von_datum-Feld holen
                 kw = form.von_datum.data.isocalendar().week  
+                #------------------------------------------------------------------------------------------------------
                 #Template erstellen (Plan/Zeitraum), zum Lernen
                 #Quellen: ChatGPT (Prompt: (1) "wieso packt er nicht die aufgabe auf die seite, die ich erstellt habe")
                 """Man musste natürlich eine Instanz der Klasse erstellen, damit die init-Methode ausgeführt wird und die template_id generiert wird,
                 die man für die Erstellung des Tasks braucht. 
                 Das war der Hauptgrund, warum es nicht funktioniert hat. (Bei den anderen Seiten dann selber umgesetzt.)"""
+
                 new_template = CleaningTemplate(
                     wg_id=user.wg_id,
                     name=form.aufgabe.data,
@@ -915,7 +918,7 @@ def activity_ics(activity_id):
 
 #---------------------------------------------------------------------------------------------------------------------------------------------
 
-#Quellen: Autocomplete (Eigenleistung) + Inspiration von: https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
+#Quellen: Autocomplete (Eigenleistung) + Anlehnung an: https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
 #wg Daten als JSON exportieren
 @app.route("/export/wg.json", methods=["GET"])
 def export_wg_json():
