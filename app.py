@@ -22,11 +22,12 @@ app = Flask(__name__)
 #session
 #app.secret_key = "super-secret-key"
 
+#Quellen: ChatGPT (nach Debug: "es steht tatsächlich 0", "er zeigt trotzdem noch 0 einträge, wieso") + 
+#https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
 app.config['SECRET_KEY'] = 'HappyWG_Project_SecretKey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
 
 db.init_app(app)
-
 
 #Quelle: https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
 @app.cli.command()
@@ -36,14 +37,15 @@ def init_db():
         db.create_all()
         print("Database initialized!")
 
+#----------------------------------------------------------------------------------------------------------------
 @app.route('/', methods=['GET', 'POST'])
-
+#Quelle: https://hwrberlin.github.io/fswd/fswd-intro.html#5-bonus-deliver-json-instead-of-html-to-the-web-server
 def index():
 
     if "user_id" in session:
         return redirect(url_for("dashboard"))
     return redirect(url_for("login"))
-
+#----------------------------------------------------------------------------------------------------------------
 def generate_unique_code(length=6):
     while True:
         code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
