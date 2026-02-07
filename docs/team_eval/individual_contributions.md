@@ -144,3 +144,6 @@ nav_order: 3
   - `LoginForm(FalskForm)`
   - `RegisterForm(FlaskForm)`
   - Zeilen 1-7 zusammen
+
+{: .fs-2 }
+Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
