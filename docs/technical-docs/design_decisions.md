@@ -23,7 +23,7 @@ nav_order: 4
 
 Status: **Entschieden, obsolete** 
 
-Updated: 05-02-2026
+Updated: 05.02.2026
 
 ### Problemstellung
 
@@ -188,7 +188,7 @@ Es gibt durch z.B. `role="admin"` (_später implementierbar_) einen Administrato
 
 **Meta**
 
-**Status:** On Hold, relevant
+**Status:** Decided, still relevant
 
 **Updated:** 05.02.2026
 
