@@ -150,6 +150,9 @@ Wenn im Code Kategorien wie `error` verwendet werden, sollten sie im Template au
 
 ![FlashMsgRed]({{ site.baseurl }}/assets/images/architecture/danger_flash.png)
 
+### Base Template
+Base Template (`base.html`) als UI-Backbone: globale Styles (Außer `activityboard.html`) und Flash-Messages, Änderungen wirken auf alle Seiten.
+
 ### Kalender-Export (.ics)
 Activities können als `.ics` exportiert werden.
 Diese ICS-Route erstellt serverseitig ein gültiges iCalendar Format und liefert es als Download aus, sodass der User es in gängige Kalender (z.B. Outlook/Google/Apple) importieren kann.
