@@ -43,9 +43,13 @@ In diesen Fällen haben wir die Hauptquelle angegeben, z.B. "ChatGPT", auch wenn
 
 Weitere Quellensammlung:
 https://github.com/hwrberlin/fswd-app/tree/main (Struktur der App)
+
 https://hwrberlin.github.io/fswd-app/
+
 https://hwrberlin.github.io/fswd/ (Alle Überschriften "Python + VS Code Setup" bis "Design Decisions")
+
 https://docs.python.org/3/library/datetime.html
+
 https://www.stefan-goebel.com/2018/was-ist-das-n1-query-problem/
 
 Bootstrap-Theme: https://bootswatch.com/zephyr/
