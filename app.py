@@ -20,7 +20,7 @@ from docs.forms import ActivityForm, CommentForm, EinkaufsplanForm, InnovationFo
 
 app = Flask(__name__)
 #session
-app.secret_key = "super-secret-key"
+#app.secret_key = "super-secret-key"
 
 app.config['SECRET_KEY'] = 'HappyWG_Project_SecretKey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///happywg.sqlite'
@@ -29,10 +29,9 @@ db.init_app(app)
 
 
 
-def current_user():
-    uid = session.get("user_id")
-    return User.query.get(uid) if uid else None
-
+#def current_user():
+ #   uid = session.get("user_id")
+  #  return User.query.get(uid) if uid else None
 
 @app.cli.command()
 def init_db():
@@ -949,8 +948,8 @@ def export_wg_json():
     return jsonify(data)
 
 #run the app
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()  # erstellt alle Tabellen in der Datenbank
-    app.run(debug=True)
+#if __name__ == "__main__":
+   # with app.app_context():
+    #    db.create_all()  # erstellt alle Tabellen in der Datenbank
+    #app.run(debug=True)
 
