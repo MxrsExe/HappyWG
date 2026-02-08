@@ -146,7 +146,7 @@ nav_order: 2
 
 
 ---
-### N:M Beziehungen
+### Normalisierte N:M Beziehungen
 
 | Von | Zu | Beschreibung |
 | --- | --- | --- |

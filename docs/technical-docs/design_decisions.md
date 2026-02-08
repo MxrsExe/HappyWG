@@ -359,7 +359,7 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 
 ### Problemstellung
 
-In HappyWG sollen WG-Mitglieder Aktivitäten (Events) beitreten oder verlassen können. Eine Aktivität kann dabei viele Teilnehmer haben, und ein User kann an vielen Aktivitäten teilnehmen. Somit entsteht eine klassische **Many-to-Many-Beziehung** zwischen `User` und `Activity`
+In HappyWG sollen WG-Mitglieder Aktivitäten (Events) beitreten oder verlassen können. Eine Aktivität kann dabei viele Teilnehmer haben, und ein User kann an vielen Aktivitäten teilnehmen. Somit entsteht eine klassische **Many-to-Many-Beziehung** zwischen `User` und `Activity`.
 
 Wir müssen entscheiden, wie wir diese Beziehung im Datenmodell abbilden, sodass:
 
