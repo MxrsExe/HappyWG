@@ -6,7 +6,7 @@ nav_order: 0
 
 ## Happy WG
 
-![HappyWGLogo](assets/images/HappyWG_Logo.png)
+<img src="{{ site.baseurl }}/assets/images/HappyWG_Logo.png" alt="HappyWg Logo" width="400">
 
 
 ## Team members: 
