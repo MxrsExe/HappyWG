@@ -18,7 +18,7 @@ nav_order: 2
 ---
 
 ## Das Data Model von Happy WG, Stand 05.02.2025
-![DataModel]({{ site.baseurl }}/assets/images/data_model.png)
+![DataModel]({{ site.baseurl }}/assets/images/DataModelHappyWG.png)
 
 ---
 
@@ -139,6 +139,7 @@ nav_order: 2
 | **CLEANING_TEMPLATE** | CLEANING_TASK | Jede Vorlage kann mehrere Tasks enthalten. |
 | **USER** | CLEANING_TASK | Ein User kann mehrere Putzaufgaben haben, eine Putzaufgabe ist einem User zugeordnet. |
 | **USER** | ACTIVITY_PARTICIPANTS | Ein User kann an vielen Activities teilnehmen, vermittelt über Activity_Participants. |
+| **USER** | ACTIVITY | Ein User kann mehrere Activities erstellen, und eine Activity wird von einem User erstellt. |
 | **USER** | IDEA | Ein User kann Ideen erstellen, eine Idee kann von einem User erstellt werden. |
 | **USER** | IDEA_COMMENT | Ein User kann mehrere Kommentare unter eine Idee schreiben, ein Kommentar kann von einem User erstellt werden. |
 | **USER** | IDEA_LIKE | Ein User kann mehrere Ideen liken, ein Like kommt von einem User. |

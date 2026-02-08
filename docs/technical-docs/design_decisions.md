@@ -31,13 +31,13 @@ Updated: 05.02.2026
 
 Die Anwendung ist für Wohngemeinschaften (WGs) konzipiert. Funktionen wie Einkaufslisten, Aktivitäten, Ideen oder Putzpläne sollen **von allen Mitgliedern einer WG gemeinsam genutzt** werden, gleichzeitig aber **klar von anderen WGs getrennt** bleiben.
 
-Zu Beginng des Projekts stellte sich daher die Frage, **wie wir die Daten logisch strukturiert werden sollen**:
+Zu Beginn des Projekts stellte sich daher die Frage, **wie wir die Daten logisch strukturieren sollen**:
 - Sollen Daten direkt einzelnen Nutzer:innen gehören?
 - Oder braucht es eine zentrale Struktur, die gemeinsam Daten zusammenfasst?
 
-Wichtig war dabei:
-- eine klare Trennung der Daten zwischen verschiedenen WGs
-- ein Modell, welches sich später gut erweitern lässt.
+**Wichtig war dabei:**
+- Eine klare Trennung der Daten zwischen verschiedenen WGs.
+- Ein Modell, welches sich später gut erweitern lässt.
 
 ---
 
@@ -49,8 +49,8 @@ Wir haben uns dafür entschieden, die **WG** als zentrales Kernelement des Daten
 - Zentrale Tabellen wie Activity, Idea, ShoppingItem oder CleaningTemplate enthalten einen Fremdschlüssel (`wg_id`), über den sie eindeutig einer WG zugeordnet sind.
 
 Durch diese Entscheidung ist klar geregelt:
-- welche Daten zu welcher WG gehören
-- welche Nutzer:innen auf welche Daten zugreifen dürfen
+- welche Daten zu welcher WG gehören,
+- welche Nutzer:innen auf welche Daten zugreifen dürfen,
 - dass Daten verschiedener WGs strikt getrennt bleiben.
 
 Diese Struktur entspricht außerdem gut der realen Nutzung der App.
@@ -279,7 +279,7 @@ Task-Card enthält alle Informationen und Buttons/Checkboxes.
 
 ### Meta
 
-**Status:** Entschieden, obsolet
+**Status:** Entschieden, obsolete
 
 **Updated:** 05.02.2026
 
