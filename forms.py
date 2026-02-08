@@ -1,3 +1,6 @@
+#Quelle: Eck, Alexander. Lehrmaterial Full Stack Web Development, HWR Berlin, 
+#"User Interfaces", https://hwrberlin.github.io/fswd/user-interfaces.html, Zugriff am 17.12.2025.
+#weitere Inspiration von hier: https://github.com/hwrberlin/fswd-app/blob/main/forms.py, Zugriff am 17.12.2025
 
 from flask_wtf import FlaskForm
 

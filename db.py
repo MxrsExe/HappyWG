@@ -1,4 +1,4 @@
-#Quelle: Lehrmaterial Full Stack Web Development, HWR Berlin, 
+#Quelle: Eck, Alexander. Lehrmaterial Full Stack Web Development, HWR Berlin, 
 #"SQLAlchemy", https://hwrberlin.github.io/fswd/sqlalchemy.html, Zugriff am 17.12.2025.
 #weitere Inspiration von hier: https://github.com/hwrberlin/fswd-app/blob/main/db.py, Zugriff am 17.12.2025
 

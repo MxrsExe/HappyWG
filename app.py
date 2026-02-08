@@ -55,7 +55,7 @@ def generate_unique_code(length=6):
             return code
 
 #----------------------------------------------------------------------------------------------------------------
-# Quelle: Lehrmaterial Full Stack Web Development, HWR Berlin, 
+# Quelle: Eck, Alexander. Lehrmaterial Full Stack Web Development, HWR Berlin, 
 # "Python - Part 2", https://hwrberlin.github.io/fswd/python-pt2.html, Zugriff am 10.01.2026.
  #bevor eine Route ausgeführt wird, prüfen ob der User eingeloggt ist!   
 def login_required(f):
@@ -68,7 +68,7 @@ def login_required(f):
     return decorated_function
 
 #----------------------------------------------------------------------------------------------------------------
-#Quelle: Angelehnt an: Lehrmaterial Full Stack Web Development, HWR Berlin, 
+#Quelle: Angelehnt an: Eck, Alexander. Lehrmaterial Full Stack Web Development, HWR Berlin, 
 # "User Interfaces", https://hwrberlin.github.io/fswd/user-interfaces.html, Zugriff am 08.01.2026.
  #login-Funktion   
 @app.route("/login/", methods=['GET', 'POST'])
@@ -149,7 +149,6 @@ def create_or_join_wg():
     return render_template("welcome.html", username=user.username)
 
 #----------------------------------------------------------------------------------------------------------------
-#Quelle:
 @app.route("/welcome/create_wg/", methods=['GET', 'POST'])
 @login_required
 def create_wg():
@@ -225,7 +224,7 @@ def dashboard():
         'einkauf': max(einkauf_count, 0)
     }
     
-#Quelle: Lehrmaterial Full Stack Web Development, HWR Berlin, 
+#Quelle: Eck, Alexander. Lehrmaterial Full Stack Web Development, HWR Berlin, 
 # "Python, Part 1, u.a. Data Structures", https://hwrberlin.github.io/fswd/python.html, Zugriff am 14.01.2026.
     #Hinweis-Box
     wichtige_hinweise = {

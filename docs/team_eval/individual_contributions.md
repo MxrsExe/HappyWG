@@ -70,12 +70,12 @@ nav_order: 3
   - `User`: `joined_activities` (Zeilen 39-43)
   - Association Table: `activity_participants` (Zeilen 14-18)
 
-- **In `forms.py` (Zeilen 50-84):**
-  - `PutzplanForm(FlaskForm)`
-  - `InnovationForm(FlaskForm)`
-  - `CommentForm(FlaskForm)`
-  - `ActivityForm(FlaskForm)`
-  - `Einkaufsform(FlaskForm)`
+- **In `forms.py` (Zeilen 54-87):**
+  - `PutzplanForm(FlaskForm)` (Zeilen 54-60)
+  - `InnovationForm(FlaskForm)` (Zeilen 64-68)
+  - `CommentForm(FlaskForm)` (Zeilen 70-72)
+  - `ActivityForm(FlaskForm)` (Zeilen 75-82)
+  - `Einkaufsform(FlaskForm)` (Zeilen 84-87)
 
 - **`design_decisions.md` (nur geschrieben, zusammen entschieden)**
 
@@ -86,52 +86,53 @@ nav_order: 3
 - **Database (DB)**
   - Implementierung der Datenbank in `db.py` (Zeilen 1-152)
   - Außer die Spalten:
-    - `Activitiy`: `participants` (Zeilen 106-113)
-    - `User`: `joined_activities` (Zeilen 34-38)
+    - `Activitiy`: `participants` (Zeilen 112-116)
+    - `User`: `joined_activities` (Zeilen 39-43)
+    - Association Table: `activity_participants` (Zeilen 14-18)
   - Definition aller Datenbankmodelle (SQLAlchemy):
-    - `User`
-    - `Wg`
-    - `ShoppingItem`
-    - `CleaningTemplate`
-    - `CleaningTask`
-    - `Activity`
-    - `Idea`
-    - `Idea_Comment`
-    - `Idea_Like`
+    - `User` (Zeilen 20-36)
+    - `Wg` (Zeilen 45-57)
+    - `ShoppingItem` (Zeilen 59-71)
+    - `CleaningTemplate` (Zeilen 73-84)
+    - `CleaningTask` (Zeilen 86-96)
+    - `Activity` (Zeilen 98-118)
+    - `Idea` (Zeilen 122-137)
+    - `Idea_Comment` (Zeilen 139-148)
+    - `Idea_Like` (Zeilen 150-157)
   - Umsetzung aller relevanten Beziehungen
 
 - **Authentifizierung (Login/Logout)**
-  - Ganze `login.html`(Zeilen 1-36)
+  - Ganze `login.html` 
   - Implementierung der Login- und Logout-Funktionalität in `app.py`
-    - `login()`
+    - `login()` (Zeilen 74-98)
       - Benutzeranmeldung mit Formularvalidierung
       - Überprüfung von Benutzername und Passwort
       - Session-Handling über `session['user_id']`
-    - `logout()`
+    - `logout()` (Zeilen 102-105)
       - Abmelden durch Zurücksetzen der Session
 
 - **Benutzerregistrierung**
-  - Ganze `register.html`(Zeilen 1-91)
+  - Ganze `register.html`
   - in `app.py`: 
-    - `register()`
+    - `register()` (Zeilen 109-139)
       - Registrierung neuer Benutzer über Formular
       - Prüfung auf eindeutigen Benutzernamen und E-Mail-Adresse
       - Passwort-Hashing vor Speicherung in der Datenbank
       - Automatisches Login durch Setzen der Session nach erfolgreicher Registrierung
 
 - **WG-Erstellung & Beitritt**
-  - Ganze `welcome.html` (Zeilen 1-72)
-  - Ganze `create_wg.html` (Zeilen 1-34)
-  - Ganze `join_wg.html` (Zeilen 1-47)
+  - Ganze `welcome.html` 
+  - Ganze `create_wg.html` 
+  - Ganze `join_wg.html` 
   - in `app.py`:
-    - `create_or_join_wg()`
+    - `create_or_join_wg()` (Zeilen 143-149)
       - Begrüßung des eingeloggten Benutzers
       - Anzeige des Benutzernames auf der Welcome-Seite
-    - `create_wg()`
+    - `create_wg()` (Zeilen 152-175)
       - Erstellung einer neuen WG mit eindeutiger Einladungscode-Generierung
       - Speicherung der WG in der Datenbank
       - Validierung des WG-Namens und Rückmeldung via Flash-Messages
-    - `join_wg()`
+    - `join_wg()` (Zeilen 179-200)
       - Beitritt zu einer bestehenden WG über Einladungscode
       - Prüfung zu einer bestehenden WG über Einladungscode
       - Speicherung der Änderung in der Datenbank und Rückmeldung via Flash-Messages
@@ -139,7 +140,7 @@ nav_order: 3
 - **Dashboard**
   - `dashboard.html` (Zeilen 1-215, außer Zeilen 20-22)
   - in `app.py`:
-    - `dashboard()`
+    - `dashboard()` (Zeilen 203-225)
       - Anezeige personalisierter Übersichtsseite für eingeloggte Benutzer
       - Zählt offene Putzaufgaben, neue Ideen, kommende Events und Einkaufsposten
       - Generiert wichtige Hinweise für Aufgaben, Einkäufe und Events
@@ -147,11 +148,11 @@ nav_order: 3
       - Anzeige aller WG-Mitglieder und aktuellem Datum
       - Übergabe aller Daten an `dashboard.html`zur dynamischen Darstellung
 
-- **In `forms.py` (Zeilen 9-48)**
-  - `UserExistsValidator`
-  - `LoginForm(FalskForm)`
-  - `RegisterForm(FlaskForm)`
-  - Zeilen 1-7 zusammen
+- **In `forms.py` (Zeilen 12-51)**
+  - `UserExistsValidator` (Zeilen 12-19)
+  - `LoginForm(FalskForm)` (Zeilen 21-30)
+  - `RegisterForm(FlaskForm)` (Zeilen 32-51)
+  - Zeilen 5-10 zusammen
 
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
