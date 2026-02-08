@@ -447,6 +447,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Sample output:**
 ![EinkaufsplanForm]({{ site.baseurl }}/assets/images/einkaufsliste/einkaufsplanForm.png)
 
+---
 
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}

@@ -5,6 +5,10 @@ parent: Technical documentation
 nav_order: 1
 ---
 
+# Architecture
+
+---
+
 <details open markdown="block">
 {: .text-delta }
 <summary>Inhaltsverzeichnis</summary>
@@ -12,7 +16,7 @@ nav_order: 1
 {: toc }
 </details>
 
-# Architecture
+---
 
 ## Overview
 
@@ -38,7 +42,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
   Interaktionen, beispielsweise create, toggle, join/leave, delete, laufen überwiegend über **POST + Redirect** (PRG Pattern)
 - **SQLAlchemy ORM** als Datenzugriffsschicht:  
   Models bilden Tabellen/Beziehungen ab, Queries werden als Python-Objekte formuliert.
-- **ORM-Instanzierung & Persistenz:** Anschließend zu **SQLAlchemy ORM:** beispielhafte Erstellung der Objekt-Instanzen durch `new_activity = Activity(...)`, dann `db.session.commit()`.
+- **ORM-Instanziierung & Persistenz:** Anschließend zu **SQLAlchemy ORM:** beispielhafte Erstellung der Objekt-Instanzen durch `new_activity = Activity(...)`, dann `db.session.commit()`.
 - **Performance/Eager Loading:** Beispielsweise `.options(joinedload(Activity.creator), joinedload(Activity.participants))` → vermeidet [N+1](https://www.stefan-goebel.com/2018/was-ist-das-n1-query-problem/) Queries im Template (alle Daten werden mittels einer einzigen Query geladen).
 - **Multi-Tenancy (WG-Scoping) über `wg_id` [(kritische Designentscheidung)]({{ site.baseurl }}/design_decisions.html):**  
   Alle relevanten Datenobjekte hängen an einer WG; **jede** Query/Änderung wird auf `current_user.wg_id` begrenzt → verhindert Cross-WG Datenzugriffe.
@@ -48,11 +52,17 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - **Kalender-Export:** Activities lassen sich als **.ics** herunterladen (serverseitig generiert, `text/calendar`) und in gängige Kalender importieren.
 - **Design:** Für das Design auf den Webseiten wird größtenteils Bootstrap (Klassen) genutzt. Im ActivityBoard gibt es zusätzlich custom CSS. 
 
+---
+
 ### High-Level Visualisierung des allgemeinen Flows mit externen Akteuren (Mermaid):
 ![SimpleFlow]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-094043.png)
 
+---
+
 ### Visualisierung der Architektur (Mermaid)
 ![AppArchitectureVisual]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-101303.png)
+
+---
 
 ### Tech-Stack
 - **Backend:** Python, Flask
@@ -66,8 +76,12 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 
 ## Codemap
 
+---
+
 **High-Level Codemap-Visualisierung (Mermaid)**
 ![ComponentDiagram]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-122120.png)
+
+---
 
 **(Routes / Controllers)`app.py`** 
 
@@ -76,7 +90,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - Feature Routes:
   - `/dashboard/` - Zähler & Aggregationen
   - `/putzplan/` - Putzaufgabe erstellen + Aufgaben auflisten + Fortschritt
-  - `/putzplan/task/<id>/toggle` - Aufgaben markieren bzw. durchstreichen, um sie als fertig oder offen zum markieren.
+  - `/putzplan/task/<id>/toggle` - Aufgaben markieren bzw. durchstreichen, um sie als fertig oder offen zu markieren.
     - `/putzplan/task/<int:template_id>/delete` - Aufgabe löschen
   - `/innovationboard/` - create ideas, like, comment, delete
     - `/innovation_board/idea/<int:idea_id>/delete` - Idee löschen
@@ -94,7 +108,7 @@ Für die visuelle Orientierung in der App empfehlen wir die [Customer Journey]({
 - `Wg`, `User`
 - Putzplan: `CleaningTemplate`, `Cleaning_Task`
 - InnovationBoard: `Idea`, `Idea_Comment`, `Idea_Like`
-- ActivityBoard: `Activity` + `ACTIVITY_PARTICIPANTS` (n zu m)
+- ActivityBoard: `Activity` + `ACTIVITY_PARTICIPANTS` (1 zu n)
 - Einkaufsliste: `ShoppingItem`
 
 **WTForms: `docs/forms.py`**
@@ -121,6 +135,8 @@ Praktische Regel:
 
 ![MultiTenancy]({{ site.baseurl }}/assets/images/architecture/HappyWG%20SSR%20App%20ICS%20Flow-2026-02-02-134844.png)
 
+---
+
 ### Autorisierungsmodell (wer darf was ändern?)
 
 Dies stellt eine [Designentscheidung]({{ site.baseurl }}/design_decisions.html#02-authorization-modell) dar.
@@ -132,6 +148,8 @@ Verschiedene Features haben unterschiedliche Ownership-Regeln:
 
 Diese Regeln beeinflussen sowohl die Backend-Prüfungen in den Routes als auch welche UI-Buttons/Controls angezeigt werden.
 
+---
+
 ### SSR + POST-Aktionen
 
 Um Komplexität gering zu halten und die UX vorhersehbar zu machen:
@@ -139,10 +157,14 @@ Um Komplexität gering zu halten und die UX vorhersehbar zu machen:
 - **Bestätigungsflows** werden umgesetzt durch entweder
   - einen zweiten "Confirm"-Schritt
   - CSS-only Modals (z.B. Checkbox/Label Pattern)
-  
+
+ ---
+
 ### Performance: Laden von Relationships
-Listen-Seiten zeigen häufig verknüpfte Daten an (z.B. Einkaufsitems inkl zuständigem User).
+Listen-Seiten zeigen häufig verknüpfte Daten an (z.B. Einkaufsitems inkl. zuständigem User).
 Da das N+1 Query-Problem vermieden werden soll, werden die Beziehungen "eager" geladen mit `joinedLoad()`.
+
+---
 
 ### Flash-Messages Kategorien (Bootstrap-Mapping)
 Bootstrap erwartet Kategorien wie `success`, `danger`, `warning`, `info`.
@@ -150,19 +172,25 @@ Wenn im Code Kategorien wie `error` verwendet werden, sollten sie im Template au
 
 ![FlashMsgRed]({{ site.baseurl }}/assets/images/architecture/danger_flash.png)
 
+---
+
 ### Base Template
 Base Template (`base.html`) als UI-Backbone: globale Styles (Außer `activityboard.html`) und Flash-Messages, Änderungen wirken auf alle Seiten.
+
+---
 
 ### Kalender-Export (.ics)
 Activities können als `.ics` exportiert werden.
 Diese ICS-Route erstellt serverseitig ein gültiges iCalendar Format und liefert es als Download aus, sodass der User es in gängige Kalender (z.B. Outlook/Google/Apple) importieren kann.
+
+---
 
 ### CSRF-Schutz (Formulare)
 Alle `POST`-Forms müssen das CSRF-Token haben (in diesem Fall `form.hidden_tag()` [im jinja2-Template]).
 
 ![hiddentag]({{ site.baseurl }}/assets/images/architecture/hiddentag.png)
 
-
+---
 
 
 
