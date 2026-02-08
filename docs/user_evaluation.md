@@ -35,9 +35,9 @@ Konkret wollten wir folgende Fragen beantworten:
 
 ### Methode
 
-Die Evaluation haben wir unter anderem mit den **zwei Mitbewohnerinnen von Susann Pietzuch** durchgeführt, die **nicht an der Umsetzung des Projekt beteiligt** waren und die App vorher nicht kannten.
+Die Evaluation haben wir unter anderem mit den **zwei Mitbewohnerinnen von Susann Pietzuch** durchgeführt, die **nicht an der Umsetzung des Projekts beteiligt** waren und die App vorher nicht kannten.
 
-Vorgehen:
+**Vorgehen:**
 1. Den Testpersonen wurde kurz erklärt, dass es sich um eine Web-App zur Organisaiton einer WG handelt.
 2. Anschließend sollten sie die App selbstständig ausprobieren und folgende Aufgaben erledigen:
 + Registrierung eines neuen Benutzerkontos
