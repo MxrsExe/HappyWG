@@ -39,7 +39,7 @@ Press CTRL+C to quit
 
 ## Commits
 
-Commits sind nicht ausgeglichen, da Marcel Granovskyy viele kleine Commits gemacht hat. Z.B. vor allem oft eine Markdown bearbeitet / korrigiert und kleine Schritte zum Visualisieren/Testen auf der GitHub-Pages Seite commitet hat oder bei der Erstellung des Codes in kleineren Commit-Schritten zum Testen vorgegangen ist.
+Die Commit-Verteilung ist nicht ausgeglichen, da Marcel Granovskyy überwiegend in vielen kleinen Commit-Schritten gearbeitet hat. Dazu gehörten insbesondere Korrekturen und Anpassungen an Markdown-Dateien sowie iterative Commits zum Visualisieren und Testen über GitHub Pages. Auch die Implementierung des Codes erfolgte schrittweise, um Zwischenergebnisse regelmäßig zu prüfen.
 
 ## Quellen
 
