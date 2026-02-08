@@ -6,6 +6,8 @@ nav_order: 0
 
 ## Happy WG
 
+![HappyWGLogo](assets/images/HappyWG_Logo.png)
+
 
 ## Team members: 
 **Marcel Granovskyy** & **Susann Pietzuch**
