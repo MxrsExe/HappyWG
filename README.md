@@ -44,7 +44,7 @@ Für weitere Informationen zu den Quellen bzw. LLM-Prompts, siehe die jeweiligen
 
 **Links zu den ChatGPT Chats**:
 
-https://chatgpt.com/g/g-p-6939dcde8a988191b6a437cd1a09b6e5-web-app/project
+Marcel Granovskyy (Anmerkung: _ich benutze den ChatGPT Account von meinem Bruder, Leo Granowskij_): https://chatgpt.com/g/g-p-6939dcde8a988191b6a437cd1a09b6e5-web-app/project
 
 **Weitere Quellensammlung**:
 
