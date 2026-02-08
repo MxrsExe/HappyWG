@@ -70,11 +70,11 @@ Mir ist aufgefallen, dass sie sich trotz einiger herausfordernder Stellen nie ha
 
 ### Wirkung auf mich
 
-Das hat mir Sicherheit gegeben, weil ich wusste: Auf sie kann man sich verlassen. Es hat auch den Team-Stress reduziert, weil sie Verantwortung übernommen hat und Dinge zuverlässig abgeschlossen hat. Gleichzeitig war es motivierend zu sehen, dass sie sich nicht von Schwierigkeiten ausbremsen lässt, was michselbst dazu gebracht hat, geduldiger zu bleiben und Probleme systematischer anzugehen.
+Das hat mir Sicherheit gegeben, weil ich wusste: Auf sie kann man sich verlassen. Es hat auch den Team-Stress reduziert, weil sie Verantwortung übernommen hat und Dinge zuverlässig abgeschlossen hat. Gleichzeitig war es motivierend zu sehen, dass sie sich nicht von Schwierigkeiten ausbremsen lässt, was mich selbst dazu gebracht hat, geduldiger zu bleiben und Probleme systematischer anzugehen.
 
 ### Tipp für die Zukunft
 
-Ich fände es super, wenn sie diesen "Dranbleiben-Mindset" beibehält und sich weiterhin traut, Fragen früh zu stellen, sobald etwas unklar ist. Gerade weil sie Herausforderungen aktiv angeht, kann sie dadurch noch schneller vorankommen. 
+Ich fände es super, wenn sie dieses "Dranbleiben-Mindset" beibehält und sich weiterhin traut, Fragen früh zu stellen, sobald etwas unklar ist. Gerade weil sie Herausforderungen aktiv angeht, kann sie dadurch noch schneller vorankommen. 
 
 ---
 
