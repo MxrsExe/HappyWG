@@ -28,47 +28,47 @@ nav_order: 3
 - **Putzplan**
   - Ganze `putzplan.html`
   - in `app.py` - für den Putzplan zuständige Funktionen & Routes 
-    - `putzplan()` 
-    - `toggle_cleaning_task(task_id)` 
-    - `delete_cleaning_task(template_id)` 
+    - `putzplan()` (Zeilen 288-405)
+    - `toggle_cleaning_task(task_id)` (Zeilen 408-432)
+    - `delete_cleaning_task(template_id)` (Zeilen 434-459)
 
 - **InnovationBoard**
   - Ganze `innovationboard.html`
   - in `app.py` - für das InnovationBoard zuständige Funktionen & Routes 
-    - `innovation_board()` 
-    - `delete_idea()` 
-    - `toggle_like()` 
-    - `post_comment()` 
+    - `innovation_board()` (Zeilen 470-512)
+    - `delete_idea()` (Zeilen 517-542)
+    - `toggle_like()` (Zeilen 545-575)
+    - `post_comment()` (Zeilen 578-614)
 
 - **ActivityBoard**
   - Ganze `activityboard.html`
   - in `app.py` - für das ActivityBoard zuständige Funktionen & Routes 
-    - `activity_board()` 
-    - `join_activity(activity_id)` 
-    - `leave_activity(activity_id)` 
-    - `delete_activity(activity_id)` 
-    - `google_calendar_url(title, start_dt, end_dt, details="", location="")` 
-    - `dt_to_ics(dt)`
-    - `build_ics(uid, title, start_dt, end_dt, description="", location="")`
-    - `activity_ics(activity_id)`
+    - `activity_board()` (Zeilen 619-668)
+    - `join_activity(activity_id)` (Zeilen 671-709)
+    - `leave_activity(activity_id)` (Zeilen 712-738)
+    - `delete_activity(activity_id)` (Zeilen 740-759)
+    - `google_calendar_url(title, start_dt, end_dt, details="", location="")` (Zeilen 851- 864)
+    - `dt_to_ics(dt)` (Zeilen 867-870)
+    - `build_ics(uid, title, start_dt, end_dt, description="", location="")` (873-888)
+    - `activity_ics(activity_id)` (Zeilen 892-915)
 
 - **Einkaufsliste**
   - Ganze `einkaufplan.html`
   - in `app.py` - für die Einkaufsliste zuständige Funktionen & Routes
-    - `einkaufsplan()`
-    - `delete_shopping_item(item_id)`
+    - `einkaufsplan()` (Zeilen 762-818)
+    - `delete_shopping_item(item_id)` (Zeilen822-843)
 
 - **Im Dashboard Button "WG-Daten-Exportieren" (WG JSON-Export)**
   - Im `dashboard.html` Zeilen 20-22
   - in `app.py` - für den WG Datenexport zuständige Funktion & Route 
-  - `export_wg_json()`
+  - `export_wg_json()` (Zeilen 921-995)
 
 - `instance/run_sql.py` & die restlichen .sql Files
 
 - **In Database `db.py` folgende Spalten:**
-  - `Activitiy`: `participants`
-  - `User`: `joined_activities`
-  - Association Table: `activity_participants`
+  - `Activitiy`: `participants` (Zeilen 112-116)
+  - `User`: `joined_activities` (Zeilen 39-43)
+  - Association Table: `activity_participants` (Zeilen 14-18)
 
 - **In `forms.py` (Zeilen 50-84):**
   - `PutzplanForm(FlaskForm)`

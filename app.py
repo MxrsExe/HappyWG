@@ -285,8 +285,6 @@ def dashboard():
     
     return render_template("dashboard.html", active_page="dashboard", username=user.username, wg_name=wg.name, heute=heute, counting_boxes=counting_boxes, wichtige_hinweise=wichtige_hinweise, letzte_aktivitaeten=letzte_aktivitaeten, wg_mitglieder=wg_mitglieder)
 
-
-
 @app.route("/putzplan/", methods=["GET", "POST"])
 @login_required
 def putzplan():
