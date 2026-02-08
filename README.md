@@ -47,6 +47,8 @@ Für weitere Informationen zu den Quellen bzw. LLM-Prompts, siehe die jeweiligen
 Marcel Granovskyy (Anmerkung: _ich benutze den ChatGPT Account von meinem Bruder, Leo Granowskij_): https://chatgpt.com/g/g-p-6939dcde8a988191b6a437cd1a09b6e5-happy-wg-marcel-granovskyy/project
 
 
+Susann Pietzuch: https://chatgpt.com/share/6987c39c-ef94-800d-93bb-a14eebb9b245
+
 **Weitere Quellensammlung**:
 
 Eck, Alexander (2024): "fwsd-app": https://github.com/hwrberlin/fswd-app/tree/main 

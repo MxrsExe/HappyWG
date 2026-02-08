@@ -107,3 +107,6 @@ Das hat die Teamarbeit deutlich angenehmer gemacht, weil weniger Missverständni
 ### Tipps für die Zukunft
 
 Ich fände es hilfreich, wenn sie diese klare Kommunikation beibehält und noch häufiger kurze Zwischenstände teilt. Dadurch können Teams noch schneller unterstützen - und ihre starke, strukturierte Arbeitsweise kommt noch mehr zur Geltung.
+
+{: .fs-2 }
+Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
