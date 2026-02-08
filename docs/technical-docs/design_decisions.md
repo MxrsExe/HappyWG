@@ -398,9 +398,161 @@ z.B. `ActivityParticipant`
 - Beitreten & verlassen ist simpel
 - Performante Abfragen möglich
 
+---
 
+##  06: Modal-Dialoge für Create-Forms (CSS-only) vs. eigene Create-Seite
 
+### Meta
 
+**Status:** Decided
+
+**Updated:** 08.02.2026
+
+---
+
+### Problemstellung
+
+In mehreren Features (z. B. InnovationBoard, ActivityBoard, Putzplan) müssen Nutzer neue Objekte erstellen.
+Die Frage ist: Sollen Create-Formulare in einem Modal (Overlay) direkt auf der Liste erscheinen oder auf einer eigenen Seite (z. B. /activities/new)?
+
+Rahmenbedingungen im Projekt:
+
+- Flask SSR + Jinja2
+- kein JavaScript
+- schnelle UX ohne komplexen Frontend-Stack
+- PRG (Post-Redirect-Get)-Pattern für stabilen Zustand
+
+---
+
+### Entscheidung
+
+Wir nutzen Modal-Dialoge (CSS-only über Checkbox/Label-Toggle) für Create-Formulare auf den Listenseiten, weil es...
+ - einen schnellen und "leichten" UX-Flow hat: Nutzer bleiben im Kontext der Liste.
+ - kein JavaScript benötigt,
+ - Seitenwechsel reduziert und die Übersichtlichkeit bei kurzen Formularen erhöht.
+ - das Form-Handling serverseitig (WTForms + PRG) bleiben lässt, wobei Modal nur die Präsentation ist
+
+_Entschieden vom HappyWG-Projektteam_
+
+---
+
+### Betrachtete Alternativen
+
+### Option 1: Create-Form im Modal (CSS-only/Checkbox-Toggle)
+
+### Vorteile
+
++ **Schneller Flow:** Erstellen ohne Kontextwechsel (Liste bleibt sichtbar)
++ Kein JavaScript
++ Einfaches Routing (kein zusätzlicher Endpoint nötig)
++ Gute UX bei kleineren Formularen
+
+### Nachteile
+
+- **Komplexeres Template:** HTML/CSS kann unter Umständen schnell unübersichtlich werden.
+- Bei großen Formularen wirkt ein Modal etwas "gequetscht"
+
+---
+
+### Option 2: Separate Create-Seite
+
+### Vorteile
+
++ Klare Struktur (weniger Template-Komplexität, einfacher zu warten)
++ Skaliert besser für längere/mehrstufige Formulare
+
+### Nachteile
+
+- Mehr Klicks / Kontextwechsel, Nutzer verlässt die Liste.
+- Mehr Routen/Views/Templates -> mehr Boilerplate 
+- Weniger "App-Feeling", wirkt alt
+
+---
+
+### 06: Konsequenzen
+
+- Saubere & einfach zu bedienende UI
+- Gute UX
+- Wirkt nicht alt
+- Ein Formular jedoch zu groß (Activity)
+
+---
+
+## 07: UI-Darstellung als Cards vs. einfache Listen-/Tabellenansicht
+
+### Meta
+
+**Status:** Entschieden
+
+**Updated:** 08.02.2026
+
+---
+
+### Problemstellung
+
+Auf allen Seiten ist es möglich, viele Einträge anzuzeigen.
+**Frage:** Sollen diese Einträge als "Cards" (Karten) dargestellt werden oder als einfache Liste/Tabelle?
+
+Rahmenbedingungen:
+
+- Flask SSR + Jinja2
+- Fokus auf schnelle Verständlichkeit und kreativeres Design
+- Bootstrap-Styles vorhanden
+
+---
+
+### Entscheidung
+
+Wir stellen Einträge primär als **Cards** dar.
+
+_Entschieden vom HappyWG-Projektteam_
+
+**Grunde:**
+
+- Cards sind visuell klarer: Titel, Meta-Infos, Actions (z.B. Join/Leave/Delete, etc.) lassen sich sauber bündeln
+- Cards lassen sich pro Feature flexibel erweitern (Badges, Farbbalken, Teilnehmerliste, etc.) ohne die gesamte Struktur umbauen zu müssen.
+- Moderneres Design, eine Tabelle z.B. wirkt klassisch & alt
+
+---
+
+### Betrachtete Alternativen
+
+### Option 1: Cards (Karten)
+
+### Vorteile
+
++ Sehr gute Lesbarkeit (klare Trennung pro Eintrag)
++ Actions sind direkt am Objekt, keine lange Suche
++ Erweiterbar
++ Kann man sehr gut an das feature-spezifische Layout anpassen.
+
+### Nachteile
+
++ Evtl. mehr Platzbedarf
++ Mehr HTML/CSS
+
+---
+
+### Option 2: Einfache Liste / Tabelle
+
+### Vorteile
+
++ Evtl. Vergleichbarkeit höher
++ Weniger HTML/CSS
+
+### Nachteile
+
+- Buttons / Icons pro Zeile könnten schnell unübersichtlich werden.
+- Weniger "App-Feeling"
+- Langweiliges & altmodisches Design, passt nicht zu unserer Vorstellung
+
+---
+
+### 07: Konsequenzen
+
+- Wir nutzen Cards, da für uns Interaktionen pro Eintrag wichtig sind
+- Wir achten auch darauf, die Cards nicht unnötig zu überladen
+- App-Design wirkt frischer und neumodischer
 
 
 
