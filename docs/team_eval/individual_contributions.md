@@ -47,7 +47,7 @@ nav_order: 3
     - `join_activity(activity_id)` (Zeilen 671-709)
     - `leave_activity(activity_id)` (Zeilen 712-738)
     - `delete_activity(activity_id)` (Zeilen 740-759)
-    - `google_calendar_url(title, start_dt, end_dt, details="", location="")` (Zeilen 851- 864)
+    - `google_calendar_url(title, start_dt, end_dt, details="", location="")` (Zeilen 851-864)
     - `dt_to_ics(dt)` (Zeilen 867-870)
     - `build_ics(uid, title, start_dt, end_dt, description="", location="")` (873-888)
     - `activity_ics(activity_id)` (Zeilen 892-915)
@@ -56,7 +56,7 @@ nav_order: 3
   - Ganze `einkaufplan.html`
   - in `app.py` - für die Einkaufsliste zuständige Funktionen & Routes
     - `einkaufsplan()` (Zeilen 762-818)
-    - `delete_shopping_item(item_id)` (Zeilen822-843)
+    - `delete_shopping_item(item_id)` (Zeilen 822-843)
 
 - **Im Dashboard Button "WG-Daten-Exportieren" (WG JSON-Export)**
   - Im `dashboard.html` Zeilen 20-22

@@ -4,7 +4,7 @@ from sqlite3 import IntegrityError
 import string
 from flask import Flask, flash, jsonify, redirect, render_template,request, url_for,session, Response, abort
 from datetime import timezone
-from sqlalchemy import func
+
 from sqlalchemy.orm import joinedload
 import random
 from datetime import datetime
