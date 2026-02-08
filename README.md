@@ -36,6 +36,7 @@ Use a production WSGI server instead.
 Press CTRL+C to quit
  * Restarting with stat
 ```
+
 ## Commits
 
 Commits sind nicht ausgeglichen, da Marcel Granovskyy viele kleine Commits gemacht hat. Z.B. vor allem oft eine Markdown bearbeitet / korrigiert und kleine Schritte zum Visualisieren/Testen auf der GitHub-Pages Seite commitet hat oder bei der Erstellung des Codes in kleineren Commit-Schritten zum Testen vorgegangen ist.
