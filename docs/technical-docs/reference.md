@@ -303,7 +303,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Methods:** `GET`, `POST`
 
-**Purpose:** Zeigt die Einkaufsliste der WG an und ermöglicht das Hinzufügen neuer Artikel. Neue Artikel werden automatisch einem zufälligen WG-Mitglied zugewiesen.
+**Purpose:** Zeigt die Einkaufsliste der WG an und ermöglicht das Hinzufügen neuer Artikel. Der Artikel wird dem jeweiligen Ersteller zugewiesen.
 
 **Sample output:** 
 

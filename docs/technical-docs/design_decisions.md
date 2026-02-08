@@ -21,6 +21,8 @@ nav_order: 4
 
 ## 01: Zentrales WG-basiertes Datenmodell
 
+### Meta
+
 Status: **Entschieden, obsolete** 
 
 Updated: 05.02.2026
@@ -97,7 +99,9 @@ Gemeinsame Daten gehören immer zu einer WG, Nutzer:innen sind Mitglieder dieser
 
 ## 02: Authorization-Modell - Wer darf was?
 
-Status:**Entschieden, obsolete**
+### Meta
+
+**Status:** Entschieden, obsolete
 
 **Updated:** 05.02.2026
 
@@ -131,51 +135,59 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 
 ### Option 1: Nur Owner darf alles (einheitlich)
 
-#### Vorteile 
+### Vorteile 
 + Einfach zu implementieren
 + Weniger Sonderfälle in Routes & Templates
 
-#### Nachteile
+### Nachteile
 + Passt nicht zur Realität einer WG und unserer Philosophie
 + Unflexibel: "Zuständigkeit" als Konzept bringt wenig, wenn Owner alles steuert.
 + Kann zu schlechter UX führen (zuständige Person kann Aufgabe nicht als erledigt markieren, wenn sie nicht Owner ist (**!**))
 
+---
+
 ### Option 2: WG-weit darf jeder alles (maximal einfach, aber sehr unsicher)
 Alle WG-Mitglieder dürfen von anderen WG-Mitgliedern alles wie z.B. löschen.
 
-#### Vorteile
+### Vorteile
 + Minimaler Implementationsaufwand: fast keine Ownership-Checks
 + Sehr schnell fürs MVP
 
-#### Nachteile
+### Nachteile
 + Unsere Philosophie ist, dass jedes WG-Mitglied gleichberechtigt sein & nicht über andere Mitglieder und deren Zuständigkeiten & Aufgaben bestimmen sollen, dies geschieht aber über diese Option.
 + **Sicherheits-/Vertrauensprobleme:** Jeder darf alles löschen/verändern: Chaos, nicht gut für eine WG.
 + Konflikte innerhalb der WG (z.B. "Wer hat mein Event gelöscht?" oder "Ich weiß nicht mehr, welche Reinigungsaufgabe ich habe!")
 + Spätere Korrektur ist teuer, da man nachträglich Checks + UI-Logik einbauen muss.
 
+---
+
 ### Option 3 (gewählt): Feature-spezifische Regeln (Owner vs. zuständig)
 Wer was machen kann wird pro Feature entschieden.
 
-#### Vorteile
+### Vorteile
 + Realistische Regeln pro Feature (Activites: Activity Owner, Cleaning: assigned_to; Ideas: Owner; Like/Comment: WG)
 + Bessere UX: Flash messages nach einem Button-Klick weisen den unberechtigen User drauf hin, dass er nicht berechtigt ist.
 + Gute Basis für späteres Rollenmodell (z.B. Admin als Erweiterung)
 
-#### Nachteile
+### Nachteile
 + Etwas mehr Komplexität: pro Feature andere Checks
 + Policy-Änderung würden mehrere Endpoints/Templates betreffen.
+
+---
   
 ### Option 4 Rollenmodell:
 Es gibt durch z.B. `role="admin"` (_später implementierbar_) einen Administrator, der alles verändern kann.
 
-#### Vorteile
+### Vorteile
 + Klar skalierbar: Admin kann moderieren/aufräumen.
 + Gut für Missbrauchsfälle
 
-#### Nachteile
+### Nachteile
 + Mehr Modell/UI-Aufwand (Rollenpflege, Admin-UI, Tests)
 + Für unser MVP overkill
 + Man muss trotzdem definieren, was Member dürfen (landet wieder bei Option 3 + Admin-Override)
+
+---
 
 ### 02: Konsequenzen
 - Backend-Routen müssen vor Änderungen immer prüfen: `current_user.wg_id == object.wg_id` und getroffene Ownership-Regel zum Feature.
@@ -186,7 +198,7 @@ Es gibt durch z.B. `role="admin"` (_später implementierbar_) einen Administrato
 
 ## 03: Putzplan-Datenmodell - Cleaning Template vs. nur Cleaning Task (Plan vs. Ausführung)
 
-**Meta**
+### Meta
 
 **Status:** Decided, still relevant
 
@@ -219,31 +231,36 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 ### Option 1: Eine gemeinsame CleaningTask Tabelle
 Task-Card enthält alle Informationen und Buttons/Checkboxes.
 
-#### Vorteile
+### Vorteile
 - Einfacher Start: nur ein Objekt-Modell, weniger Joins
 - CRUD-Ops schneller zu bauen
 
-#### Nachteile
+### Nachteile
 - Änderungen am Plan könnten alte Einträge betreffen
+
+---
 
 ### Option 2: Template + Task getrennt (chosen)
 
-#### Vorteile
+### Vorteile
 - Saubere Domänentrennung
 - Ideal für spätere Features (_geplant zu implementieren, aus Zeit- und Scopegründen nicht geschafft_)
 - Weniger Daten-Duplikation
 
-#### Nachteile
+### Nachteile
 - Mehr Joins/Relationships in Queries/Templates
 - Beim Erstellen in der App immer 2 Schritte
 - Klare Policy benötigt
 
+---
+
 ### Option 3: Template + automatisch generierte Tasks (Scheduler/Cron)
-#### Vorteile
+
+### Vorteile
 + "Echte" Wiederkehr: systematisch jede Woche neue Tasks
 + Sehr gute Basis für Historie/Rotation (neue Features) ohne manuelles Erstellen
 
-#### Nachteile
+### Nachteile
 + Mehr Infrastruktur/Komplexität (Scheduler, Background Jobs etc.)
 + Zu viel Aufwand 
 + Fehleranfälliger
@@ -260,7 +277,7 @@ Task-Card enthält alle Informationen und Buttons/Checkboxes.
 
 ## 04: Hard Delete vs Soft Delete (Daten löschen oder deaktivierebn)
 
-**Meta**
+### Meta
 
 **Status:** Entschieden, obsolet
 
@@ -286,7 +303,8 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 ### Betrachtete Alternativen
 
 ### Option 1: Hard Delete direkt aus der DB (chosen)
-#### Vorteile
+
+### Vorteile
 + Sehr simpel (einfach mit `db.session.delete(...)`)
 + Keine "gelöscht-Filter" in allen Queries nötig
 + Weniger Datenballast & Sonderlogik
@@ -296,7 +314,10 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 + Keine History (z.B. wer hat wann was gelöscht?)
 + Cascades können mehr löschen als erwartet (z.B. Template → Tasks), Vorsicht ist geboten
 
-### Option 2: Soft Delete (mit Variable deleted_at)
+---
+
+### Option 2: Soft Delete (mit Variable `deleted_at`)
+
 #### Vorteile
 + Wiederherstellen möglich (durch Archiv oder Undo)
 + History möglich
@@ -307,12 +328,15 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 + UI muss Archiv implementieren
 + Mehr Felder + mehr Tests
 
+---
+
 ### Option 3: Hybrid (manche Entities soft, andere hard)
-#### Vorteile
+
+### Vorteile
 + Flexibilität: Man kann wichtige Daten behalten, unwichtige löschen
 + Guter Kompromiss zwischen Aufwand und Nutzen.
 
-#### Nachteile
+### Nachteile
 + Inkonsistent: Entwickler müssen pro Entity wissen, was gilt.
 + Mehr Denkaufwand + Doku nötig
 + Verwirrungsgefahr
@@ -327,7 +351,7 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 
 ## 05: Many-to-Many Activities - Association Table (`ACTIVITY_PARTICIPANTS`)
 
-**Meta**
+### Meta
 
 **Status:** Entschieden
 
@@ -365,25 +389,27 @@ _Entschieden vom HappyWG-Team_: github.com/MxrsExe, github.com/susi-hwr
 ### Option 1: Association Table (pure join table) (chosen)
 Einfaches n:m Mapping über eine Join-Tabelle mit zwei FKs und Composite PK
 
-#### Vorteile
+### Vorteile
 - Relational korrekt für Many-to-Many (Normalisierung)
 - Einfaches **ORM-Handling** (siehe obiges Beispiel)
 - Keine Duplikate durch Composite PK 
 - Gute Performance bei typischen Abfragen; Eager Loading (`joinedLoad(Activity.participants)`) funktioniert damit gut
 - Wenig Code bzw. kein zusätzliches Model, keine extra CRUD-Operation
 
-#### Nachteile
+### Nachteile
 - Schwierig zu ändern, ggf. Migration auf Option 2 nötig
+
+---
 
 ### Option 2: Association Object (eigenes Model)
 z.B. `ActivityParticipant`
 
-#### Vorteile
+### Vorteile
 
 - Maximal erweiterbar, man kann neue Felder speichern
 - Flexiblere Queries
 
-#### Nachteile
+### Nachteile
 
 - Mehr Implementierungsaufwand, da zusätzliches Model mit ggf. eigener CRUD-Logik
 - **ORM-Zugriff** ist etwas komplexer
@@ -438,7 +464,7 @@ _Entschieden vom HappyWG-Projektteam_
 
 ### Betrachtete Alternativen
 
-### Option 1: Create-Form im Modal (CSS-only/Checkbox-Toggle)
+### Option 1: Create-Form im Modal (CSS-only/Checkbox-Toggle) (chosen)
 
 ### Vorteile
 
@@ -517,7 +543,7 @@ _Entschieden vom HappyWG-Projektteam_
 
 ### Betrachtete Alternativen
 
-### Option 1: Cards (Karten)
+### Option 1: Cards (Karten) (chosen)
 
 ### Vorteile
 
