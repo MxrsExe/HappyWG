@@ -5,15 +5,15 @@ parent: Technical documentation
 nav_order: 2
 ---
 
+# Data Model
+
+---
 <details open markdown="block">
 {: .text-delta }
 <summary>Inhaltsverzeichnis</summary>
 + ToC
 {: toc }
 </details>
-
----
-# Data Model
 
 ---
 

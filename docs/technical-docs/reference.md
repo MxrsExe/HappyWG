@@ -106,7 +106,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Methods:** `GET`, `POST`
 
-**Purpose:** Willkommensseite nach dem Login. Zeigt Option zum Erstellen oder Beitreten einer WG an. Zugriff nur für eingeloggt Nutzer erlaubt.
+**Purpose:** Willkommensseite nach dem Login. Zeigt Option zum Erstellen oder Beitreten einer WG an. Zugriff nur für eingeloggte Nutzer erlaubt.
 
 **Sample output** 
 
@@ -149,7 +149,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Methods:** `GET`, `POST`
 
-**Purpose:** Zentrale Übersichtsseite der WG. Zeigt Statistiken, offene Aufgaben, Einkaufsliste, kommende Events, letzte Aktivitäten sowie alle WG-Mitglieder an. Alle Daten werden anhand der wg_id gefiltert, um Mandantentrennungsicherzustellen.
+**Purpose:** Zentrale Übersichtsseite der WG. Zeigt Statistiken, offene Aufgaben, Einkaufsliste, kommende Events, letzte Aktivitäten sowie alle WG-Mitglieder an. Alle Daten werden anhand der wg_id gefiltert, um Mandantentrennung sicherzustellen.
 
 **Sample output:** 
 
@@ -179,7 +179,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Purpose:** Wechselt den Status einer Putzaufgabe zwischen `open` und `completed`. Beim Abschließen wird zusätzlich das Abschlussdatum gespeichert.
 
-**Sample output:** Kein direkter Output - Statusänderung sichtbar im Putzplant (Checkbox/Fortschrittsbalken).
+**Sample output:** Kein direkter Output - Statusänderung sichtbar im Putzplan (Checkbox/Fortschrittsbalken).
 
 ---
 
@@ -231,7 +231,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Methods:** `POST`
 
-**Purpose:** Erstellt einen neuen Kommentar zu einer Idee. Leere Kommentare erscheint unter der Idee.
+**Purpose:** Erstellt einen neuen Kommentar zu einer Idee. Neues Kommentar erscheint unter der Idee.
 
 **Sample output:** 
 
@@ -317,7 +317,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 
 **Methods:** `POST`
 
-**Purpose:** Löscht einen Eintrag aus der Einkaufsliste
+**Purpose:** Löscht einen Eintrag aus der Einkaufsliste.
 
 **Sample output:** 
 
@@ -447,6 +447,7 @@ Fehler -> Anzeige einer Fehlermeldung in der Login-Seite.
 **Sample output:**
 ![EinkaufsplanForm]({{ site.baseurl }}/assets/images/einkaufsliste/einkaufsplanForm.png)
 
+---
 
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
