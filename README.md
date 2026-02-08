@@ -36,6 +36,9 @@ Use a production WSGI server instead.
 Press CTRL+C to quit
  * Restarting with stat
 ```
+## Commits
+
+Commits sind nicht ausgeglichen, da Marcel Granovskyy viele kleine Commits gemacht hat. Z.B. vor allem oft eine Markdown bearbeitet / korrigiert und kleine Schritte zum Visualisieren/Testen auf der GitHub-Pages Seite commitet hat oder bei der Erstellung des Codes in kleineren Commit-Schritten zum Testen vorgegangen ist.
 
 ## Quellen
 
@@ -44,12 +47,12 @@ Für weitere Informationen zu den Quellen bzw. LLM-Prompts, siehe die jeweiligen
 
 **Links zu den ChatGPT Chats**:
 
-Marcel Granovskyy (Anmerkung: _ich benutze den ChatGPT Account von meinem Bruder, Leo Granowskij_): https://chatgpt.com/g/g-p-6939dcde8a988191b6a437cd1a09b6e5-happy-wg-marcel-granovskyy/project
+Marcel Granovskyy (Anmerkung: _ChatGPT Account ist von Marcel's Bruder, Leo Granowskij_): https://chatgpt.com/g/g-p-6939dcde8a988191b6a437cd1a09b6e5-happy-wg-marcel-granovskyy/project
 
 
 Susann Pietzuch: https://chatgpt.com/share/6987c39c-ef94-800d-93bb-a14eebb9b245
 
-**Weitere Quellensammlung**:
+**Weiteres Quellenverzeichnis**:
 
 Eck, Alexander (2024): "fwsd-app": https://github.com/hwrberlin/fswd-app/tree/main 
 (Struktur der App) (Letzter Zugriff: 07.02.2026)
@@ -72,5 +75,4 @@ https://www.geeksforgeeks.org/python/python-generate-random-string-of-given-leng
 Stack Overflow. (2014). How do I clear a flask session?
 https://stackoverflow.com/questions/27747578/how-do-i-clear-a-flask-session
 (Zugriff: 13.01.2026)
-
 
