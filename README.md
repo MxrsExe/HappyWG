@@ -42,7 +42,11 @@ Press CTRL+C to quit
 Alle Quellen bzw. LLM Prompts sind möglichst genau im Code als Kommentar (#) angegeben (z.B. "Quelle: ChatGPT (Prompt: ...)") und getrennt ("#--------"). 
 Für weitere Informationen zu den Quellen bzw. LLM-Prompts, siehe die jeweiligen PDFs (unter docs/llm_prompts_files/).
 
-Weitere Quellensammlung:
+**Links zu den ChatGPT Chats**:
+
+https://chatgpt.com/g/g-p-6939dcde8a988191b6a437cd1a09b6e5-web-app/project
+
+**Weitere Quellensammlung**:
 
 Eck, Alexander (2024): "fwsd-app": https://github.com/hwrberlin/fswd-app/tree/main 
 (Struktur der App) (Letzter Zugriff: 07.02.2026)
